@@ -1,9 +1,7 @@
 from django.contrib import admin
-
-from management.models import DetailService, Enseignements, Modules, Niveaux, Periodes, Professeurs, Semestres, Types_ens, Ues, Unites
+from management.models import Enseignements, Niveaux, Periodes, Professeurs, DetailService, Semestres, TypesEns, Ues, Unites, Modules
 
 # Register your models here.
-
 class DetailServiceInline(admin.TabularInline):
   model = DetailService
   extra = 1
@@ -12,48 +10,47 @@ class ProfesseursAdmin(admin.ModelAdmin):
   inlines = [DetailServiceInline]
 admin.site.register(Professeurs, ProfesseursAdmin)
 
-class UnitesAdmin(admin.ModelAdmin):
-  pass
-admin.site.register(Unites, UnitesAdmin)
 
-"""
-class Types_ensAdmin(admin.ModelAdmin):
-  pass
-admin.site.register(Types_ens, Types_ensAdmin)
+admin.site.register(DetailService)
 
-class DetailServiceAdmin(admin.ModelAdmin):
-  pass
-admin.site.register(DetailService, DetailServiceAdmin)
 
-class TypesEnsAdmin(admin.ModelAdmin):
-  pass
-admin.site.register(TypesEns, TypesEnsAdmin)
+admin.site.register(TypesEns)
+
+
+class EnseignementsAdminInline(admin.TabularInline):
+  model = Enseignements
+  extra = 1
 
 class UnitesAdmin(admin.ModelAdmin):
-  pass
+  inlines = [EnseignementsAdminInline]
 admin.site.register(Unites, UnitesAdmin)
+
+
+class SemestresInline(admin.TabularInline):
+  model = Semestres
+  extra = 1
 
 class NiveauxAdmin(admin.ModelAdmin):
-  pass
+  inlines = [SemestresInline]
 admin.site.register(Niveaux, NiveauxAdmin)
 
-class SemestresAdmin(admin.ModelAdmin):
-  pass
-admin.site.register(Semestres, SemestresAdmin)
+
+admin.site.register(Semestres)
+
+
+class EnseignementsInline(admin.TabularInline):
+  model = Enseignements
+  extra = 1
 
 class PeriodesAdmin(admin.ModelAdmin):
-  pass
+  inlines = [EnseignementsInline]
 admin.site.register(Periodes, PeriodesAdmin)
 
-class EnseignementsAdmin(admin.ModelAdmin):
-  pass
-admin.site.register(Enseignements, EnseignementsAdmin)
 
-class UesAdmin(admin.ModelAdmin):
-  pass
-admin.site.register(Ues, UesAdmin)
+admin.site.register(Enseignements)
 
-class ModulesAdmin(admin.ModelAdmin):
-  pass
-admin.site.register(Modules, ModulesAdmin)
-"""
+
+admin.site.register(Ues)
+
+
+admin.site.register(Modules)
