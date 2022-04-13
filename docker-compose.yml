@@ -11,11 +11,18 @@ services:
   #     - POSTGRES_PASSWORD=postgres
   web:
     build: .
+    container_name: ${NAME}
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
     ports:
       - "8000:8000"
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${NAME}.rule=Host(`${NAME}.jrcandev.netlib.re`)"
+      - "traefik.http.routers.${NAME}.entrypoints=websecure"
+      - "traefik.http.routers.${NAME}.tls.certresolver=lets-encrypt"  
     # environment:
     #   - POSTGRES_NAME=postgres
     #   - POSTGRES_USER=postgres
