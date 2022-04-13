@@ -9,7 +9,7 @@ services:
   #     - POSTGRES_DB=postgres
   #     - POSTGRES_USER=postgres
   #     - POSTGRES_PASSWORD=postgres
-  web:
+  app:
     build: .
     container_name: ${NAME}
     command: python manage.py runserver
