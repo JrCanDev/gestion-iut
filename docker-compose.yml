@@ -12,7 +12,7 @@ services:
   web:
     build: .
     container_name: ${NAME}
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python manage.py runserver
     volumes:
       - .:/code
     networks:
