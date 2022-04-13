@@ -29,3 +29,7 @@ services:
     # depends_on:
     #   - db
 
+networks:
+  web:
+    external: true
+
