@@ -90,8 +90,11 @@ class SemaineAdmin(admin.ModelAdmin):
 admin.site.register(Semaine, SemaineAdmin)
 
 class CourAdmin(admin.ModelAdmin):
-  list_display = ('type_cours', 'module', 'nom_semaine', 'semestre', 'annee')
+  list_display = ('type_cours', 'nom_professeur', 'module', 'nom_semaine', 'semestre', 'annee')
   filter_horizontal = ("tp_promotion", "td_promotion")
+
+  def nom_professeur(self, obj):
+    return obj.professeur.nom_professeur
 
   def nom_semaine(self, obj):
     return obj.semaine.nom_semaine
