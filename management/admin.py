@@ -62,7 +62,7 @@ class TPPromotionList(ChangeList):
 class CourInline(admin.TabularInline):
   model = Cour
   extra = 1
-  fieldsets = ((None, {'fields': ('module', 'type_cours', 'nb_heure', 'professeur')}),)
+  fieldsets = ((None, {'fields': ('module', 'type_cours', 'nb_heure', 'professeur', 'semaine')}),)
   """
     def get_changelist(self, request, **kwargs):
       return TPPromotionList
