@@ -29,14 +29,7 @@ class TDPromotion(models.Model):
   promotion = models.ForeignKey(Promotion, on_delete=models.CASCADE)
 
   def __str__(self):
-    return self.nom_td_promotion
-
-class TPPromotion(models.Model):
-  nom_tp_promotion = models.CharField(max_length=12)
-  td_promotion = models.ForeignKey(TDPromotion, on_delete=models.CASCADE)
-
-  def __str__(self):
-    return self.nom_tp_promotion + " | " + self.td_promotion.promotion.nom_promotion
+    return self.nom_td_promotion + " | " + self.promotion.nom_promotion
 class Semaine(models.Model):
   nom_semaine = models.CharField(max_length=50)
   semestre = models.ForeignKey(Semestre, on_delete=models.CASCADE)
@@ -58,15 +51,24 @@ class Module(models.Model):
   def __str__(self):
     return self.nom_module
 
-class Cours(models.Model):
+class TPPromotion(models.Model):
+  nom_tp_promotion = models.CharField(max_length=12)
+  td_promotion = models.ForeignKey(TDPromotion, on_delete=models.CASCADE)
+
+  def __str__(self):
+    return self.nom_tp_promotion + " | " + self.td_promotion.promotion.nom_promotion
+
+class Cour(models.Model):
+  module = models.ForeignKey(Module, on_delete=models.CASCADE)
+  semaine = models.ForeignKey(Semaine, on_delete=models.CASCADE)
   TypeCours = models.TextChoices('type', 'CM TD TP')
   type_cours = models.CharField(blank=True, choices=TypeCours.choices, max_length=10)
   nb_heure = models.IntegerField(default=0)
-  module = models.ForeignKey(Module, on_delete=models.CASCADE)
   professeur = models.ForeignKey(Professeur, on_delete=models.CASCADE)
-  tp_promotion = models.ForeignKey(TPPromotion, on_delete=models.CASCADE)
-  semaine = models.ForeignKey(Semaine, on_delete=models.CASCADE)
-
+  #tp_promotion = models.ForeignKey(TPPromotion, on_delete=models.CASCADE)
+  tp_promotion = models.ManyToManyField(TPPromotion, blank=True, related_name='tp_promotion')
+  #td_promotion = models.ForeignKey(TDPromotion, on_delete=models.CASCADE)
+  td_promotion = models.ManyToManyField(TDPromotion, blank=True, related_name='td_promotion')
 
 """
 class SemaineToTDPromotion(models.Model):

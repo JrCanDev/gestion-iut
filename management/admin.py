@@ -1,8 +1,11 @@
 from django.contrib import admin
 # Register your models here.
 from django import forms
-
-from management.models import Annee, Semestre, Promotion, TDPromotion, TPPromotion, Semaine, Professeur, Module, Cours
+from django.utils.html import format_html_join
+from django.utils.safestring import mark_safe
+from management.forms import TPPromotionListForm
+from django.contrib.admin.views.main import ChangeList
+from management.models import Annee, Semestre, Promotion, TDPromotion, TPPromotion, Semaine, Professeur, Module, Cour
 
 class SemestreInline(admin.TabularInline):
   model = Semestre
@@ -46,12 +49,59 @@ admin.site.register(TDPromotion, TDPromotionAdmin)
 
 admin.site.register(Professeur)
 
-class CoursInline(admin.TabularInline):
-  model = Cours
+"""
+class TPPromotionList(ChangeList):
+  def __init__(self, request, model, list_display, list_display_links, list_filter, date_hierarchy, search_fields, list_select_related, list_per_page, list_max_show_all, list_editable, model_admin):
+    super(TPPromotionList, self).__init__(request, model, list_display, list_display_links, list_filter, date_hierarchy, search_fields, list_select_related,list_per_page, list_max_show_all, list_editable, model_admin)
+    
+    # these need to be defined here, and not in MovieAdmin
+    self.list_display = ['action_checkbox', 'nom_tp_promotion', 'nom_tp_promotion']
+    self.list_display_links = ['nom_tp_promotion']
+    self.list_editable = ['nom_tp_promotion']
+"""
+class CourInline(admin.TabularInline):
+  model = Cour
   extra = 1
+  fieldsets = ((None, {'fields': ('module', 'type_cours', 'nb_heure', 'professeur')}),)
+  """
+    def get_changelist(self, request, **kwargs):
+      return TPPromotionList
+
+    def get_changelist_form(self, request, **kwargs):
+      return TPPromotionListForm
+  """
+
 class ModuleAdmin(admin.ModelAdmin):
-  inlines = [CoursInline]
+  inlines = [CourInline]
 admin.site.register(Module, ModuleAdmin)
+
+class SemaineAdmin(admin.ModelAdmin):
+  list_display = ('nom_semaine', 'semestre', 'annee')
+  inlines = [CourInline]
+
+  def nom_semaine(self, obj):
+    return obj.nom_semaine
+
+  def semestre(self, obj):
+    return obj.semestre.nom_semestre
+
+  def annee(self, obj):
+    return obj.semestre.annee
+admin.site.register(Semaine, SemaineAdmin)
+
+class CourAdmin(admin.ModelAdmin):
+  list_display = ('type_cours', 'module', 'nom_semaine', 'semestre', 'annee')
+  filter_horizontal = ("tp_promotion", "td_promotion")
+
+  def nom_semaine(self, obj):
+    return obj.semaine.nom_semaine
+
+  def semestre(self, obj):
+    return obj.semaine.semestre.nom_semestre
+
+  def annee(self, obj):
+    return obj.semaine.semestre.annee
+admin.site.register(Cour, CourAdmin)
 
 """
 class ProductAdminForm(forms.ModelForm):
