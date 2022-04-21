@@ -30,13 +30,6 @@ class TDPromotion(models.Model):
 
   def __str__(self):
     return self.nom_td_promotion + " | " + self.promotion.nom_promotion
-class Semaine(models.Model):
-  nom_semaine = models.CharField(max_length=50)
-  semestre = models.ForeignKey(Semestre, on_delete=models.CASCADE)
-  #tp_promotion_list = models.ManyToManyField(TPPromotion, through='SemaineToTDPromotion')
-
-  def __str__(self):
-    return self.nom_semaine + " | " + self.semestre.nom_semestre + " | " + self.semestre.annee.nom_annee
 
 class Professeur(models.Model):
   nom_professeur = models.CharField(max_length=50)
@@ -47,6 +40,7 @@ class Professeur(models.Model):
 
 class Module(models.Model):
   nom_module = models.CharField(max_length=50)
+  promotion = models.ForeignKey(Promotion, on_delete=models.CASCADE)
 
   def __str__(self):
     return self.nom_module
@@ -56,19 +50,23 @@ class TPPromotion(models.Model):
   td_promotion = models.ForeignKey(TDPromotion, on_delete=models.CASCADE)
 
   def __str__(self):
-    return self.nom_tp_promotion + " | " + self.td_promotion.promotion.nom_promotion
+    return self.nom_tp_promotion
 
 class Cour(models.Model):
   module = models.ForeignKey(Module, on_delete=models.CASCADE)
-  semaine = models.ForeignKey(Semaine, on_delete=models.CASCADE)
   TypeCours = models.TextChoices('type', 'CM TD TP')
   type_cours = models.CharField(blank=True, choices=TypeCours.choices, max_length=10)
   nb_heure = models.IntegerField(default=0)
+  semestre = models.ForeignKey(Semestre, on_delete=models.CASCADE, blank=True, null=True)
   professeur = models.ForeignKey(Professeur, on_delete=models.CASCADE)
   #tp_promotion = models.ForeignKey(TPPromotion, on_delete=models.CASCADE)
   tp_promotion = models.ManyToManyField(TPPromotion, blank=True, related_name='tp_promotion')
   #td_promotion = models.ForeignKey(TDPromotion, on_delete=models.CASCADE)
-  td_promotion = models.ManyToManyField(TDPromotion, blank=True, related_name='td_promotion')
+  #td_promotion = models.ManyToManyField(TDPromotion, blank=True, related_name='td_promotion')
+
+  def __str__(self):
+    return self.type_cours + "-" + self.professeur.nom_professeur
+
 
 """
 class SemaineToTDPromotion(models.Model):

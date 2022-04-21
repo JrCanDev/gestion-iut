@@ -1,27 +1,15 @@
 from django.contrib import admin
 # Register your models here.
 from django import forms
-from django.utils.html import format_html_join
-from django.utils.safestring import mark_safe
-from management.forms import TPPromotionListForm
-from django.contrib.admin.views.main import ChangeList
-from management.models import Annee, Semestre, Promotion, TDPromotion, TPPromotion, Semaine, Professeur, Module, Cour
-
+from management.forms import CourAdminForm
+from management.models import Annee, Semestre, Promotion, TDPromotion, TPPromotion, Professeur, Module, Cour
+from django.urls import reverse
 class SemestreInline(admin.TabularInline):
   model = Semestre
   extra = 1
 class AnneeAdmin(admin.ModelAdmin):
   inlines = [SemestreInline]
 admin.site.register(Annee, AnneeAdmin)
-
-
-class SemaineInline(admin.TabularInline):
-  model = Semaine
-  extra = 1
-class SemestreAdmin(admin.ModelAdmin):
-  list_display = ('nom_semestre', 'annee')
-  inlines = [SemaineInline]
-admin.site.register(Semestre, SemestreAdmin)
 
 
 class TDPromotionInline(admin.TabularInline):
@@ -59,10 +47,20 @@ class TPPromotionList(ChangeList):
     self.list_display_links = ['nom_tp_promotion']
     self.list_editable = ['nom_tp_promotion']
 """
+def get_object_attrs(obj):
+  try:
+    return obj.__dict__
+  except AttributeError:
+    return {attr: getattr(obj, attr) for attr in obj.__slots__}
+
+
 class CourInline(admin.TabularInline):
   model = Cour
-  extra = 1
-  fieldsets = ((None, {'fields': ('module', 'type_cours', 'nb_heure', 'professeur', 'semaine')}),)
+  extra = 0
+  readonly_fields = ("semestre", "tp_promotion",)
+  #filter_horizontal = ("tp_promotion",)
+  fieldsets = ((None, {'fields': ('type_cours', 'nb_heure', 'professeur', 'semestre', 'tp_promotion')}),)
+  
   """
     def get_changelist(self, request, **kwargs):
       return TPPromotionList
@@ -72,38 +70,33 @@ class CourInline(admin.TabularInline):
   """
 
 class ModuleAdmin(admin.ModelAdmin):
+  list_display = ('nom_module', 'promotion')
   inlines = [CourInline]
+
 admin.site.register(Module, ModuleAdmin)
 
-class SemaineAdmin(admin.ModelAdmin):
-  list_display = ('nom_semaine', 'semestre', 'annee')
-  inlines = [CourInline]
-
-  def nom_semaine(self, obj):
-    return obj.nom_semaine
-
-  def semestre(self, obj):
-    return obj.semestre.nom_semestre
-
-  def annee(self, obj):
-    return obj.semestre.annee
-admin.site.register(Semaine, SemaineAdmin)
 
 class CourAdmin(admin.ModelAdmin):
-  list_display = ('type_cours', 'nom_professeur', 'module', 'nom_semaine', 'semestre', 'annee')
-  filter_horizontal = ("tp_promotion", "td_promotion")
-
-  def nom_professeur(self, obj):
-    return obj.professeur.nom_professeur
-
-  def nom_semaine(self, obj):
-    return obj.semaine.nom_semaine
-
-  def semestre(self, obj):
-    return obj.semaine.semestre.nom_semestre
+  fieldsets = ((None, {'fields': ('type_cours', 'module', 'nb_heure', 'semestre', 'professeur', 'tp_promotion')}),)
+  filter_horizontal = ("tp_promotion",)
+  form = CourAdminForm
+  list_display = ('module', 'professeur', 'type_cours', 'promotion', 'semestre', 'annee')
 
   def annee(self, obj):
-    return obj.semaine.semestre.annee
+    return obj.module.promotion.annee
+  
+  def promotion(self, obj):
+    return obj.module.promotion
+
+  def has_add_permission(self, request, obj=None):
+    return False
+  """
+  def render_change_form(self, request, context, *args, **kwargs):
+    print(get_object_attrs(self.instance))
+
+    context['adminform'].form.fields['semestre'].queryset = Semestre.objects.filter(annee='1')
+    return super(CourAdmin, self).render_change_form(request, context, *args, **kwargs)
+  """
 admin.site.register(Cour, CourAdmin)
 
 """
