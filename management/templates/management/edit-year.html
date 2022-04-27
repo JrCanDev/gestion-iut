@@ -1,0 +1,11 @@
+<p>{{ year.name_year }}</p>
+
+<ul>
+  {% for one_subject in year.subject_set.all %}
+  <li>
+    <p>{{ one_subject }}</p>
+  </li>
+  {% endfor %}
+</ul>
+
+<a href="{% url 'management:index'%}"><p>back</p></a>

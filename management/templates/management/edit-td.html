@@ -1,0 +1,13 @@
+<p>{{ promotion.name_promotion }}</p>
+<p>{{ promotion.year.name_year }}</p>
+
+<ul>
+  {% for one_tp in td.tp_set.all %}
+  <li>
+    <p>{{ one_tp }}</p>
+  </li>
+  {% endfor %}
+</ul>
+<a href="{% url 'management:add-tp' promotion.id td.id%}"><p>add-tp</p></a>
+
+<a href="{% url 'management:edit-promotion' promotion.id%}"><p>back</p></a>

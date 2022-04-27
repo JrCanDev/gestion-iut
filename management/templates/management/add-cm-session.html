@@ -1,0 +1,7 @@
+<form action="{% url 'management:add-cm-session' promotion_id subject_id %}" method="post">
+  {% csrf_token %} {% if error %}
+  <p>{{ error }}</p>
+  {% endif %} {{ form }}
+  <input type="submit" value="Submit" />
+</form>
+<a href="{% url 'management:edit-subject' promotion_id subject_id%}"><p>back</p></a>

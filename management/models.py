@@ -1,140 +1,59 @@
-from datetime import date
 from django.db import models
-from django.contrib import admin
+from numpy import number
 
 # Create your models here.
-
-class Annee(models.Model):
-  nom_annee = models.CharField(max_length=12)
-
-  def __str__(self):
-    return self.nom_annee
-
-class Semestre(models.Model):
-  nom_semestre = models.CharField(max_length=12)
-  annee = models.ForeignKey(Annee, on_delete=models.CASCADE)
+class Year(models.Model):
+  name_year = models.CharField(max_length=20)
 
   def __str__(self):
-    return self.nom_semestre
+    return self.name_year
+
+class Teacher(models.Model):
+  lastname = models.CharField(max_length=50)
+  firstname = models.CharField(max_length=50)
+  StatusChoices = models.TextChoices('type', 'professeur vacataire')
+  status = models.CharField(blank=True, choices=StatusChoices.choices, max_length=20)
+
+  def __str__(self):
+    return self.lastname
 
 class Promotion(models.Model):
-  nom_promotion = models.CharField(max_length=12)
-  annee = models.ForeignKey(Annee, on_delete=models.CASCADE)
+  name_promotion = models.CharField(max_length=20)
+  year = models.ForeignKey(Year, on_delete=models.CASCADE)
 
   def __str__(self):
-    return self.nom_promotion
+    return self.name_promotion
 
-class TDPromotion(models.Model):
-  nom_td_promotion = models.CharField(max_length=12)
+class Td(models.Model):
+  name_td = models.CharField(max_length=5)
   promotion = models.ForeignKey(Promotion, on_delete=models.CASCADE)
 
   def __str__(self):
-    return self.nom_td_promotion + " | " + self.promotion.nom_promotion
+    return self.name_td
 
-class Professeur(models.Model):
-  nom_professeur = models.CharField(max_length=50)
-  prenom_professeur = models.CharField(max_length=50)
+class Tp(models.Model):
+  name_tp = models.CharField(max_length=5)
+  td = models.ForeignKey(Td, on_delete=models.CASCADE)
 
   def __str__(self):
-    return self.nom_professeur
+    return self.name_tp
 
-class Module(models.Model):
-  nom_module = models.CharField(max_length=50)
+class Subject(models.Model):
+  name_subject = models.CharField(max_length=20)
+  number_cm_sessions = models.PositiveIntegerField(default=0)
+  number_td_sessions = models.PositiveIntegerField(default=0)
+  number_tp_sessions = models.PositiveIntegerField(default=0)
   promotion = models.ForeignKey(Promotion, on_delete=models.CASCADE)
 
   def __str__(self):
-    return self.nom_module
+    return self.name_subject
 
-class TPPromotion(models.Model):
-  nom_tp_promotion = models.CharField(max_length=12)
-  td_promotion = models.ForeignKey(TDPromotion, on_delete=models.CASCADE)
-
-  def __str__(self):
-    return self.nom_tp_promotion
-
-class Cour(models.Model):
-  module = models.ForeignKey(Module, on_delete=models.CASCADE)
-  TypeCours = models.TextChoices('type', 'CM TD TP')
-  type_cours = models.CharField(blank=True, choices=TypeCours.choices, max_length=10)
-  nb_heure = models.IntegerField(default=0)
-  semestre = models.ForeignKey(Semestre, on_delete=models.CASCADE, blank=True, null=True)
-  professeur = models.ForeignKey(Professeur, on_delete=models.CASCADE)
-  #tp_promotion = models.ForeignKey(TPPromotion, on_delete=models.CASCADE)
-  tp_promotion = models.ManyToManyField(TPPromotion, blank=True, related_name='tp_promotion')
-  #td_promotion = models.ForeignKey(TDPromotion, on_delete=models.CASCADE)
-  #td_promotion = models.ManyToManyField(TDPromotion, blank=True, related_name='td_promotion')
-
-  def __str__(self):
-    return self.type_cours + "-" + self.professeur.nom_professeur
-
-
-"""
-class SemaineToTDPromotion(models.Model):
-  tp_promotion = models.ForeignKey(TPPromotion, on_delete=models.CASCADE)
-  semaine = models.ForeignKey(Semaine, on_delete=models.CASCADE)
-"""
-
-
-"""
-class Professeurs(models.Model):
-  code_prof = models.CharField(primary_key=True, max_length=8)
-  nom_prof = models.CharField(max_length=50)
-
-class DetailService(models.Model):
-  code_prof = models.ForeignKey(Professeurs, on_delete=models.CASCADE)
-  type_ds = models.CharField(max_length=8)
-  code_enseignement = models.IntegerField()
-  nombre = models.IntegerField()
-
-  class Meta:
-    unique_together = ('code_enseignement', 'type_ds')
-
-class TypesEns(models.Model):
-  type_ens = models.CharField(primary_key=True, max_length=8)
-  detail = models.CharField(max_length=50)
-  coef_finan = models.FloatField()
-  coef_temps = models.FloatField()
-
-class Unites(models.Model):
-  code_unite = models.CharField(primary_key=True, max_length=18)
-  libelle_unite = models.CharField(max_length=100)
-  annee = models.DateField()
-
-class Niveaux(models.Model):
-  code_niveau = models.CharField(primary_key=True, max_length=8)
-  nom_niveau = models.CharField(max_length=80)
-
-class Semestres(models.Model):
-  code_semestre = models.CharField(primary_key=True, max_length=8)
-  nom_semestre = models.CharField(max_length=80)
-  code_niveau = models.ForeignKey(Niveaux, on_delete=models.CASCADE)
-  groups_td = models.IntegerField()
-  groups_tp = models.IntegerField()
-
-class Periodes(models.Model):
-  code_periode = models.CharField(primary_key=True, max_length=8)
-  nom_periodes = models.CharField(max_length=80)
-  code_semestre = models.ForeignKey(Semestres, on_delete=models.CASCADE)
-
-class Enseignements(models.Model):
-  code_enseignement = models.ForeignKey(DetailService, on_delete=models.CASCADE)
-  code_unite = models.ForeignKey(Unites, on_delete=models.CASCADE)
-  nb_semaines = models.FloatField()
-  code_periode = models.ForeignKey(Periodes, on_delete=models.CASCADE)
-  n_cours = models.FloatField()
-  n_td = models.FloatField()
-  n_tp = models.FloatField()
-  remarque = models.CharField(max_length=500)
-
-class Ues(models.Model):
-  code_ue = models.CharField(primary_key=True, max_length=8)
-  libelle_ue = models.CharField(max_length=80)
-  coef_ue = models.DateField()
-  code_semestre =  models.CharField(max_length=8)
-
-class Modules(models.Model):
-  code_module = models.CharField(primary_key=True, max_length=8)
-  libelle_module = models.CharField(max_length=80)
-  coef_module = models.FloatField()
-  code_ue = models.ForeignKey(Ues, on_delete=models.CASCADE)
-"""
+class Sessions(models.Model):
+  TypeSessionsChoices = models.TextChoices('type', 'cm td tp')
+  type_sessions = models.CharField(blank=True, choices=TypeSessionsChoices.choices, max_length=20)
+  teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+  number_sessions = models.PositiveIntegerField(default=0)
+  promotion = models.ForeignKey(Promotion, blank=True, null=True, on_delete=models.CASCADE, related_name='promotion')
+  td = models.ForeignKey(Td, blank=True, null=True, on_delete=models.CASCADE, related_name='td')
+  tp = models.ManyToManyField(Tp, blank=True, related_name='tp')
+  subject = models.ForeignKey(Subject, on_delete=models.CASCADE)

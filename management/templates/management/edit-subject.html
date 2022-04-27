@@ -1,0 +1,45 @@
+<p>{{ subject.name_subject }}</p>
+
+<p>{{ nb_sessions }}</p>
+
+<ul>
+  {% for one_sessions in subject.sessions_set.all %}
+  <li>
+    <p>{{ one_sessions.type_sessions }}</p>
+    <p>{{ one_sessions.number_sessions }}</p>
+    <p>{{ one_sessions.teacher }}</p>
+
+    {% if one_sessions.type_sessions == "cm" %}
+    <p>{{ one_sessions.promotion }}</p>
+    {% endif %}
+    <!---->
+    {% if one_sessions.type_sessions == "td" %}
+    <p>{{ one_sessions.td }}</p>
+    {% endif %}
+    <!---->
+    {% if one_sessions.type_sessions == "tp" %}
+    <ul>
+      {% for one_tp in one_sessions.tp.all %}
+      <li>
+        <p>{{ one_tp }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+
+{% if nb_sessions.cm.remaining > 0%}
+<a href="{% url 'management:add-cm-session' promotion_id subject.id%}"><p>add-cm</p></a>
+{% endif %}
+<!---->
+{% if nb_sessions.td.remaining > 0%}
+<a href="{% url 'management:add-td-session' promotion_id subject.id%}"><p>add-td</p></a>
+{% endif %}
+<!---->
+{% if nb_sessions.tp.remaining > 0%}
+<a href="{% url 'management:add-tp-session' promotion_id subject.id%}"><p>add-tp</p></a>
+{% endif %}
+
+<a href="{% url 'management:edit-promotion' promotion_id%}"><p>back</p></a>

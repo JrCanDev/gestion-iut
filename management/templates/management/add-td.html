@@ -1,0 +1,7 @@
+<form action="{% url 'management:add-td' promotion_id%}" method="post">
+  {% csrf_token %} {% if error %}
+  <p>{{ error }}</p>
+  {% endif %} {{ form }}
+  <input type="submit" value="Submit" />
+</form>
+<a href="{% url 'management:edit-promotion' promotion_id%}"><p>back</p></a>

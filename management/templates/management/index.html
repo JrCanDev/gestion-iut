@@ -1,0 +1,27 @@
+<h1>Année</h1>
+<ul>
+  {% for one_year in year %}
+  <li>
+    <a href="{% url 'management:edit-year' one_year.id%}"><p>{{ one_year }}</p></a>
+  </li>
+  {% endfor %}
+</ul>
+<a href="{% url 'management:add-year'%}"><p>add-year</p></a>
+<h1>Professeur</h1>
+<ul>
+  {% for one_teacher in teacher %}
+  <li>
+    <p>{{ one_teacher }}</p>
+  </li>
+  {% endfor %}
+</ul>
+<a href="{% url 'management:add-teacher'%}"><p>add-teacher</p></a>
+<h1>Promotion</h1>
+<ul>
+  {% for one_promotion in promotion %}
+  <li>
+    <a href="{% url 'management:edit-promotion' one_promotion.id%}"><p>{{ one_promotion }}</p></a>
+  </li>
+  {% endfor %}
+</ul>
+<a href="{% url 'management:add-promotion'%}"><p>add-promotion</p></a>

@@ -1,0 +1,31 @@
+<p>{{ promotion.name_promotion }}</p>
+<p>{{ promotion.year.name_year }}</p>
+
+<p>Promotion</p>
+<ul>
+  {% for one_td in td %}
+  <li>
+    <a href="{% url 'management:edit-td' promotion.id one_td.id%}"><p>{{ one_td }}</p></a>
+    <ul>
+      {% for one_tp in one_td.tp_set.all %}
+      <li>
+        <p>{{ one_tp }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+  </li>
+  {% endfor %}
+</ul>
+
+<p>Matiere</p>
+<ul>
+  {% for one_subject in subject %}
+  <li>
+    <a href="{% url 'management:edit-subject' promotion.id one_subject.id%}"><p>{{ one_subject }}</p></a>
+  </li>
+  {% endfor %}
+</ul>
+
+<a href="{% url 'management:add-td' promotion.id%}"><p>add-td</p></a>
+<a href="{% url 'management:add-subject' promotion.id%}"><p>add-subject</p></a>
+<a href="{% url 'management:index'%}"><p>back</p></a>

@@ -1,0 +1,7 @@
+<form action="{% url 'management:add-teacher'%}" method="post">
+  {% csrf_token %} {% if error %}
+  <p>{{ error }}</p>
+  {% endif %} {{ form }}
+  <input type="submit" value="Submit" />
+</form>
+<a href="{% url 'management:index'%}"><p>back</p></a>
