@@ -1,11 +1,8 @@
-<p>{{ year.name_year }}</p>
+{% load static %}
 
-<ul>
-  {% for one_subject in year.subject_set.all %}
-  <li>
-    <p>{{ one_subject }}</p>
-  </li>
-  {% endfor %}
-</ul>
+<link rel="stylesheet" type="text/css" href="{% static 'management/edit-year.css' %}" />
 
-<a href="{% url 'management:index'%}"><p>back</p></a>
+<div class="title">
+  <h1>{{ year.name_year }}</h1>
+  <a class="btn-back" href="{% url 'management:index'%}">← back</a>
+</div>

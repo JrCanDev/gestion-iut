@@ -1,45 +1,90 @@
-<p>{{ subject.name_subject }}</p>
+{% load static %}
 
-<p>{{ nb_sessions }}</p>
+<link rel="stylesheet" type="text/css" href="{% static 'management/edit-subject.css' %}" />
 
-<ul>
-  {% for one_sessions in subject.sessions_set.all %}
-  <li>
-    <p>{{ one_sessions.type_sessions }}</p>
-    <p>{{ one_sessions.number_sessions }}</p>
-    <p>{{ one_sessions.teacher }}</p>
-
-    {% if one_sessions.type_sessions == "cm" %}
-    <p>{{ one_sessions.promotion }}</p>
-    {% endif %}
-    <!---->
-    {% if one_sessions.type_sessions == "td" %}
-    <p>{{ one_sessions.td }}</p>
-    {% endif %}
-    <!---->
-    {% if one_sessions.type_sessions == "tp" %}
-    <ul>
-      {% for one_tp in one_sessions.tp.all %}
-      <li>
-        <p>{{ one_tp }}</p>
-      </li>
+<div class="title">
+  <h1>{{ subject.name_subject }}</h1>
+  <p>{{ promotion.name_promotion }}</p>
+  <a href="{% url 'management:edit-promotion' promotion.id%}">← back</a>
+</div>
+<div class="container">
+  <div class="cm">
+    <h2>CM</h2>
+    <div class="info">
+      <p>{{ nb_sessions.cm.for_promotion }} séances ont été prévue, vous devez encor en affecter {{ nb_sessions.cm.remaining }}.</p>
+    </div>
+    <table>
+      <tr>
+        <th>Nom professeur</th>
+        <th>Nombre de séances</th>
+      </tr>
+      {% for one_sessions in subject.sessions_set.all %}
+      <tr>
+        {% if one_sessions.type_sessions == "cm" %}
+        <td>{{ one_sessions.teacher }}</td>
+        <td>{{ one_sessions.number_sessions }}</td>
+        {% endif %}
+      </tr>
       {% endfor %}
-    </ul>
+    </table>
+    {% if nb_sessions.cm.remaining > 0%}
+    <a href="{% url 'management:add-cm-session' promotion.id subject.id%}">Ajouter un CM</a>
     {% endif %}
-  </li>
-  {% endfor %}
-</ul>
+  </div>
 
-{% if nb_sessions.cm.remaining > 0%}
-<a href="{% url 'management:add-cm-session' promotion_id subject.id%}"><p>add-cm</p></a>
-{% endif %}
-<!---->
-{% if nb_sessions.td.remaining > 0%}
-<a href="{% url 'management:add-td-session' promotion_id subject.id%}"><p>add-td</p></a>
-{% endif %}
-<!---->
-{% if nb_sessions.tp.remaining > 0%}
-<a href="{% url 'management:add-tp-session' promotion_id subject.id%}"><p>add-tp</p></a>
-{% endif %}
+  <div class="td">
+    <h2>TD</h2>
+    <div class="info">
+      <p>{{ nb_sessions.td.for_td }} séances par TD ont été prévue, vous devez encor en affecter {{ nb_sessions.td.remaining }}.</p>
+    </div>
+    {% for one_td, list_session in session_td.items %}
+    <table>
+      <tr>
+        <th colspan="2">{{ one_td }}</th>
+      </tr>
+      <tr>
+        <th>Nom professeur</th>
+        <th>Nombre de séances</th>
+      </tr>
+      {% for one_sessions in list_session %}
+      <tr>
+        <td>{{ one_sessions.teacher }}</td>
+        <td>{{ one_sessions.number_sessions }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endfor %}
+    <!---->
+    {% if nb_sessions.td.remaining > 0%}
+    <a href="{% url 'management:add-td-session' promotion.id subject.id%}"><p>Ajouter un TD</p></a>
+    {% endif %}
+  </div>
 
-<a href="{% url 'management:edit-promotion' promotion_id%}"><p>back</p></a>
+  <div class="tp">
+    <h2>TD</h2>
+    <div class="info">
+      <p>{{ nb_sessions.tp.for_tp }} séances par TP ont été prévue, vous devez encor en affecter {{ nb_sessions.tp.remaining }}.</p>
+    </div>
+    {% for one_tp, list_session in session_tp.items %}
+    <table>
+      <tr>
+        <th colspan="2">{{ one_tp }}</th>
+      </tr>
+      <tr>
+        <th>Nom professeur</th>
+        <th>Nombre de séances</th>
+      </tr>
+      {% for one_sessions in list_session %}
+      <tr>
+        <td>{{ one_sessions.teacher }}</td>
+        <td>{{ one_sessions.number_sessions }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endfor %}
+    <!---->
+    {% if nb_sessions.tp.remaining > 0%}
+    <a href="{% url 'management:add-tp-session' promotion.id subject.id%}"><p>Ajputer un TP</p></a>
+    {% endif %}
+  </div>
+</div>

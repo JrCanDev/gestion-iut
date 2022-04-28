@@ -20,13 +20,13 @@ def addYear(request):
     form = AddYear(request.POST)
     if form.is_valid():
       if (len(Year.objects.filter(name_year=form.cleaned_data['name_year']).all())):
-       return render(request, 'management/add_year.html', {'form': form, 'error': 'L\'année existe déjà' })
+       return render(request, 'management/add-year.html', {'form': form, 'error': 'L\'année existe déjà' })
       
       Year(name_year = form.cleaned_data['name_year']).save()
       return HttpResponseRedirect('/')
   else:
     form = AddYear()
-    return render(request, 'management/add_year.html', {'form': form})
+    return render(request, 'management/add-year.html', {'form': form})
 
 def addTeacher(request):
   if request.method == 'POST':
@@ -141,7 +141,6 @@ def editSubject(request, promotion_id, subject_id):
   for one_td in promotion.td_set.all():
     nb_sessions["tp"]["remaining"] += (subject.number_tp_sessions * len(one_td.tp_set.all()))
 
-
   for one_sessions in subject.sessions_set.all():
     if(one_sessions.type_sessions == "cm"):
       nb_sessions["cm"]["remaining"] -= one_sessions.number_sessions
@@ -150,7 +149,17 @@ def editSubject(request, promotion_id, subject_id):
     if(one_sessions.type_sessions == "tp"):
       nb_sessions["tp"]["remaining"] -= one_sessions.number_sessions
   
-  return render(request, 'management/edit-subject.html', {'promotion_id': promotion_id, 'subject': subject, 'nb_sessions': nb_sessions})
+  
+  session_td = {}
+  session_tp = {}
+
+  for one_td in promotion.td_set.all():
+    session_td[one_td] = (subject.sessions_set.filter(td=one_td).all())
+
+    for one_tp in one_td.tp_set.all():
+      session_tp[one_tp] = (subject.sessions_set.filter(tp=one_tp).all())
+
+  return render(request, 'management/edit-subject.html', {'promotion': promotion, 'subject': subject, 'nb_sessions': nb_sessions, "session_td": session_td, "session_tp": session_tp})
 
 def addCmSession(request, promotion_id, subject_id):
   if request.method == 'POST':

@@ -2,7 +2,7 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'management/form.css' %}" />
 
-<form action="{% url 'management:add-cm-session' promotion_id subject_id %}" method="post">
+<form action="{% url 'management:add-year'%}" method="post">
   {% csrf_token %}
   <!---->
   {% if error %}
@@ -13,5 +13,5 @@
   <!---->
   <div class="inputs">{{ form }}</div>
   <input type="submit" value="Submit" />
-  <a href="{% url 'management:edit-subject' promotion_id subject_id%}"><p>Annuler</p></a>
+  <a href="{% url 'management:index'%}"><p>Annuler</p></a>
 </form>
