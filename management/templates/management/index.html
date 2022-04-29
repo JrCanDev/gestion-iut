@@ -1,0 +1,43 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'management/index.css' %}" />
+
+<div class="container">
+  <div class="year">
+    <h2>Année</h2>
+    <div class="list">
+      {% for one_year in year %}
+      <div class="item">
+        <p>{{ one_year }}</p>
+        <a href="{% url 'management:edit-year' one_year.id%}">Voir</a>
+      </div>
+      {% endfor %}
+    </div>
+    <a class="btn-add" href="{% url 'management:add-year'%}">Ajouter une année</a>
+  </div>
+
+  <div class="teacher">
+    <h2>Professeur</h2>
+    <div class="list">
+      {% for one_teacher in teacher %}
+      <div class="item">
+        <p>{{ one_teacher }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    <a class="btn-add" href="{% url 'management:add-teacher'%}"><p>Ajouter un professeur</p></a>
+  </div>
+
+  <div class="promotion">
+    <h2>Promotion</h2>
+    <div class="list">
+      {% for one_promotion in promotion %}
+      <div class="item">
+        <p>{{ one_promotion }}</p>
+        <a href="{% url 'management:edit-promotion' one_promotion.id%}">Voir</a>
+      </div>
+      {% endfor %}
+    </div>
+    <a class="btn-add" href="{% url 'management:add-promotion'%}"><p>Ajouter une promotion</p></a>
+  </div>
+</div>

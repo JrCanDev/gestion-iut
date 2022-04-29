@@ -1,0 +1,97 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap");
+
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "Open Sans", sans-serif;
+  color: #37474f;
+  background-color: #f5f5f5;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  padding: 5rem;
+}
+
+.year,
+.teacher,
+.promotion {
+  padding: 2rem;
+  border-radius: 1.5rem;
+  border: 2px solid #0002;
+  background-color: #fff;
+  margin-bottom: 5rem;
+}
+
+.promotion {
+  margin-bottom: 0px;
+}
+
+.year h2,
+.teacher h2,
+.promotion h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.year .list,
+.teacher .list,
+.promotion .list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.year .list .item,
+.teacher .list .item,
+.promotion .list .item {
+  min-width: 15rem;
+  padding: 1.5rem;
+  border-radius: 0.8rem;
+  background-color: #f5f5f5;
+  margin-bottom: 2rem;
+}
+
+.year .list .item p,
+.promotion .list .item p {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.teacher .list .item p {
+  text-align: center;
+  font-weight: 600;
+}
+
+.year .list .item a,
+.promotion .list .item a {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  color: #f5f5f5;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  width: 100%;
+  background-color: #1e88e5;
+}
+
+.year .btn-add,
+.teacher .btn-add,
+.promotion .btn-add {
+  display: block;
+  text-decoration: none;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 500;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  color: #f5f5f5;
+  background-color: #1e88e5;
+}

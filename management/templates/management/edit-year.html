@@ -1,0 +1,8 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'management/edit-year.css' %}" />
+
+<div class="title">
+  <h1>{{ year.name_year }}</h1>
+  <a class="btn-back" href="{% url 'management:index'%}">← back</a>
+</div>

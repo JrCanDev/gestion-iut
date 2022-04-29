@@ -1,0 +1,23 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'management/edit-td.css' %}" />
+
+<div class="title">
+  <h1>{{ td.name_td }}</h1>
+  <p>{{ promotion.name_promotion }}</p>
+  <a class="btn-back" href="{% url 'management:edit-promotion' promotion.id%}">← back</a>
+</div>
+
+<div class="container">
+  <div class="td">
+    <h2>TD</h2>
+    <div class="list">
+      {% for one_tp in td.tp_set.all %}
+      <div class="item">
+        <p>{{ one_tp }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    <a class="btn-add" href="{% url 'management:add-tp' promotion.id td.id %}">Ajouter un TP</a>
+  </div>
+</div>

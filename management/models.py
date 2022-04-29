@@ -1,64 +1,59 @@
 from django.db import models
+from numpy import number
 
 # Create your models here.
-class Professeurs(models.Model):
-  code_prof = models.CharField(primary_key=True, max_length=8)
-  nom_prof = models.CharField(max_length=50)
+class Year(models.Model):
+  name_year = models.CharField(max_length=20)
 
-class DetailService(models.Model):
-  code_prof = models.ForeignKey(Professeurs, on_delete=models.CASCADE)
-  type_ds = models.CharField(max_length=8)
-  code_enseignement = models.IntegerField()
-  nombre = models.IntegerField()
+  def __str__(self):
+    return self.name_year
 
-  class Meta:
-    unique_together = ('code_enseignement', 'type_ds')
+class Teacher(models.Model):
+  lastname = models.CharField(max_length=50)
+  firstname = models.CharField(max_length=50)
+  StatusChoices = models.TextChoices('type', 'professeur vacataire')
+  status = models.CharField(blank=True, choices=StatusChoices.choices, max_length=20)
 
-class TypesEns(models.Model):
-  type_ens = models.CharField(primary_key=True, max_length=8)
-  detail = models.CharField(max_length=50)
-  coef_finan = models.FloatField()
-  coef_temps = models.FloatField()
+  def __str__(self):
+    return self.lastname
 
-class Unites(models.Model):
-  code_unite = models.CharField(primary_key=True, max_length=18)
-  libelle_unite = models.CharField(max_length=100)
-  annee = models.DateField()
+class Promotion(models.Model):
+  name_promotion = models.CharField(max_length=20)
+  year = models.ForeignKey(Year, on_delete=models.CASCADE)
 
-class Niveaux(models.Model):
-  code_niveau = models.CharField(primary_key=True, max_length=8)
-  nom_niveau = models.CharField(max_length=80)
+  def __str__(self):
+    return self.name_promotion
 
-class Semestres(models.Model):
-  code_semestre = models.CharField(primary_key=True, max_length=8)
-  nom_semestre = models.CharField(max_length=80)
-  code_niveau = models.ForeignKey(Niveaux, on_delete=models.CASCADE)
-  groups_td = models.IntegerField()
-  groups_tp = models.IntegerField()
+class Td(models.Model):
+  name_td = models.CharField(max_length=5)
+  promotion = models.ForeignKey(Promotion, on_delete=models.CASCADE)
 
-class Periodes(models.Model):
-  code_periode = models.CharField(primary_key=True, max_length=8)
-  nom_periodes = models.CharField(max_length=80)
-  code_semestre = models.ForeignKey(Semestres, on_delete=models.CASCADE)
+  def __str__(self):
+    return self.name_td
 
-class Enseignements(models.Model):
-  code_enseignement = models.ForeignKey(DetailService, on_delete=models.CASCADE)
-  code_unite = models.ForeignKey(Unites, on_delete=models.CASCADE)
-  nb_semaines = models.FloatField()
-  code_periode = models.ForeignKey(Periodes, on_delete=models.CASCADE)
-  n_cours = models.FloatField()
-  n_td = models.FloatField()
-  n_tp = models.FloatField()
-  remarque = models.CharField(max_length=500)
+class Tp(models.Model):
+  name_tp = models.CharField(max_length=5)
+  td = models.ForeignKey(Td, on_delete=models.CASCADE)
 
-class Ues(models.Model):
-  code_ue = models.CharField(primary_key=True, max_length=8)
-  libelle_ue = models.CharField(max_length=80)
-  coef_ue = models.DateField()
-  code_semestre =  models.CharField(max_length=8)
+  def __str__(self):
+    return self.name_tp
 
-class Modules(models.Model):
-  code_module = models.CharField(primary_key=True, max_length=8)
-  libelle_module = models.CharField(max_length=80)
-  coef_module = models.FloatField()
-  code_ue = models.ForeignKey(Ues, on_delete=models.CASCADE)
+class Subject(models.Model):
+  name_subject = models.CharField(max_length=20)
+  number_cm_sessions = models.PositiveIntegerField(default=0)
+  number_td_sessions = models.PositiveIntegerField(default=0)
+  number_tp_sessions = models.PositiveIntegerField(default=0)
+  promotion = models.ForeignKey(Promotion, on_delete=models.CASCADE)
+
+  def __str__(self):
+    return self.name_subject
+
+class Sessions(models.Model):
+  TypeSessionsChoices = models.TextChoices('type', 'cm td tp')
+  type_sessions = models.CharField(blank=True, choices=TypeSessionsChoices.choices, max_length=20)
+  teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+  number_sessions = models.PositiveIntegerField(default=0)
+  promotion = models.ForeignKey(Promotion, blank=True, null=True, on_delete=models.CASCADE, related_name='promotion')
+  td = models.ForeignKey(Td, blank=True, null=True, on_delete=models.CASCADE, related_name='td')
+  tp = models.ManyToManyField(Tp, blank=True, related_name='tp')
+  subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
