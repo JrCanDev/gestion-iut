@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'gestion-iut.jrcandev.netlib.re']
 
+CSRF_TRUSTED_ORIGINS = ["https://gestion-iut.jrcandev.netlib.re/"]
+
 
 # Application definition
 
