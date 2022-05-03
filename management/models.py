@@ -8,6 +8,19 @@ class Year(models.Model):
   def __str__(self):
     return self.name_year
 
+class Semester(models.Model):
+  name_semester = models.CharField(max_length=20)
+  year = models.ForeignKey(Year, on_delete=models.CASCADE)
+
+  def __str__(self):
+    return self.name_semester
+class Week(models.Model):
+  name_week = models.DateField()
+  semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
+
+  def __str__(self):
+    return str(self.name_week)
+
 class Teacher(models.Model):
   lastname = models.CharField(max_length=50)
   firstname = models.CharField(max_length=50)
@@ -57,3 +70,4 @@ class Sessions(models.Model):
   td = models.ForeignKey(Td, blank=True, null=True, on_delete=models.CASCADE, related_name='td')
   tp = models.ManyToManyField(Tp, blank=True, related_name='tp')
   subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+  week = models.ForeignKey(Week, on_delete=models.CASCADE)
