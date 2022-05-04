@@ -5,6 +5,9 @@ from . import views
 app_name = 'management'
 urlpatterns = [
   path('', views.index, name='index'),
+
+  path('accounts/login/', views.userLogin, name='login'),  
+
   path('add/year', views.addYear, name="add-year"),
   path('add/teacher', views.addTeacher, name="add-teacher"),
   path('add/promotion', views.addPromotion, name="add-promotion"),

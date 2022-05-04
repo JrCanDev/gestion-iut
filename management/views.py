@@ -4,10 +4,14 @@ from django.shortcuts import render
 # Create your views here.
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from management.forms import AddPromotion, AddTeacher, AddYear, AddTD, AddTP, AddSubject, AddCmSubject, AddTdSubject, AddTpSubject, AddSemester, AddWeek
+from matplotlib import use
+from management.forms import AddPromotion, AddTeacher, AddYear, AddTD, AddTP, AddSubject, AddCmSubject, AddTdSubject, AddTpSubject, AddSemester, AddWeek, Login
 from management.models import Promotion, Semester, Subject, Teacher, Year, Td, Tp, Sessions, Week
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 
-
+@login_required
 def index(request):
   '''
   Récupère les années, les professeurs et les promotions pour les envoyer à la vue.
@@ -19,6 +23,7 @@ def index(request):
   
   return render(request, 'management/index.html', {'year': year, 'teacher': teacher, 'promotion': promotion})
 
+@login_required
 def addYear(request):
   '''
   Affiche la vue responsable de l'ajout d'une année et gère le retour de celle-ci.
@@ -52,6 +57,7 @@ def addYear(request):
     form = AddYear()
     return render(request, 'management/add-year.html', {'form': form})
 
+@login_required
 def addTeacher(request):
   '''
   Affiche la vue responsable de l'ajout d'un professeur et gère le retour de celle-ci.
@@ -63,8 +69,8 @@ def addTeacher(request):
       '''
       Si le formulaire a été soumi, on vérifie que les champs ont été correctement remplis.
       '''
-    
-      if (len(Teacher.objects.filter(lastname=form.cleaned_data['lastname'], firstname=form.cleaned_data['firstname']).all())):
+
+      if (len(Teacher.objects.filter(last_name=form.cleaned_data['last_name'], first_name=form.cleaned_data['first_name']).all())):
         '''
         Si le professeur existe déjà on revoie le formulaire avec une erreur.
         '''
@@ -79,8 +85,11 @@ def addTeacher(request):
       '''
       Ajoute les données à la BDD et redirige le client.
       '''
-
-      Teacher(lastname=form.cleaned_data['lastname'], firstname=form.cleaned_data['firstname'], status = StatusChoices[form.cleaned_data['status']]).save()
+      user = Teacher.objects.create_user(form.cleaned_data['last_name'], '', form.cleaned_data['password'])
+      user.last_name = form.cleaned_data['last_name']
+      user.first_name = form.cleaned_data['first_name']
+      user.status = StatusChoices[form.cleaned_data['status']]
+      user.save()
       return HttpResponseRedirect('/')
   else:
     '''
@@ -90,6 +99,7 @@ def addTeacher(request):
     form = AddTeacher()
     return render(request, 'management/add-teacher.html', {'form': form})
 
+@login_required
 def addPromotion(request):
   '''
   Affiche la vue responsable de l'ajout d'une promotions et gère le retour de celle-ci.
@@ -124,6 +134,7 @@ def addPromotion(request):
     form = AddPromotion()
     return render(request, 'management/add-promotion.html', {'form': form})
 
+@login_required
 def editPromotion(request, promotion_id):
   '''
   Affiche la vue qui rassemble toutes les données sur une promotion.
@@ -134,6 +145,7 @@ def editPromotion(request, promotion_id):
   subject = promotion.subject_set.all()
   return render(request, 'management/edit-promotion.html', {'promotion': promotion, 'td': td, 'subject': subject})
 
+@login_required
 def addTd(request, promotion_id):
   '''
   Affiche la vue responsable de l'ajout d'un TD dans une promotion et gère le retour de celle-ci.
@@ -169,6 +181,7 @@ def addTd(request, promotion_id):
     form = AddTD()
     return render(request, 'management/add-td.html', {'promotion_id': promotion_id, 'form': form})
 
+@login_required
 def editTd(request, promotion_id, td_id):
   '''
   Affiche la vue qui rassemble toutes les données sur un TD d'une promotion.
@@ -179,6 +192,7 @@ def editTd(request, promotion_id, td_id):
 
   return render(request, 'management/edit-td.html', {'promotion': promotion, 'td': td})
 
+@login_required
 def addTp(request, promotion_id, td_id):
   '''
   Affiche la vue responsable de l'ajout d'un TP dans un TD d'une promotion et gère le retour de celle-ci.
@@ -220,6 +234,7 @@ def addTp(request, promotion_id, td_id):
     form = AddTP()
     return render(request, 'management/add-tp.html', {'promotion_id': promotion_id, 'td_id': td_id, 'form': form})
 
+@login_required
 def editYear(request, year_id):
   '''
   Affiche la vue qui rassemble toutes les données sur une année.
@@ -229,6 +244,7 @@ def editYear(request, year_id):
 
   return render(request, 'management/edit-year.html', {'year': year})
 
+@login_required
 def addSubject(request, promotion_id):
   '''
   Affiche la vue responsable de l'ajout d'une matiere dans une promotion et gère le retour de celle-ci.
@@ -264,6 +280,7 @@ def addSubject(request, promotion_id):
     form = AddSubject()
     return render(request, 'management/add-subject.html', {'promotion_id': promotion_id, 'form': form})
 
+@login_required
 def editSubject(request, promotion_id, subject_id):
   '''
   Affiche la vue qui rassemble toutes les données sur une matiere.
@@ -316,6 +333,7 @@ def editSubject(request, promotion_id, subject_id):
 
   return render(request, 'management/edit-subject.html', {'promotion': promotion, 'subject': subject, 'nb_sessions': nb_sessions, "session_td": session_td, "session_tp": session_tp})
 
+@login_required
 def addCmSession(request, promotion_id, subject_id):
   '''
   Affiche la vue responsable de l'ajout d'une séances (CM) pour une matière dans une promotion et gère le retour de celle-ci.
@@ -363,6 +381,7 @@ def addCmSession(request, promotion_id, subject_id):
     form = AddCmSubject(promotion_id=promotion_id)
     return render(request, 'management/add-cm-session.html', {'promotion_id': promotion_id, 'subject_id': subject_id, 'form': form})
 
+@login_required
 def addTdSession(request, promotion_id, subject_id):
   '''
   Affiche la vue responsable de l'ajout d'une séances (TD) pour une matière dans une promotion et gère le retour de celle-ci.
@@ -410,6 +429,7 @@ def addTdSession(request, promotion_id, subject_id):
     form = AddTdSubject(promotion_id=promotion_id)
     return render(request, 'management/add-td-session.html', {'promotion_id': promotion_id, 'subject_id': subject_id, 'form': form})
 
+@login_required
 def addTpSession(request, promotion_id, subject_id):
   '''
   Affiche la vue responsable de l'ajout d'une séances (TP) pour une matière dans une promotion et gère le retour de celle-ci.
@@ -461,6 +481,7 @@ def addTpSession(request, promotion_id, subject_id):
     return render(request, 'management/add-tp-session.html', {'promotion_id': promotion_id, 'subject_id': subject_id, 'form': form})
 
 
+@login_required
 def addSemester(request, year_id):
   '''
   Affiche la vue responsable de l'ajout d'un semestre et gère le retour de celle-ci.
@@ -495,12 +516,14 @@ def addSemester(request, year_id):
     form = AddSemester()
     return render(request, 'management/add-semester.html', {'form': form, 'year_id': year_id})
 
+@login_required
 def editSemester(request, year_id, semester_id):
   year = Year.objects.get(pk=year_id)
   semester = Semester.objects.get(pk=semester_id)
 
   return render(request, 'management/edit-semester.html', {'year': year, 'semester': semester})
 
+@login_required
 def addWeek(request, year_id, semester_id):
   '''
   Affiche la vue responsable de l'ajout d'une semaine et gère le retour de celle-ci.
@@ -535,10 +558,25 @@ def addWeek(request, year_id, semester_id):
     form = AddWeek()
     return render(request, 'management/add-week.html', {'form': form, 'year_id': year_id, 'semester_id': semester_id})
 
+@login_required
 def editTeacher(request, teacher_id):
   teacher = Teacher.objects.get(pk=teacher_id)
   year = Year.objects.all()
 
   return render(request, 'management/edit-teacher.html', {'teacher': teacher, 'year': year})
 
-  #return HttpResponse("Hello, world. You're at the polls index.")
+def userLogin(request):
+  if request.method == 'POST':
+    form = Login(request.POST)
+    if form.is_valid():
+      user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
+      if user is not None:
+        login(request, user)
+        return HttpResponseRedirect(request.GET['next'])
+      else:
+        return render(request, 'management/login.html', {'form': form, 'error': 'Utilisateur et/ou les mots de pass et incorrect', 'next_url': request.GET['next']})
+  else:
+    form = Login()
+    return render(request, 'management/login.html', {'form': form, 'next_url': request.GET['next']})
+
+#  return HttpResponse("Hello, world. You're at the polls index.")
