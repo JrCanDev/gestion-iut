@@ -1,0 +1,42 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'management/edit-teacher.css' %}" />
+
+<div class="title">
+  <h1>{{ teacher.lastname }}</h1>
+  <p>{{ teacher.firstname }}</p>
+  <a class="btn-back" href="{% url 'management:index' %}">← back</a>
+</div>
+
+<div class="container">
+  {% for one_year in year %}
+  <div class="year">
+    <h2>{{ one_year }}</h2>
+    {% for one_semester in one_year.semester_set.all %}
+    <table>
+      <tr>
+        <th colspan="3">{{ one_semester }}</th>
+      </tr>
+
+      {% for one_week in one_semester.week_set.all %} {% if one_week.sessions_set.all %}
+      <tr>
+        <th colspan="3">{{ one_week }}</th>
+      </tr>
+      <tr>
+        <th>type_sessions</th>
+        <th>number_sessions</th>
+        <th>subject</th>
+      </tr>
+
+      {% for one_sessions in one_week.sessions_set.all %} {% if teacher == one_sessions.teacher %}
+      <tr>
+        <td>{{ one_sessions.type_sessions }}</td>
+        <td>{{ one_sessions.number_sessions }}</td>
+        <td>{{ one_sessions.subject }}</td>
+      </tr>
+      {% endif %} {% endfor %} {% endif %} {% endfor %}
+    </table>
+    {% endfor %}
+  </div>
+  {% endfor %}
+</div>

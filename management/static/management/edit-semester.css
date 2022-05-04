@@ -29,7 +29,7 @@ body {
   padding: 0px 5rem;
 }
 
-.semester {
+.week {
   padding: 2rem;
   border-radius: 1.5rem;
   border: 2px solid #0002;
@@ -37,18 +37,18 @@ body {
   margin-bottom: 5rem;
 }
 
-.semester h2 {
+.week h2 {
   text-align: center;
   margin-bottom: 2rem;
 }
 
-.semester .list {
+.week .list {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
 }
 
-.semester .list .item {
+.week .list .item {
   min-width: 15rem;
   padding: 1.5rem;
   border-radius: 0.8rem;
@@ -56,39 +56,12 @@ body {
   margin-bottom: 2rem;
 }
 
-.semester .list .item h3 {
+.week .list .item p {
   text-align: center;
-  margin-bottom: 1rem;
   font-weight: 600;
 }
 
-.semester .list .item a {
-  display: block;
-  text-align: center;
-  text-decoration: none;
-  color: #f5f5f5;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  font-weight: 500;
-  width: 100%;
-  background-color: #1e88e5;
-}
-
-.semester .list .item .weeks {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.semester .list .item .weeks .week {
-  border-radius: 0.5rem;
-  padding: 0.5rem 1rem;
-  background-color: #bbdefb;
-}
-
-.semester .btn-add {
+.week a {
   display: block;
   text-decoration: none;
   text-align: center;
