@@ -1,0 +1,30 @@
+version: "3.9"
+   
+services:
+  app:
+    build: .
+    volumes:
+      - .:/code
+
+  app_migrate:
+    extends:
+      service: app  
+    command: python manage.py migrate    
+
+  app_run:
+    extends:
+      service: app
+    container_name: ${NAME}  
+    command: python manage.py runserver 0.0.0.0:8000
+    networks:
+      - web  
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${NAME}.rule=Host(`${NAME}.jrcandev.netlib.re`)"
+      - "traefik.http.routers.${NAME}.entrypoints=websecure"
+      - "traefik.http.routers.${NAME}.tls.certresolver=lets-encrypt"  
+
+networks:
+  web:
+    external: true
+
