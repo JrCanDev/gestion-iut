@@ -29,9 +29,9 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'gestion-iut.jrcandev.netlib.re']
 
 CSRF_TRUSTED_ORIGINS = ["https://gestion-iut.jrcandev.netlib.re"]
 
-CSRF_TRUSTED_ORIGINS = ["https://gestion-iut.jrcandev.netlib.re/"]
-
 # Application definition
+
+AUTH_USER_MODEL = 'management.Teacher'
 
 INSTALLED_APPS = [
     'management.apps.ManagementConfig',

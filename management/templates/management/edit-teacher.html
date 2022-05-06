@@ -3,8 +3,8 @@
 <link rel="stylesheet" type="text/css" href="{% static 'management/edit-teacher.css' %}" />
 
 <div class="title">
-  <h1>{{ teacher.lastname }}</h1>
-  <p>{{ teacher.firstname }}</p>
+  <h1>{{ teacher.last_name }}</h1>
+  <p>{{ teacher.first_name }}</p>
   <a class="btn-back" href="{% url 'management:index' %}">← back</a>
 </div>
 
@@ -15,26 +15,24 @@
     {% for one_semester in one_year.semester_set.all %}
     <table>
       <tr>
-        <th colspan="3">{{ one_semester }}</th>
+        <th colspan="4">{{ one_semester }}</th>
       </tr>
 
-      {% for one_week in one_semester.week_set.all %} {% if one_week.sessions_set.all %}
+      {% for one_week in one_semester.week_set.all %}
       <tr>
-        <th colspan="3">{{ one_week }}</th>
+        <th>Type de séance</th>
+        <th>Nombre de séance</th>
+        <th>Module</th>
+        <th>Semaine</th>
       </tr>
-      <tr>
-        <th>type_sessions</th>
-        <th>number_sessions</th>
-        <th>subject</th>
-      </tr>
-
       {% for one_sessions in one_week.sessions_set.all %} {% if teacher == one_sessions.teacher %}
       <tr>
         <td>{{ one_sessions.type_sessions }}</td>
         <td>{{ one_sessions.number_sessions }}</td>
         <td>{{ one_sessions.subject }}</td>
+        <td>{{ one_week }}</td>
       </tr>
-      {% endif %} {% endfor %} {% endif %} {% endfor %}
+      {% endif %} {% endfor %}{% endfor %}
     </table>
     {% endfor %}
   </div>
