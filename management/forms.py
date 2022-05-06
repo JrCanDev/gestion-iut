@@ -75,7 +75,7 @@ class AddSemester(forms.Form):
 
 class AddWeek(forms.Form):
   #name_week = forms.DateField(widget=forms.SelectDateWidget)
-  name_week = forms.DateField(input_formats=['%m/%d/%Y'])
+  name_week = forms.DateField(input_formats=['%d/%m/%Y'])
 
 class Login(forms.Form):
   username = forms.CharField(max_length=50)

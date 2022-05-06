@@ -4,7 +4,6 @@ from django.shortcuts import render
 # Create your views here.
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from matplotlib import use
 from management.forms import AddPromotion, AddTeacher, AddYear, AddTD, AddTP, AddSubject, AddCmSubject, AddTdSubject, AddTpSubject, AddSemester, AddWeek, Login
 from management.models import Promotion, Semester, Subject, Teacher, Year, Td, Tp, Sessions, Week
 from django.contrib.auth.decorators import login_required
