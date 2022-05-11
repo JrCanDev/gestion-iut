@@ -1,11 +1,12 @@
+from calendar import week
 from hashlib import new
 from django.shortcuts import render
 
 # Create your views here.
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from management.forms import AddPromotion, AddTeacher, AddYear, AddTD, AddTP, AddSubject, AddCmSubject, AddTdSubject, AddTpSubject, AddSemester, AddWeek, Login
-from management.models import Promotion, Semester, Subject, Teacher, Year, Td, Tp, Sessions, Week
+from management.forms import AddPromotion, AddTeacher, AddYear, AddTD, AddTP, AddSubject, AddCmSubject, AddTdSubject, AddTpSubject, AddSemester, AddWeek, Login, AddPlanning
+from management.models import Promotion, Semester, Subject, Teacher, Year, Td, Tp, Sessions, Week, Planning
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
@@ -27,6 +28,8 @@ def addYear(request):
   '''
   Affiche la vue responsable de l'ajout d'une année et gère le retour de celle-ci.
   '''
+  post_url = reverse('management:add-year', args=())
+  back_url = reverse('management:index', args=())
 
   if request.method == 'POST':
     form = AddYear(request.POST)
@@ -40,7 +43,7 @@ def addYear(request):
         Si l'année existe déjà on revoie le formulaire avec une erreur.
         '''
 
-        return render(request, 'management/add-year.html', {'form': form, 'error': 'L\'année existe déjà' })
+        return render(request, 'management/add-form.html', {'form': form, 'error': 'L\'année existe déjà', post_url: post_url, "back_url": back_url})
       
       '''
       Ajoute les données à la BDD et redirige le client.
@@ -54,13 +57,15 @@ def addYear(request):
     '''
 
     form = AddYear()
-    return render(request, 'management/add-year.html', {'form': form})
+    return render(request, 'management/add-form.html', {'form': form, 'post_url': post_url, "back_url": back_url})
 
 @login_required
 def addTeacher(request):
   '''
   Affiche la vue responsable de l'ajout d'un professeur et gère le retour de celle-ci.
   '''
+  post_url = reverse('management:add-teacher', args=())
+  back_url = reverse('management:index', args=())
 
   if request.method == 'POST':
     form = AddTeacher(request.POST)
@@ -74,7 +79,7 @@ def addTeacher(request):
         Si le professeur existe déjà on revoie le formulaire avec une erreur.
         '''
 
-        return render(request, 'management/add-teacher.html', {'form': form, 'error': 'Le professeur existe déjà' })
+        return render(request, 'management/add-form.html', {'form': form, 'error': 'Le professeur existe déjà', 'post_url': post_url, "back_url": back_url })
       
       StatusChoices = {
         "1": "professeur",
@@ -96,13 +101,15 @@ def addTeacher(request):
     '''
 
     form = AddTeacher()
-    return render(request, 'management/add-teacher.html', {'form': form})
+    return render(request, 'management/add-form.html', {'form': form, 'post_url': post_url, "back_url": back_url})
 
 @login_required
 def addPromotion(request):
   '''
   Affiche la vue responsable de l'ajout d'une promotions et gère le retour de celle-ci.
   '''
+  post_url = reverse('management:add-promotion', args=())
+  back_url = reverse('management:index', args=())
 
   if request.method == 'POST':
     form = AddPromotion(request.POST)
@@ -116,7 +123,7 @@ def addPromotion(request):
         Si la promotions existe déjà on revoie le formulaire avec une erreur.
         '''
 
-        return render(request, 'management/add-promotion.html', {'form': form, 'error': 'La promotion existe déjà' })
+        return render(request, 'management/add-form.html', {'form': form, 'error': 'La promotion existe déjà', 'post_url': post_url, "back_url": back_url })
       
       '''
       Ajoute les données à la BDD et redirige le client.
@@ -131,7 +138,7 @@ def addPromotion(request):
     '''
 
     form = AddPromotion()
-    return render(request, 'management/add-promotion.html', {'form': form})
+    return render(request, 'management/add-form.html', {'form': form, 'post_url': post_url, "back_url": back_url})
 
 @login_required
 def editPromotion(request, promotion_id):
@@ -149,6 +156,8 @@ def addTd(request, promotion_id):
   '''
   Affiche la vue responsable de l'ajout d'un TD dans une promotion et gère le retour de celle-ci.
   '''
+  post_url = reverse('management:add-td', args=(promotion_id,))
+  back_url = reverse('management:edit-promotion', args=(promotion_id,))
 
   if request.method == 'POST':
     form = AddTD(request.POST)
@@ -162,7 +171,7 @@ def addTd(request, promotion_id):
         Si le TD existe déjà dans la promotion on revoie le formulaire avec une erreur.
         '''
 
-        return render(request, 'management/add-td.html', {'promotion_id': promotion_id, 'form': form, 'error': 'Le TD existe déjà' })
+        return render(request, 'management/add-form.html', {'promotion_id': promotion_id, 'form': form, 'error': 'Le TD existe déjà', 'post_url': post_url, "back_url": back_url})
 
       '''
       Ajoute les données à la BDD et redirige le client.
@@ -178,7 +187,7 @@ def addTd(request, promotion_id):
     '''
 
     form = AddTD()
-    return render(request, 'management/add-td.html', {'promotion_id': promotion_id, 'form': form})
+    return render(request, 'management/add-form.html', {'promotion_id': promotion_id, 'form': form, 'post_url': post_url, "back_url": back_url})
 
 @login_required
 def editTd(request, promotion_id, td_id):
@@ -196,6 +205,8 @@ def addTp(request, promotion_id, td_id):
   '''
   Affiche la vue responsable de l'ajout d'un TP dans un TD d'une promotion et gère le retour de celle-ci.
   '''
+  post_url = reverse('management:add-tp', args=(promotion_id, td_id))
+  back_url = reverse('management:edit-td', args=(promotion_id, td_id))
 
   if request.method == 'POST':
     form = AddTP(request.POST)
@@ -215,7 +226,7 @@ def addTp(request, promotion_id, td_id):
         Si le TP existe déjà dans la promotion on revoie le formulaire avec une erreur.
         '''
 
-        return render(request, 'management/add-tp.html', {'promotion_id': promotion_id, 'td_id': td_id, 'form': form, 'error': 'Le TP existe déjà' })
+        return render(request, 'management/add-form.html', {'promotion_id': promotion_id, 'td_id': td_id, 'form': form, 'error': 'Le TP existe déjà', 'post_url': post_url, "back_url": back_url})
 
       '''
       Ajoute les données à la BDD et redirige le client.
@@ -231,7 +242,7 @@ def addTp(request, promotion_id, td_id):
     '''
 
     form = AddTP()
-    return render(request, 'management/add-tp.html', {'promotion_id': promotion_id, 'td_id': td_id, 'form': form})
+    return render(request, 'management/add-form.html', {'promotion_id': promotion_id, 'td_id': td_id, 'form': form, 'post_url': post_url, "back_url": back_url})
 
 @login_required
 def editYear(request, year_id):
@@ -248,6 +259,8 @@ def addSubject(request, promotion_id):
   '''
   Affiche la vue responsable de l'ajout d'une matiere dans une promotion et gère le retour de celle-ci.
   '''
+  post_url = reverse('management:add-subject', args=(promotion_id,))
+  back_url = reverse('management:edit-promotion', args=(promotion_id,))
 
   if request.method == 'POST':
     form = AddSubject(request.POST)
@@ -261,7 +274,7 @@ def addSubject(request, promotion_id):
         Si la matiere existe déjà dans la promotion on revoie le formulaire avec une erreur.
         '''
 
-        return render(request, 'management/add-subject.html', {'promotion_id': promotion_id, 'form': form, 'error': 'La matiere existe déjà' })
+        return render(request, 'management/add-form.html', {'promotion_id': promotion_id, 'form': form, 'error': 'La matiere existe déjà', 'post_url': post_url, "back_url": back_url})
 
       '''
       Ajoute les données à la BDD et redirige le client.
@@ -277,7 +290,7 @@ def addSubject(request, promotion_id):
     '''
 
     form = AddSubject()
-    return render(request, 'management/add-subject.html', {'promotion_id': promotion_id, 'form': form})
+    return render(request, 'management/add-form.html', {'promotion_id': promotion_id, 'form': form, 'post_url': post_url, "back_url": back_url})
 
 @login_required
 def editSubject(request, promotion_id, subject_id):
@@ -337,6 +350,8 @@ def addCmSession(request, promotion_id, subject_id):
   '''
   Affiche la vue responsable de l'ajout d'une séances (CM) pour une matière dans une promotion et gère le retour de celle-ci.
   '''
+  post_url = reverse('management:add-cm-session', args=(promotion_id, subject_id))
+  back_url = reverse('management:edit-subject', args=(promotion_id, subject_id))
 
   if request.method == 'POST':
     form = AddCmSubject(request.POST, promotion_id=promotion_id)
@@ -363,13 +378,13 @@ def addCmSession(request, promotion_id, subject_id):
         Si le nombre de séance attribuée et supérieure au nombre de séance restante alors on revoie le formulaire avec une erreur.
         '''
 
-        return render(request, 'management/add-cm-session.html', {'promotion_id': promotion_id, 'subject_id': subject_id, 'form': form, 'error': 'Vous ne pouvez pas affecter plus de ' + str(nb_sessions_remaining) + ' séances' })
+        return render(request, 'management/add-form.html', {'promotion_id': promotion_id, 'subject_id': subject_id, 'form': form, 'error': 'Vous ne pouvez pas affecter plus de ' + str(nb_sessions_remaining) + ' séances', 'post_url': post_url, "back_url": back_url})
 
       '''
       Ajoute les données à la BDD et redirige le client.
       '''
 
-      new_session = Sessions(subject=subject, type_sessions='cm', teacher=form.cleaned_data['teacher'], number_sessions=form.cleaned_data['number_sessions'], week=form.cleaned_data['week'], promotion=promotion)
+      new_session = Sessions(subject=subject, type_sessions='cm', teacher=form.cleaned_data['teacher'], number_sessions=form.cleaned_data['number_sessions'], promotion=promotion)
       new_session.save()
       return HttpResponseRedirect(reverse('management:edit-subject', args=(promotion_id, subject_id)))
   else:
@@ -378,13 +393,15 @@ def addCmSession(request, promotion_id, subject_id):
     '''
 
     form = AddCmSubject(promotion_id=promotion_id)
-    return render(request, 'management/add-cm-session.html', {'promotion_id': promotion_id, 'subject_id': subject_id, 'form': form})
+    return render(request, 'management/add-form.html', {'promotion_id': promotion_id, 'subject_id': subject_id, 'form': form, 'post_url': post_url, "back_url": back_url})
 
 @login_required
 def addTdSession(request, promotion_id, subject_id):
   '''
   Affiche la vue responsable de l'ajout d'une séances (TD) pour une matière dans une promotion et gère le retour de celle-ci.
   '''
+  post_url = reverse('management:add-td-session', args=(promotion_id, subject_id))
+  back_url = reverse('management:edit-subject', args=(promotion_id, subject_id))
 
   if request.method == 'POST':
     form = AddTdSubject(request.POST, promotion_id=promotion_id)
@@ -411,13 +428,13 @@ def addTdSession(request, promotion_id, subject_id):
         Si le nombre de séance attribuée et supérieure au nombre de séance restante alors on revoie le formulaire avec une erreur.
         '''
 
-        return render(request, 'management/add-td-session.html', {'promotion_id': promotion_id, 'subject_id': subject_id, 'form': form, 'error': 'Vous ne pouvez pas affecter plus de ' + str(nb_sessions_remaining) + ' séances' })
+        return render(request, 'management/add-form.html', {'promotion_id': promotion_id, 'subject_id': subject_id, 'form': form, 'error': 'Vous ne pouvez pas affecter plus de ' + str(nb_sessions_remaining) + ' séances', 'post_url': post_url, "back_url": back_url})
 
       '''
       Ajoute les données à la BDD et redirige le client.
       '''
 
-      new_session = Sessions(subject=subject, type_sessions='td', teacher=form.cleaned_data['teacher'], number_sessions=form.cleaned_data['number_sessions'], week=form.cleaned_data['week'], td=form.cleaned_data['td'])
+      new_session = Sessions(subject=subject, type_sessions='td', promotion=promotion, teacher=form.cleaned_data['teacher'], number_sessions=form.cleaned_data['number_sessions'], td=form.cleaned_data['td'])
       new_session.save()
       return HttpResponseRedirect(reverse('management:edit-subject', args=(promotion_id, subject_id)))
   else:
@@ -426,13 +443,15 @@ def addTdSession(request, promotion_id, subject_id):
     '''
 
     form = AddTdSubject(promotion_id=promotion_id)
-    return render(request, 'management/add-td-session.html', {'promotion_id': promotion_id, 'subject_id': subject_id, 'form': form})
+    return render(request, 'management/add-form.html', {'promotion_id': promotion_id, 'subject_id': subject_id, 'form': form, 'post_url': post_url, "back_url": back_url})
 
 @login_required
 def addTpSession(request, promotion_id, subject_id):
   '''
   Affiche la vue responsable de l'ajout d'une séances (TP) pour une matière dans une promotion et gère le retour de celle-ci.
   '''
+  post_url = reverse('management:add-tp-session', args=(promotion_id, subject_id))
+  back_url = reverse('management:edit-subject', args=(promotion_id, subject_id))
 
   if request.method == 'POST':
     form = AddTpSubject(request.POST, promotion_id=promotion_id)
@@ -459,13 +478,13 @@ def addTpSession(request, promotion_id, subject_id):
         Si le nombre de séance attribuée et supérieure au nombre de séance restante alors on revoie le formulaire avec une erreur.
         '''
 
-        return render(request, 'management/add-tp-session.html', {'promotion_id': promotion_id, 'subject_id': subject_id, 'form': form, 'error': 'Vous ne pouvez pas affecter plus de ' + str(nb_sessions_remaining) + ' séances' })
+        return render(request, 'management/add-form.html', {'promotion_id': promotion_id, 'subject_id': subject_id, 'form': form, 'error': 'Vous ne pouvez pas affecter plus de ' + str(nb_sessions_remaining) + ' séances', 'post_url': post_url, "back_url": back_url})
 
       '''
       Ajoute les données à la BDD et redirige le client.
       '''
 
-      new_session = Sessions(subject=subject, type_sessions='tp', teacher=form.cleaned_data['teacher'], number_sessions=form.cleaned_data['number_sessions'], week=form.cleaned_data['week'])
+      new_session = Sessions(subject=subject, type_sessions='tp', promotion=promotion, teacher=form.cleaned_data['teacher'], number_sessions=form.cleaned_data['number_sessions'])
       tp = Tp.objects.get(pk=form.cleaned_data['tp'].id)
       new_session.save()
       new_session.tp.add(tp)
@@ -477,7 +496,7 @@ def addTpSession(request, promotion_id, subject_id):
     '''
 
     form = AddTpSubject(promotion_id=promotion_id)
-    return render(request, 'management/add-tp-session.html', {'promotion_id': promotion_id, 'subject_id': subject_id, 'form': form})
+    return render(request, 'management/add-form.html', {'promotion_id': promotion_id, 'subject_id': subject_id, 'form': form, 'post_url': post_url, "back_url": back_url})
 
 
 @login_required
@@ -485,6 +504,8 @@ def addSemester(request, year_id):
   '''
   Affiche la vue responsable de l'ajout d'un semestre et gère le retour de celle-ci.
   '''
+  post_url = reverse('management:add-semester', args=(year_id,))
+  back_url = reverse('management:edit-year', args=(year_id,))
 
   if request.method == 'POST':
     form = AddSemester(request.POST)
@@ -498,7 +519,7 @@ def addSemester(request, year_id):
         Si le semestre existe déjà on revoie le formulaire avec une erreur.
         '''
 
-        return render(request, 'management/add-semester.html', {'form': form, 'error': 'Le semestre existe déjà', 'year_id': year_id })
+        return render(request, 'management/add-form.html', {'form': form, 'error': 'Le semestre existe déjà', 'year_id': year_id, "post_url": post_url, "back_url": back_url })
       
       '''
       Ajoute les données à la BDD et redirige le client.
@@ -513,7 +534,7 @@ def addSemester(request, year_id):
     '''
 
     form = AddSemester()
-    return render(request, 'management/add-semester.html', {'form': form, 'year_id': year_id})
+    return render(request, 'management/add-form.html', {'form': form, 'year_id': year_id, 'post_url': post_url, "back_url": back_url})
 
 @login_required
 def editSemester(request, year_id, semester_id):
@@ -578,4 +599,44 @@ def userLogin(request):
     form = Login()
     return render(request, 'management/login.html', {'form': form, 'next_url': request.GET['next']})
 
-#  return HttpResponse("Hello, world. You're at the polls index.")
+@login_required
+def editPlanning(request, year_id):
+  sessions = Sessions.objects.all()
+  week = Week.objects.all()
+  year = Year.objects.get(pk=year_id)
+  planning = Planning.objects.all()
+
+  remaining_session = {}
+
+  for one_sessions in sessions:
+    remaining_session[one_sessions.id] = {"name_subject" : one_sessions.subject.name_subject, "promotion": one_sessions.promotion, "number_sessions": one_sessions.number_sessions, 'type_sessions': one_sessions.type_sessions, 'teacher': one_sessions.teacher}
+
+  for one_planning in planning:
+    remaining_session[one_planning.sessions.id]["number_sessions"] -= one_planning.number_sessions
+
+  return render(request, 'management/edit-planning.html', {'week': week, 'year': year, 'remaining_session': remaining_session})
+
+@login_required
+def addPlanning(request, year_id, sessions_id):
+  post_url = reverse('management:add-planning', args=(year_id, sessions_id))
+  back_url = reverse('management:edit-planning', args=(year_id,))
+
+  if request.method == 'POST':
+    form = AddPlanning(request.POST, year_id=year_id)
+    if form.is_valid():
+      remaining_session = Sessions.objects.get(pk=sessions_id).number_sessions
+
+      for one_planning in Planning.objects.filter(sessions=sessions_id):
+        remaining_session -= one_planning.number_sessions
+
+      if (form.cleaned_data['number_sessions'] > remaining_session):
+        return render(request, 'management/add-form.html', {'form': form, 'error': 'Vous ne pouvez pas affecter plus de ' + str(remaining_session) + ' séances', 'post_url': post_url, "back_url": back_url})
+      
+      sessions = Sessions.objects.get(pk=sessions_id)
+      Planning(sessions=sessions, week=form.cleaned_data['week'], number_sessions=form.cleaned_data['number_sessions']).save()
+      return HttpResponseRedirect(reverse('management:edit-planning', args=(year_id,)))
+  else:
+    form = AddPlanning(year_id=year_id)
+    return render(request, 'management/add-form.html', {'form': form, 'post_url': post_url, "back_url": back_url})
+
+  #return HttpResponse("ok")

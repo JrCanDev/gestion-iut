@@ -28,6 +28,9 @@ urlpatterns = [
   path('edit/year/<int:year_id>/add/semester', views.addSemester, name="add-semester"),
   path('edit/year/<int:year_id>/edit/semester/<int:semester_id>', views.editSemester, name="edit-semester"),
   path('edit/year/<int:year_id>/edit/semester/<int:semester_id>/add/week', views.addWeek, name="add-week"),
+  path('edit/year/<int:year_id>/edit/planning', views.editPlanning, name='edit-planning'),
+  path('edit/year/<int:year_id>/add/planning/<int:sessions_id>', views.addPlanning, name='add-planning'),
 
-  path('edit/teacher/<int:teacher_id>', views.editTeacher, name='edit-teacher')
+
+  path('edit/teacher/<int:teacher_id>', views.editTeacher, name='edit-teacher'),
 ]

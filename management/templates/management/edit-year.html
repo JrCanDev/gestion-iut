@@ -26,5 +26,6 @@
       {% endfor %}
     </div>
     <a class="btn-add" href="{% url 'management:add-semester' year.id%}">Ajouter un semestre</a>
+    <a class="btn-add" href="{% url 'management:edit-planning' year.id%}">Modifier la planification</a>
   </div>
 </div>

@@ -40,10 +40,11 @@ class AddCmSubject(forms.Form):
     self.promotion_id = kwargs.pop("promotion_id")
     super(AddCmSubject, self).__init__(*args, **kwargs)
     
+    """
     promotion = Promotion.objects.get(pk=self.promotion_id)
     year = Year.objects.get(pk=promotion.year.id)
     self.fields['week'] = forms.ModelChoiceField(queryset=Week.objects.filter(semester__in=year.semester_set.all()).all())
-
+    """
 class AddTdSubject(forms.Form):
   teacher = forms.ModelChoiceField(queryset=Teacher.objects.all())
   number_sessions = forms.IntegerField(min_value=1, initial=1)
@@ -53,9 +54,12 @@ class AddTdSubject(forms.Form):
     super(AddTdSubject, self).__init__(*args, **kwargs)
     self.fields['td'] = forms.ModelChoiceField(queryset=Td.objects.filter(promotion=self.promotion_id).all())
 
+    """
     promotion = Promotion.objects.get(pk=self.promotion_id)
     year = Year.objects.get(pk=promotion.year.id)
     self.fields['week'] = forms.ModelChoiceField(queryset=Week.objects.filter(semester__in=year.semester_set.all()).all())
+    """
+
 
 class AddTpSubject(forms.Form):
   teacher = forms.ModelChoiceField(queryset=Teacher.objects.all())
@@ -66,9 +70,11 @@ class AddTpSubject(forms.Form):
     super(AddTpSubject, self).__init__(*args, **kwargs)
     self.fields['tp'] = forms.ModelChoiceField(queryset=Tp.objects.filter(td__in=Td.objects.filter(promotion=self.promotion_id).all()).all())
 
+    """
     promotion = Promotion.objects.get(pk=self.promotion_id)
     year = Year.objects.get(pk=promotion.year.id)
     self.fields['week'] = forms.ModelChoiceField(queryset=Week.objects.filter(semester__in=year.semester_set.all()).all())
+    """
 
 class AddSemester(forms.Form):
   name_semester = forms.CharField(max_length=20)
@@ -80,3 +86,11 @@ class AddWeek(forms.Form):
 class Login(forms.Form):
   username = forms.CharField(max_length=50)
   password = forms.CharField(max_length=250)
+
+class AddPlanning(forms.Form):
+  number_sessions = forms.IntegerField(min_value=1, initial=1)
+  
+  def __init__(self, *args, **kwargs):
+    self.year_id = kwargs.pop("year_id")
+    super(AddPlanning, self).__init__(*args, **kwargs)
+    self.fields['week'] = forms.ModelChoiceField(queryset=Week.objects.filter(semester__in=Semester.objects.filter(year=self.year_id).all()).all())
