@@ -13,11 +13,14 @@
       {% for one_year in year %}
       <div class="item">
         <p>{{ one_year }}</p>
-        <a href="{% url 'management:edit-year' one_year.id%}">Voir</a>
+        <div class="btn">
+          <a href="{% url 'management:managed-year' one_year.id %}">Voir</a>
+          <a href="{% url 'management:delete-year' one_year.id %}">Delete</a>
+        </div>
       </div>
       {% endfor %}
     </div>
-    <a class="btn-add" href="{% url 'management:add-year'%}">Ajouter une année</a>
+    <a class="btn-add" href="{% url 'management:add-year' %}">Ajouter une année</a>
   </div>
 
   <div class="teacher">
@@ -26,11 +29,14 @@
       {% for one_teacher in teacher %}
       <div class="item">
         <p>{{ one_teacher }}</p>
-        <a href="{% url 'management:edit-teacher' one_teacher.id %}">Voir</a>
+        <div class="btn">
+          <a href="{% url 'management:managed-teacher' one_teacher.id %}">Voir</a>
+          <a href="{% url 'management:delete-teacher' one_teacher.id %}">Delete</a>
+        </div>
       </div>
       {% endfor %}
     </div>
-    <a class="btn-add" href="{% url 'management:add-teacher'%}"><p>Ajouter un professeur</p></a>
+    <a class="btn-add" href="{% url 'management:add-teacher' %}"><p>Ajouter un professeur</p></a>
   </div>
 
   <div class="promotion">
@@ -39,10 +45,13 @@
       {% for one_promotion in promotion %}
       <div class="item">
         <p>{{ one_promotion }}</p>
-        <a href="{% url 'management:edit-promotion' one_promotion.id%}">Voir</a>
+        <div class="btn">
+          <a href="{% url 'management:managed-promotion' one_promotion.id %}">Voir</a>
+          <a href="{% url 'management:delete-promotion' one_promotion.id %}">Delete</a>
+        </div>
       </div>
       {% endfor %}
     </div>
-    <a class="btn-add" href="{% url 'management:add-promotion'%}"><p>Ajouter une promotion</p></a>
+    <a class="btn-add" href="{% url 'management:add-promotion' %}"><p>Ajouter une promotion</p></a>
   </div>
 </div>

@@ -65,4 +65,8 @@ class Sessions(models.Model):
   td = models.ForeignKey(Td, blank=True, null=True, on_delete=models.CASCADE, related_name='td')
   tp = models.ManyToManyField(Tp, blank=True, related_name='tp')
   subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+
+class Planning(models.Model):
+  sessions = models.ForeignKey(Sessions, on_delete=models.CASCADE)
+  number_sessions = models.PositiveIntegerField(default=0)
   week = models.ForeignKey(Week, on_delete=models.CASCADE)

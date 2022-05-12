@@ -1,6 +1,6 @@
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'management/edit-year.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'management/managed-year.css' %}" />
 
 <div class="title">
   <h1>{{ year.name_year }}</h1>
@@ -21,10 +21,14 @@
           </div>
           {% endfor %}
         </dev>
-        <a href="{% url 'management:edit-semester' year.id one_semester.id%}">Edit</a>
+        <div class="btn">
+          <a href="{% url 'management:managed-semester' year.id one_semester.id %}">Edit</a>
+          <a href="{% url 'management:delete-semester' year.id one_semester.id %}">Delete</a>
+        </div>
       </div>
       {% endfor %}
     </div>
     <a class="btn-add" href="{% url 'management:add-semester' year.id%}">Ajouter un semestre</a>
+    <a class="btn-add" href="{% url 'management:managed-planning' year.id%}">Modifier la planification</a>
   </div>
 </div>
