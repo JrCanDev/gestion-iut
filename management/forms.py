@@ -81,7 +81,7 @@ class AddSemester(forms.Form):
 
 class AddWeek(forms.Form):
   #name_week = forms.DateField(widget=forms.SelectDateWidget)
-  name_week = forms.DateField(input_formats=['%d/%m/%Y'])
+  name_week = forms.DateField(input_formats=['%m/%d/%Y'])
 
 class Login(forms.Form):
   username = forms.CharField(max_length=50)
@@ -94,3 +94,6 @@ class AddPlanning(forms.Form):
     self.year_id = kwargs.pop("year_id")
     super(AddPlanning, self).__init__(*args, **kwargs)
     self.fields['week'] = forms.ModelChoiceField(queryset=Week.objects.filter(semester__in=Semester.objects.filter(year=self.year_id).all()).all())
+
+class DeleteForm(forms.Form):
+  confirm = forms.BooleanField()

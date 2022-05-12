@@ -1,11 +1,11 @@
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'management/edit-td.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'management/managed-td.css' %}" />
 
 <div class="title">
   <h1>{{ td.name_td }}</h1>
   <p>{{ promotion.name_promotion }}</p>
-  <a class="btn-back" href="{% url 'management:edit-promotion' promotion.id%}">← back</a>
+  <a class="btn-back" href="{% url 'management:managed-promotion' promotion.id%}">← back</a>
 </div>
 
 <div class="container">
@@ -15,6 +15,7 @@
       {% for one_tp in td.tp_set.all %}
       <div class="item">
         <p>{{ one_tp }}</p>
+        <a href="{% url 'management:delete-tp' promotion.id td.id one_tp.id %}">Delete</a>
       </div>
       {% endfor %}
     </div>

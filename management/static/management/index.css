@@ -77,9 +77,16 @@ body {
   font-weight: 600;
 }
 
-.year .list .item a,
-.promotion .list .item a,
-.teacher .list .item a {
+.year .list .item .btn,
+.promotion .list .item .btn,
+.teacher .list .item .btn {
+  display: flex;
+  gap: 1rem;
+}
+
+.year .list .item .btn a,
+.promotion .list .item .btn a,
+.teacher .list .item .btn a {
   display: block;
   text-align: center;
   text-decoration: none;

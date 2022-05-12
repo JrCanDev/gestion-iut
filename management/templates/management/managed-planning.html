@@ -1,11 +1,11 @@
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'management/edit-planning.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'management/managed-planning.css' %}" />
 
 <div class="title">
   <h1>Planification</h1>
   <p>{{ year }}</p>
-  <a class="btn-back" href="{% url 'management:edit-year' year.id %}">← back</a>
+  <a class="btn-back" href="{% url 'management:managed-year' year.id %}">← back</a>
 </div>
 
 <div class="container">
@@ -16,22 +16,26 @@
     {% for one_semester in year.semester_set.all %}
     <table>
       <tr>
-        <th colspan="5">{{ one_semester }}</th>
+        <th colspan="7">{{ one_semester }}</th>
       </tr>
       <tr>
+        <th>Semaine</th>
         <th>Matiere</th>
         <th>Promotion</th>
-        <th>Semaine</th>
+        <th>Type de séance</th>
         <th>Nombre de séances</th>
         <th>Professeur</th>
+        <th>Action</th>
       </tr>
       {% for one_week in one_semester.week_set.all %} {% for one_planning in one_week.planning_set.all %}
       <tr>
+        <td>{{ one_week }}</td>
         <td>{{ one_planning.sessions.subject }}</td>
         <td>{{ one_planning.sessions.promotion }}</td>
-        <td>{{ one_week }}</td>
+        <td>{{ one_planning.sessions.type_sessions }}</td>
         <td>{{ one_planning.number_sessions }}</td>
         <td>{{ one_planning.sessions.teacher }}</td>
+        <td><a href="{% url 'management:delete-planning' year.id one_planning.id %}">Delete</a></td>
       </tr>
       {% endfor %} {% endfor %}
     </table>
