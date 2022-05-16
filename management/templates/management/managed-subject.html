@@ -1,102 +1,125 @@
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'management/managed-subject.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'management/managed-subject.css' %}"/>
 
 <div class="title">
-  <h1>{{ subject.name_subject }}</h1>
-  <p>{{ promotion.name_promotion }}</p>
-  <a href="{% url 'management:managed-promotion' promotion.id %}">← back</a>
+    <h1>{{ subject.name_subject }}</h1>
+    <p>{{ promotion.name_promotion }}</p>
+    <a href="{% url 'management:managed-promotion' promotion.id %}">← back</a> | <a class="btn-back"
+                                                                                    href="{% url 'management:index' %}">Home</a>
 </div>
 <div class="container">
-  <div class="cm">
-    <h2>CM</h2>
-    <div class="info">
-      <p>{{ nb_sessions.cm.for_promotion }} séances ont été prévue, vous devez encor en affecter {{ nb_sessions.cm.remaining }}.</p>
+    <div class="cm">
+        <h2>CM</h2>
+        <div class="info">
+            <p>{{ nb_sessions.cm.for_promotion }} séances ont été prévue, vous devez encor en
+                affecter {{ nb_sessions.cm.remaining }}.</p>
+        </div>
+        <table>
+            <tr>
+                <th>Nom professeur</th>
+                <th>Nombre de séances</th>
+                <th>Semaine</th>
+                <th>Action</th>
+            </tr>
+            {% for one_sessions in nb_sessions.cm.sessions %}
+                <tr>
+                    {% if one_sessions.type_sessions == "cm" %}
+                        <td>{{ one_sessions.teacher }}</td>
+                        <td class="number_hours">
+                            {% if nb_sessions.cm.remaining < 0 %}
+                                <div class="overload">{{ one_sessions.number_hours }}</div>
+                            {% elif  nb_sessions.cm.remaining > 0 %}
+                                <div class="incomplete">{{ one_sessions.number_hours }}</div>
+                            {% else %}
+                                {{ one_sessions.number_hours }}
+                            {% endif %}
+                        </td>
+                        <td>{{ one_sessions.week }}</td>
+                        <td><a href="{% url 'management:delete-session' promotion.id subject.id one_sessions.id %}">Delete</a>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+        <a href="{% url 'management:add-cm-session' promotion.id subject.id %}">Ajouter un CM</a>
     </div>
-    <table>
-      <tr>
-        <th>Nom professeur</th>
-        <th>Nombre de séances</th>
-        <th>Semaine</th>
-        <th>Action</th>
-      </tr>
-      {% for one_sessions in subject.sessions_set.all %}
-      <tr>
-        {% if one_sessions.type_sessions == "cm" %}
-        <td>{{ one_sessions.teacher }}</td>
-        <td>{{ one_sessions.number_sessions }}</td>
-        <td>{{ one_sessions.week }}</td>
-        <td><a href="{% url 'management:delete-session' promotion.id subject.id one_sessions.id %}">Delete</a></td>
-        {% endif %}
-      </tr>
-      {% endfor %}
-    </table>
-    {% if nb_sessions.cm.remaining > 0%}
-    <a href="{% url 'management:add-cm-session' promotion.id subject.id %}">Ajouter un CM</a>
-    {% endif %}
-  </div>
 
-  <div class="td">
-    <h2>TD</h2>
-    <div class="info">
-      <p>{{ nb_sessions.td.for_td }} séances par TD ont été prévue, vous devez encor en affecter {{ nb_sessions.td.remaining }}.</p>
+    <div class="td">
+        <h2>TD</h2>
+        <div class="info">
+            <p>{{ nb_sessions.td.for_td }} séances par TD ont été prévue, vous devez encor en
+                affecter {{ nb_sessions.td.remaining }}.</p>
+        </div>
+        {% for td_session, list_session in nb_sessions.td.sessions.items %}
+            <table>
+                <tr>
+                    <th colspan="4">{{ td_session }}</th>
+                </tr>
+                <tr>
+                    <th>Nom professeur</th>
+                    <th>Nombre de séances</th>
+                    <th>Semaine</th>
+                    <th>Action</th>
+                </tr>
+                {% for one_sessions in list_session.data %}
+                    <tr>
+                        <td>{{ one_sessions.teacher }}</td>
+                        <td class="number_hours">
+                            {% if nb_sessions.td.for_td <  list_session.allocate_hours %}
+                                <div class="overload">{{ one_sessions.number_hours }}</div>
+                            {% elif  nb_sessions.td.for_td > list_session.allocate_hours %}
+                                <div class="incomplete">{{ one_sessions.number_hours }}</div>
+                            {% else %}
+                                {{ one_sessions.number_hours }}
+                            {% endif %}
+                        </td>
+                        <td>{{ one_sessions.week }}</td>
+                        <td><a href="{% url 'management:delete-session' promotion.id subject.id one_sessions.id %}">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endfor %}
+        <a href="{% url 'management:add-td-session' promotion.id subject.id %}"><p>Ajouter un TD</p></a>
     </div>
-    {% for one_td, list_session in session_td.items %}
-    <table>
-      <tr>
-        <th colspan="3">{{ one_td }}</th>
-      </tr>
-      <tr>
-        <th>Nom professeur</th>
-        <th>Nombre de séances</th>
-        <th>Semaine</th>
-        <th>Action</th>
-      </tr>
-      {% for one_sessions in list_session %}
-      <tr>
-        <td>{{ one_sessions.teacher }}</td>
-        <td>{{ one_sessions.number_sessions }}</td>
-        <td>{{ one_sessions.week }}</td>
-        <td><a href="{% url 'management:delete-session' promotion.id subject.id one_sessions.id %}">Delete</a></td>
-      </tr>
-      {% endfor %}
-    </table>
-    {% endfor %}
-    <!---->
-    {% if nb_sessions.td.remaining > 0%}
-    <a href="{% url 'management:add-td-session' promotion.id subject.id %}"><p>Ajouter un TD</p></a>
-    {% endif %}
-  </div>
 
-  <div class="tp">
-    <h2>TP</h2>
-    <div class="info">
-      <p>{{ nb_sessions.tp.for_tp }} séances par TP ont été prévue, vous devez encor en affecter {{ nb_sessions.tp.remaining }}.</p>
+    <div class="tp">
+        <h2>TP</h2>
+        <div class="info">
+            <p>{{ nb_sessions.tp.for_tp }} séances par TP ont été prévue, vous devez encor en
+                affecter {{ nb_sessions.tp.remaining }}.</p>
+        </div>
+        {% for tp_session, list_session in nb_sessions.tp.sessions.items %}
+            <table>
+                <tr>
+                    <th colspan="4">{{ tp_session }}</th>
+                </tr>
+                <tr>
+                    <th>Nom professeur</th>
+                    <th>Nombre de séances</th>
+                    <th>Semaine</th>
+                    <th>Action</th>
+                </tr>
+                {% for one_sessions in list_session.data %}
+                    <tr>
+                        <td>{{ one_sessions.teacher }}</td>
+                        <td class="number_hours">
+                            {% if nb_sessions.tp.for_tp < list_session.allocate_hours %}
+                                <div class="overload">{{ one_sessions.number_hours }}</div>
+                            {% elif  nb_sessions.tp.for_tp > list_session.allocate_hours %}
+                                <div class="incomplete">{{ one_sessions.number_hours }}</div>
+                            {% else %}
+                                {{ one_sessions.number_hours }}
+                            {% endif %}
+                        </td>
+                        <td>{{ one_sessions.week }}</td>
+                        <td><a href="{% url 'management:delete-session' promotion.id subject.id one_sessions.id %}">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endfor %}
+        <a href="{% url 'management:add-tp-session' promotion.id subject.id %}"><p>Ajouter un TP</p></a>
     </div>
-    {% for one_tp, list_session in session_tp.items %}
-    <table>
-      <tr>
-        <th colspan="3">{{ one_tp }}</th>
-      </tr>
-      <tr>
-        <th>Nom professeur</th>
-        <th>Nombre de séances</th>
-        <th>Semaine</th>
-        <th>Action</th>
-      </tr>
-      {% for one_sessions in list_session %}
-      <tr>
-        <td>{{ one_sessions.teacher }}</td>
-        <td>{{ one_sessions.number_sessions }}</td>
-        <td>{{ one_sessions.week }}</td>
-        <td><a href="{% url 'management:delete-session' promotion.id subject.id one_sessions.id %}">Delete</a></td>
-      </tr>
-      {% endfor %}
-    </table>
-    {% endfor %}
-    <!---->
-    {% if nb_sessions.tp.remaining > 0%}
-    <a href="{% url 'management:add-tp-session' promotion.id subject.id %}"><p>Ajouter un TP</p></a>
-    {% endif %}
-  </div>
 </div>

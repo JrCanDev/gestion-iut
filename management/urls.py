@@ -6,6 +6,7 @@ app_name = 'management'
 urlpatterns = [
     path('', home.index, name='index'),
     path('accounts/login/', home.user_login, name='login'),
+    path('accounts/logout/', home.user_logout, name='logout'),
 
     path('add/year', year.add_year, name="add-year"),
     path('add/teacher', teacher.add_teacher, name="add-teacher"),

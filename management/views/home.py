@@ -1,8 +1,10 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth import login
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 
 from management.forms import Login
 from management.models import Promotion, Teacher, Year
@@ -35,3 +37,8 @@ def user_login(request):
     else:
         form = Login()
         return render(request, 'management/login.html', {'form': form, 'next_url': request.GET['next']})
+
+
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('management:index'))

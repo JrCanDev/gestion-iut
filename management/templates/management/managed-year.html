@@ -1,34 +1,35 @@
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'management/managed-year.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'management/managed-year.css' %}"/>
 
 <div class="title">
-  <h1>{{ year.name_year }}</h1>
-  <a class="btn-back" href="{% url 'management:index'%}">← back</a>
+    <h1>{{ year.name_year }}</h1>
+    <a class="btn-back" href="{% url 'management:index' %}">← back</a> | <a class="btn-back"
+                                                                            href="{% url 'management:index' %}">Home</a>
 </div>
 
 <div class="container">
-  <div class="semester">
-    <h2>Semestre</h2>
-    <div class="list">
-      {% for one_semester in year.semester_set.all %}
-      <div class="item">
-        <h3>{{ one_semester }}</h3>
-        <dev class="weeks">
-          {% for one_week in one_semester.week_set.all %}
-          <div class="week">
-            <p>{{ one_week }}</p>
-          </div>
-          {% endfor %}
-        </dev>
-        <div class="btn">
-          <a href="{% url 'management:managed-semester' year.id one_semester.id %}">Edit</a>
-          <a href="{% url 'management:delete-semester' year.id one_semester.id %}">Delete</a>
+    <div class="semester">
+        <h2>Semestre</h2>
+        <div class="list">
+            {% for one_semester in year.semester_set.all %}
+                <div class="item">
+                    <h3>{{ one_semester }}</h3>
+                    <div class="weeks">
+                        {% for one_week in one_semester.week_set.all %}
+                            <div class="week">
+                                <p>{{ one_week }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="btn">
+                        <a href="{% url 'management:managed-semester' year.id one_semester.id %}">Voir</a>
+                        <a href="{% url 'management:delete-semester' year.id one_semester.id %}">Delete</a>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
-      </div>
-      {% endfor %}
+        <a class="btn-add" href="{% url 'management:add-semester' year.id %}">Ajouter un semestre</a>
+        <a class="btn-add" href="{% url 'management:managed-planning' year.id %}">Modifier la planification</a>
     </div>
-    <a class="btn-add" href="{% url 'management:add-semester' year.id%}">Ajouter un semestre</a>
-    <a class="btn-add" href="{% url 'management:managed-planning' year.id%}">Modifier la planification</a>
-  </div>
 </div>

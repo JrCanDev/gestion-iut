@@ -1,24 +1,25 @@
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'management/managed-semester.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'management/managed-semester.css' %}"/>
 
 <div class="title">
-  <h1>{{ semester.name_semester }}</h1>
-  <p>{{ year.name_year }}</p>
-  <a class="btn-back" href="{% url 'management:managed-year' year.id%}">← back</a>
+    <h1>{{ semester.name_semester }}</h1>
+    <p>{{ year.name_year }}</p>
+    <a class="btn-back" href="{% url 'management:managed-year' year.id %}">← back</a> | <a class="btn-back"
+                                                                                           href="{% url 'management:index' %}">Home</a>
 </div>
 
 <div class="container">
-  <div class="week">
-    <h2>Semestre</h2>
-    <div class="list">
-      {% for one_week in semester.week_set.all %}
-      <div class="item">
-        <p>{{ one_week }}</p>
-        <a href="{% url 'management:delete-week' year.id semester.id one_week.id %}">Delete</a>
-      </div>
-      {% endfor %}
+    <div class="week">
+        <h2>Semestre</h2>
+        <div class="list">
+            {% for one_week in semester.week_set.all %}
+                <div class="item">
+                    <p>{{ one_week }}</p>
+                    <a href="{% url 'management:delete-week' year.id semester.id one_week.id %}">Delete</a>
+                </div>
+            {% endfor %}
+        </div>
+        <a class="btn-add" href="{% url 'management:add-week' year.id semester.id %}">Ajouter une semaine</a>
     </div>
-    <a class="btn-add" href="{% url 'management:add-week' year.id semester.id %}">Ajouter un semaine</a>
-  </div>
 </div>

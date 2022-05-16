@@ -1,40 +1,44 @@
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'management/managed-teacher.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'management/managed-teacher.css' %}"/>
 
 <div class="title">
-  <h1>{{ teacher.last_name }}</h1>
-  <p>{{ teacher.first_name }}</p>
-  <a class="btn-back" href="{% url 'management:index' %}">← back</a>
+    <h1>{{ teacher.last_name }}</h1>
+    <p>{{ teacher.first_name }}</p>
+    <a class="btn-back" href="{% url 'management:index' %}">← back</a> | <a class="btn-back"
+                                                                            href="{% url 'management:index' %}">Home</a>
 </div>
 
 <div class="container">
-  {% for one_year in year %}
-  <div class="year">
-    <h2>{{ one_year }}</h2>
-    {% for one_semester in one_year.semester_set.all %}
-    <table>
-      <tr>
-        <th colspan="4">{{ one_semester }}</th>
-      </tr>
+    {% for one_year in year %}
+        <div class="year">
+            <h2>{{ one_year }}</h2>
+            {% for one_semester in one_year.semester_set.all %}
+                <table>
+                    <tr>
+                        <th colspan="4">{{ one_semester }}</th>
+                    </tr>
 
-      {% for one_week in one_semester.week_set.all %}
-      <tr>
-        <th>Type de séance</th>
-        <th>Nombre de séance</th>
-        <th>Module</th>
-        <th>Semaine</th>
-      </tr>
-      {% for one_sessions in one_week.sessions_set.all %} {% if teacher == one_sessions.teacher %}
-      <tr>
-        <td>{{ one_sessions.type_sessions }}</td>
-        <td>{{ one_sessions.number_sessions }}</td>
-        <td>{{ one_sessions.subject }}</td>
-        <td>{{ one_week }}</td>
-      </tr>
-      {% endif %} {% endfor %}{% endfor %}
-    </table>
+                    {% for one_week in one_semester.week_set.all %}
+                        <tr>
+                            <th>Module</th>
+                            <th>Type de séance</th>
+                            <th>Nombre d'heures</th>
+                            <th>Semaine</th>
+                        </tr>
+                        {% for one_planning in one_week.planning_set.all %}
+                            {% if teacher == one_planning.sessions.teacher %}
+                                <tr>
+                                    <td>{{ one_planning.sessions.subject }}</td>
+                                    <td>{{ one_planning.sessions.type_sessions }}</td>
+                                    <td>{{ one_planning.number_hours }}</td>
+                                    <td>{{ one_week }}</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </table>
+            {% endfor %}
+        </div>
     {% endfor %}
-  </div>
-  {% endfor %}
 </div>
