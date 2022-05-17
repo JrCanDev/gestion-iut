@@ -57,9 +57,10 @@ class Tp(models.Model):
 
 class Subject(models.Model):
     name_subject = models.CharField(max_length=20)
-    number_cm_sessions = models.PositiveIntegerField(default=0)
-    number_td_sessions = models.PositiveIntegerField(default=0)
-    number_tp_sessions = models.PositiveIntegerField(default=0)
+    description = models.CharField(max_length=120)
+    number_cm_sessions = models.FloatField(default=0)
+    number_td_sessions = models.FloatField(default=0)
+    number_tp_sessions = models.FloatField(default=0)
     promotion = models.ForeignKey(Promotion, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -70,7 +71,7 @@ class Sessions(models.Model):
     TypeSessionsChoices = models.TextChoices('type', 'cm td tp')
     type_sessions = models.CharField(blank=True, choices=TypeSessionsChoices.choices, max_length=20)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    number_sessions = models.PositiveIntegerField(default=0)
+    number_hours = models.FloatField(default=0)
     promotion = models.ForeignKey(Promotion, blank=True, null=True, on_delete=models.CASCADE, related_name='promotion')
     td = models.ForeignKey(Td, blank=True, null=True, on_delete=models.CASCADE, related_name='td')
     tp = models.ManyToManyField(Tp, blank=True, related_name='tp')
@@ -79,5 +80,5 @@ class Sessions(models.Model):
 
 class Planning(models.Model):
     sessions = models.ForeignKey(Sessions, on_delete=models.CASCADE)
-    number_sessions = models.PositiveIntegerField(default=0)
+    number_hours = models.FloatField(default=0)
     week = models.ForeignKey(Week, on_delete=models.CASCADE)

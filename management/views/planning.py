@@ -19,13 +19,13 @@ def managed_planning(request, year_id):
     for one_sessions in sessions:
         remaining_session[one_sessions.id] = {"name_subject": one_sessions.subject.name_subject,
                                               "promotion": one_sessions.promotion,
-                                              "number_sessions": one_sessions.number_sessions,
+                                              "number_hours": one_sessions.number_hours,
                                               'type_sessions': one_sessions.type_sessions,
                                               'teacher': one_sessions.teacher}
 
     for one_planning in planning:
         if one_planning.sessions.id in remaining_session:
-            remaining_session[one_planning.sessions.id]["number_sessions"] -= one_planning.number_sessions
+            remaining_session[one_planning.sessions.id]["number_hours"] -= one_planning.number_hours
 
     return render(request, 'management/managed-planning.html',
                   {'week': week, 'year': year, 'remaining_session': remaining_session})
@@ -39,12 +39,12 @@ def add_planning(request, year_id, sessions_id):
     if request.method == 'POST':
         form = AddPlanning(request.POST, year_id=year_id)
         if form.is_valid():
-            remaining_session = Sessions.objects.get(pk=sessions_id).number_sessions
+            remaining_session = Sessions.objects.get(pk=sessions_id).number_hours
 
             for one_planning in Planning.objects.filter(sessions=sessions_id):
-                remaining_session -= one_planning.number_sessions
+                remaining_session -= one_planning.number_hours
 
-            if form.cleaned_data['number_sessions'] > remaining_session:
+            if form.cleaned_data['number_hours'] > remaining_session:
                 return render(request, 'management/add-form.html', {'form': form,
                                                                     'error': 'Vous ne pouvez pas affecter plus de '
                                                                              + str(remaining_session) + ' séances',
@@ -52,7 +52,7 @@ def add_planning(request, year_id, sessions_id):
 
             sessions = Sessions.objects.get(pk=sessions_id)
             Planning(sessions=sessions, week=form.cleaned_data['week'],
-                     number_sessions=form.cleaned_data['number_sessions']).save()
+                     number_hours=form.cleaned_data['number_hours']).save()
             return HttpResponseRedirect(reverse('management:managed-planning', args=(year_id,)))
     else:
         form = AddPlanning(year_id=year_id)

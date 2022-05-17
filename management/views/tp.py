@@ -75,4 +75,5 @@ def delete_tp(request, promotion_id, td_id, tp_id):
     else:
         form = DeleteForm()
         return render(request, 'management/delete-form.html',
-                      {'form': form, 'post_url': post_url, "back_url": back_url})
+                      {'form': form, 'post_url': post_url, "back_url": back_url,
+                       "info": "Tous les éléments liés à ce TP seront aussi supprimés !"})

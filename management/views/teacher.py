@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from management.forms import AddTeacher, DeleteForm
+from management.forms import AddTeacher, DeleteForm, EditTeacher
 from management.models import Teacher, Year
 
 
@@ -64,6 +64,42 @@ def managed_teacher(request, teacher_id):
 
 
 @login_required
+def edit_teacher(request, teacher_id):
+    post_url = reverse('management:edit-teacher', args=(teacher_id,))
+    back_url = reverse('management:index')
+
+    teacher = Teacher.objects.get(pk=teacher_id)
+
+    if request.method == 'POST':
+        form = EditTeacher(request.POST, teacher=teacher)
+        if form.is_valid():
+            '''
+            Si le formulaire a été soumi, on vérifie que les champs ont été correctement remplis.
+            '''
+
+            status_choices = {
+                "1": "professeur",
+                "2": "vacataire"
+            }
+
+            '''
+            Ajoute les données à la BDD et redirige le client.
+            '''
+            teacher.last_name = form.cleaned_data['last_name']
+            teacher.first_name = form.cleaned_data['first_name']
+            teacher.status = status_choices[form.cleaned_data['status']]
+            teacher.save()
+            return HttpResponseRedirect('/')
+    else:
+        '''
+        Sinon on affiche le formulaire vide.
+        '''
+
+        form = EditTeacher(teacher=teacher)
+        return render(request, 'management/edit-form.html', {'form': form, 'post_url': post_url, "back_url": back_url})
+
+
+@login_required
 def delete_teacher(request, teacher_id):
     post_url = reverse('management:delete-teacher', args=(teacher_id,))
     back_url = reverse('management:index', args=())
@@ -82,4 +118,5 @@ def delete_teacher(request, teacher_id):
     else:
         form = DeleteForm()
         return render(request, 'management/delete-form.html',
-                      {'form': form, 'post_url': post_url, "back_url": back_url})
+                      {'form': form, 'post_url': post_url, "back_url": back_url,
+                       "info": "Tous les éléments liés à ce professeur seront aussi supprimés !"})
