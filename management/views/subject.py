@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from management.forms import AddSubject, DeleteForm
+from management.forms import AddSubject, DeleteForm, EditSubject
 from management.models import Promotion, Subject, Td, Tp, Sessions
 
 
@@ -118,6 +118,44 @@ def managed_subject(request, promotion_id, subject_id):
 
     return render(request, 'management/managed-subject.html',
                   {'promotion': promotion, 'subject': subject, 'nb_sessions': nb_sessions})
+
+
+@login_required
+def edit_subject(request, promotion_id, subject_id):
+    """
+    Affiche la vue responsable de l'ajout d'une matiere dans une promotion et gère le retour de celle-ci.
+    """
+    post_url = reverse('management:edit-subject', args=(promotion_id, subject_id))
+    back_url = reverse('management:managed-promotion', args=(promotion_id,))
+
+    subject = Subject.objects.get(pk=subject_id)
+
+    if request.method == 'POST':
+        form = EditSubject(request.POST, subject=subject)
+        if form.is_valid():
+            '''
+            Si le formulaire a été soumi, on vérifie que les champs ont été correctement remplis.
+            '''
+
+            '''
+            Ajoute les données à la BDD et redirige le client.
+            '''
+
+            subject.name_subject = form.cleaned_data['name_subject']
+            subject.description = form.cleaned_data['description']
+            subject.number_cm_sessions = form.cleaned_data['number_cm_sessions']
+            subject.number_td_sessions = form.cleaned_data['number_td_sessions']
+            subject.number_tp_sessions = form.cleaned_data['number_tp_sessions']
+            subject.save()
+            return HttpResponseRedirect(reverse('management:managed-promotion', args=(promotion_id,)))
+    else:
+        '''
+        Sinon on affiche le formulaire vide.
+        '''
+
+        form = EditSubject(subject=subject)
+        return render(request, 'management/add-form.html',
+                      {'promotion_id': promotion_id, 'form': form, 'post_url': post_url, "back_url": back_url})
 
 
 @login_required

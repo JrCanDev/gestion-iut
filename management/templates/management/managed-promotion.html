@@ -42,6 +42,7 @@
 
                     <div class="btn">
                         <a href="{% url 'management:managed-subject' promotion.id one_subject.id %}">Voir</a>
+                        <a href="{% url 'management:edit-subject' promotion.id one_subject.id %}">Edit</a>
                         <a href="{% url 'management:delete-subject' promotion.id one_subject.id %}">Delete</a>
                     </div>
                 </div>

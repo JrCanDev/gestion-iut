@@ -12,7 +12,7 @@
     <div class="cm">
         <h2>CM</h2>
         <div class="info">
-            <p>{{ nb_sessions.cm.for_promotion }} séances ont été prévue, vous devez encor en
+            <p>{{ nb_sessions.cm.for_promotion }} séances ont été prévues, vous devez encore en
                 affecter {{ nb_sessions.cm.remaining }}.</p>
         </div>
         <table>
@@ -48,7 +48,7 @@
     <div class="td">
         <h2>TD</h2>
         <div class="info">
-            <p>{{ nb_sessions.td.for_td }} séances par TD ont été prévue, vous devez encor en
+            <p>{{ nb_sessions.td.for_td }} séances par TD ont été prévues, vous devez encore en
                 affecter {{ nb_sessions.td.remaining }}.</p>
         </div>
         {% for td_session, list_session in nb_sessions.td.sessions.items %}
@@ -87,7 +87,7 @@
     <div class="tp">
         <h2>TP</h2>
         <div class="info">
-            <p>{{ nb_sessions.tp.for_tp }} séances par TP ont été prévue, vous devez encor en
+            <p>{{ nb_sessions.tp.for_tp }} séances par TP ont été prévues, vous devez encore en
                 affecter {{ nb_sessions.tp.remaining }}.</p>
         </div>
         {% for tp_session, list_session in nb_sessions.tp.sessions.items %}

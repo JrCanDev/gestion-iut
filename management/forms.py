@@ -108,3 +108,28 @@ class AddPlanning(forms.Form):
 
 class DeleteForm(forms.Form):
     confirm = forms.BooleanField()
+
+
+class ChangePassword(forms.Form):
+    password = forms.CharField(max_length=250, widget=forms.PasswordInput)
+
+
+class EditTeacher(forms.Form):
+    def __init__(self, *args, **kwargs):
+        self.teacher = kwargs.pop("teacher")
+        super(EditTeacher, self).__init__(*args, **kwargs)
+        self.fields['last_name'] = forms.CharField(max_length=50, initial=self.teacher.last_name)
+        self.fields['first_name'] = forms.CharField(max_length=50, initial=self.teacher.first_name)
+        self.fields['status'] = forms.ChoiceField(choices=StatusChoices,
+                                                  initial=(1 if self.teacher.status == "professeur" else 2))
+
+
+class EditSubject(forms.Form):
+    def __init__(self, *args, **kwargs):
+        self.subject = kwargs.pop("subject")
+        super(EditSubject, self).__init__(*args, **kwargs)
+        self.fields['name_subject'] = forms.CharField(max_length=20, initial=self.subject.name_subject)
+        self.fields['description'] = forms.CharField(max_length=120, initial=self.subject.description)
+        self.fields['number_cm_sessions'] = forms.FloatField(min_value=0, initial=self.subject.number_cm_sessions)
+        self.fields['number_td_sessions'] = forms.FloatField(min_value=0, initial=self.subject.number_td_sessions)
+        self.fields['number_tp_sessions'] = forms.FloatField(min_value=0, initial=self.subject.number_tp_sessions)

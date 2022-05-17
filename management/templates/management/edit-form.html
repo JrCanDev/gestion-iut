@@ -1,6 +1,6 @@
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'management/add-form.css' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'management/edit-form.css' %}"/>
 
 <form action="{{ post_url }}" method="post">
     {% csrf_token %}
@@ -15,6 +15,6 @@
         </div>
     {% endif %}
     <div class="inputs">{{ form }}</div>
-    <input type="submit" value="Submit"/>
+    <input type="submit" value="Save"/>
     <a href="{{ back_url }}"><p>Annuler</p></a>
 </form>

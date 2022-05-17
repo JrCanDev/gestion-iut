@@ -7,6 +7,7 @@ urlpatterns = [
     path('', home.index, name='index'),
     path('accounts/login/', home.user_login, name='login'),
     path('accounts/logout/', home.user_logout, name='logout'),
+    path('accounts/change/password/<int:teacher_id>', home.user_change_password, name='change-password'),
 
     path('add/year', year.add_year, name="add-year"),
     path('add/teacher', teacher.add_teacher, name="add-teacher"),
@@ -17,6 +18,8 @@ urlpatterns = [
     path('managed/promotion/<int:promotion_id>/managed/td/<int:td_id>', td.managed_td, name="managed-td"),
     path('managed/promotion/<int:promotion_id>/managed/td/<int:td_id>/add/tp', tp.add_tp, name="add-tp"),
     path('managed/promotion/<int:promotion_id>/add/subject', subject.add_subject, name="add-subject"),
+    path('managed/promotion/<int:promotion_id>/edit/subject/<int:subject_id>', subject.edit_subject,
+         name="edit-subject"),
     path('managed/promotion/<int:promotion_id>/managed/subject/<int:subject_id>', subject.managed_subject,
          name="managed-subject"),
     path('managed/promotion/<int:promotion_id>/managed/subject/<int:subject_id>/add/session/cm', session.add_cm_session,
@@ -35,6 +38,7 @@ urlpatterns = [
     path('managed/year/<int:year_id>/add/planning/<int:sessions_id>', planning.add_planning, name='add-planning'),
 
     path('managed/teacher/<int:teacher_id>', teacher.managed_teacher, name='managed-teacher'),
+    path('edit/teacher/<int:teacher_id>', teacher.edit_teacher, name='edit-teacher'),
 
     path('delete/year/<int:year_id>', year.delete_year, name='delete-year'),
     path('managed/year/<int:year_id>/delete/semester/<int:semester_id>', semester.delete_semester,

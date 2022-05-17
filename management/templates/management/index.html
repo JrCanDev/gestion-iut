@@ -32,7 +32,9 @@
                     <p>{{ one_teacher }}</p>
                     <div class="btn">
                         <a href="{% url 'management:managed-teacher' one_teacher.id %}">Voir</a>
+                        <a href="{% url 'management:edit-teacher' one_teacher.id %}">Edit</a>
                         <a href="{% url 'management:delete-teacher' one_teacher.id %}">Delete</a>
+                        <a href="{% url 'management:change-password' one_teacher.id %}">Password</a>
                     </div>
                 </div>
             {% endfor %}
