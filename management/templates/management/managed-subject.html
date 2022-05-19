@@ -12,7 +12,7 @@
     <div class="cm">
         <h2>CM</h2>
         <div class="info">
-            <p>{{ nb_sessions.cm.for_promotion }} séances ont été prévues, vous devez encore en
+            <p>{{ nb_sessions.cm.foreseen }} séances ont été prévues, vous devez encore en
                 affecter {{ nb_sessions.cm.remaining }}.</p>
         </div>
         <table>
@@ -36,7 +36,9 @@
                             {% endif %}
                         </td>
                         <td>{{ one_sessions.week }}</td>
-                        <td><a href="{% url 'management:delete-session' promotion.id subject.id one_sessions.id %}">Delete</a>
+                        <td class="btn">
+                            <a href="{% url 'management:delete-session' promotion.id subject.id one_sessions.id %}">Delete</a>
+                            <a href="{% url 'management:edit-session' promotion.id subject.id one_sessions.id %}">Edit</a>
                         </td>
                     {% endif %}
                 </tr>
@@ -48,7 +50,7 @@
     <div class="td">
         <h2>TD</h2>
         <div class="info">
-            <p>{{ nb_sessions.td.for_td }} séances par TD ont été prévues, vous devez encore en
+            <p>{{ nb_sessions.td.foreseen }} séances par TD ont été prévues, vous devez encore en
                 affecter {{ nb_sessions.td.remaining }}.</p>
         </div>
         {% for td_session, list_session in nb_sessions.td.sessions.items %}
@@ -66,16 +68,18 @@
                     <tr>
                         <td>{{ one_sessions.teacher }}</td>
                         <td class="number_hours">
-                            {% if nb_sessions.td.for_td <  list_session.allocate_hours %}
+                            {% if nb_sessions.td.foreseen <  list_session.allocate_hours %}
                                 <div class="overload">{{ one_sessions.number_hours }}</div>
-                            {% elif  nb_sessions.td.for_td > list_session.allocate_hours %}
+                            {% elif  nb_sessions.td.foreseen > list_session.allocate_hours %}
                                 <div class="incomplete">{{ one_sessions.number_hours }}</div>
                             {% else %}
                                 {{ one_sessions.number_hours }}
                             {% endif %}
                         </td>
                         <td>{{ one_sessions.week }}</td>
-                        <td><a href="{% url 'management:delete-session' promotion.id subject.id one_sessions.id %}">Delete</a>
+                        <td class="btn">
+                            <a href="{% url 'management:delete-session' promotion.id subject.id one_sessions.id %}">Delete</a>
+                            <a href="{% url 'management:edit-session' promotion.id subject.id one_sessions.id %}">Edit</a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -87,7 +91,7 @@
     <div class="tp">
         <h2>TP</h2>
         <div class="info">
-            <p>{{ nb_sessions.tp.for_tp }} séances par TP ont été prévues, vous devez encore en
+            <p>{{ nb_sessions.tp.foreseen }} séances par TP ont été prévues, vous devez encore en
                 affecter {{ nb_sessions.tp.remaining }}.</p>
         </div>
         {% for tp_session, list_session in nb_sessions.tp.sessions.items %}
@@ -105,16 +109,18 @@
                     <tr>
                         <td>{{ one_sessions.teacher }}</td>
                         <td class="number_hours">
-                            {% if nb_sessions.tp.for_tp < list_session.allocate_hours %}
+                            {% if nb_sessions.tp.foreseen < list_session.allocate_hours %}
                                 <div class="overload">{{ one_sessions.number_hours }}</div>
-                            {% elif  nb_sessions.tp.for_tp > list_session.allocate_hours %}
+                            {% elif  nb_sessions.tp.foreseen > list_session.allocate_hours %}
                                 <div class="incomplete">{{ one_sessions.number_hours }}</div>
                             {% else %}
                                 {{ one_sessions.number_hours }}
                             {% endif %}
                         </td>
                         <td>{{ one_sessions.week }}</td>
-                        <td><a href="{% url 'management:delete-session' promotion.id subject.id one_sessions.id %}">Delete</a>
+                        <td class="btn">
+                            <a href="{% url 'management:delete-session' promotion.id subject.id one_sessions.id %}">Delete</a>
+                            <a href="{% url 'management:edit-session' promotion.id subject.id one_sessions.id %}">Edit</a>
                         </td>
                     </tr>
                 {% endfor %}

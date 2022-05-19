@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from management.forms import AddCmSubject, AddTdSubject, AddTpSubject, DeleteForm
+from management.forms import AddCmSubject, AddTdSubject, AddTpSubject, DeleteForm, EditSession
 from management.models import Promotion, Sessions, Subject, Tp
 
 
@@ -76,7 +76,7 @@ def add_td_session(request, promotion_id, subject_id):
     promotion = Promotion.objects.get(pk=promotion_id)
 
     if request.method == 'POST':
-        form = AddTdSubject(request.POST, promotion_id=promotion_id, nb_hours_remaining=subject.number_td_sessions)
+        form = AddTdSubject(request.POST, subject=subject, nb_hours_remaining=subject.number_td_sessions)
         if form.is_valid():
             '''
             Si le formulaire a été soumi, on vérifie que les champs ont été correctement remplis.
@@ -114,7 +114,7 @@ def add_td_session(request, promotion_id, subject_id):
         Sinon on affiche le formulaire vide.
         '''
 
-        form = AddTdSubject(promotion_id=promotion_id, nb_hours_remaining=subject.number_td_sessions)
+        form = AddTdSubject(subject=subject, nb_hours_remaining=subject.number_td_sessions)
         return render(request, 'management/add-form.html',
                       {'promotion_id': promotion_id, 'subject_id': subject_id, 'form': form, 'post_url': post_url,
                        "back_url": back_url})
@@ -133,7 +133,7 @@ def add_tp_session(request, promotion_id, subject_id):
     promotion = Promotion.objects.get(pk=promotion_id)
 
     if request.method == 'POST':
-        form = AddTpSubject(request.POST, promotion_id=promotion_id, nb_hours_remaining=subject.number_td_sessions)
+        form = AddTpSubject(request.POST, subject=subject, nb_hours_remaining=subject.number_td_sessions)
         if form.is_valid():
             '''
             Si le formulaire a été soumi, on vérifie que les champs ont été correctement remplis.
@@ -156,7 +156,7 @@ def add_tp_session(request, promotion_id, subject_id):
                                'error': 'Vous ne pouvez pas affecter plus de ' + str(
                                    nb_hours_remaining) + ' séances', 'post_url': post_url, "back_url": back_url})
             '''
-            
+
             '''
             Ajoute les données à la BDD et redirige le client.
             '''
@@ -174,7 +174,7 @@ def add_tp_session(request, promotion_id, subject_id):
         Sinon on affiche le formulaire vide.
         '''
 
-        form = AddTpSubject(promotion_id=promotion_id, nb_hours_remaining=subject.number_td_sessions)
+        form = AddTpSubject(subject=subject, nb_hours_remaining=subject.number_td_sessions)
         return render(request, 'management/add-form.html',
                       {'promotion_id': promotion_id, 'subject_id': subject_id, 'form': form, 'post_url': post_url,
                        "back_url": back_url})
@@ -199,4 +199,24 @@ def delete_session(request, promotion_id, subject_id, session_id):
     else:
         form = DeleteForm()
         return render(request, 'management/delete-form.html',
+                      {'form': form, 'post_url': post_url, "back_url": back_url})
+
+
+@login_required
+def edit_session(request, promotion_id, subject_id, session_id):
+    post_url = reverse('management:edit-session', args=(promotion_id, subject_id, session_id))
+    back_url = reverse('management:managed-subject', args=(promotion_id, subject_id))
+
+    session = Sessions.objects.get(pk=session_id)
+
+    if request.method == 'POST':
+        form = EditSession(request.POST, session=session)
+        if form.is_valid():
+            session.teacher = form.cleaned_data['teacher']
+            session.number_hours = form.cleaned_data['number_hours']
+            session.save()
+            return HttpResponseRedirect(reverse('management:managed-subject', args=(promotion_id, subject_id)))
+    else:
+        form = EditSession(session=session)
+        return render(request, 'management/edit-form.html',
                       {'form': form, 'post_url': post_url, "back_url": back_url})

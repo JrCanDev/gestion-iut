@@ -28,6 +28,11 @@ class AddPromotion(forms.Form):
 class AddTD(forms.Form):
     name_td = forms.CharField(max_length=5)
 
+    def __init__(self, *args, **kwargs):
+        self.promotion = kwargs.pop("promotion")
+        super(AddTD, self).__init__(*args, **kwargs)
+        self.fields['semester'] = forms.ModelChoiceField(queryset=self.promotion.year.semester_set.all())
+
 
 class AddTP(forms.Form):
     name_tp = forms.CharField(max_length=5)
@@ -39,6 +44,11 @@ class AddSubject(forms.Form):
     number_cm_sessions = forms.FloatField(min_value=0, initial=0)
     number_td_sessions = forms.FloatField(min_value=0, initial=0)
     number_tp_sessions = forms.FloatField(min_value=0, initial=0)
+
+    def __init__(self, *args, **kwargs):
+        self.promotion = kwargs.pop("promotion")
+        super(AddSubject, self).__init__(*args, **kwargs)
+        self.fields['semester'] = forms.ModelChoiceField(queryset=self.promotion.year.semester_set.all())
 
 
 class AddCmSubject(forms.Form):
@@ -55,10 +65,11 @@ class AddTdSubject(forms.Form):
     teacher = forms.ModelChoiceField(queryset=Teacher.objects.all())
 
     def __init__(self, *args, **kwargs):
-        self.promotion_id = kwargs.pop("promotion_id")
+        self.subject = kwargs.pop("subject")
         self.nb_hours_remaining = kwargs.pop("nb_hours_remaining")
         super(AddTdSubject, self).__init__(*args, **kwargs)
-        self.fields['td'] = forms.ModelChoiceField(queryset=Td.objects.filter(promotion=self.promotion_id).all())
+        self.fields['td'] = forms.ModelChoiceField(
+            queryset=Td.objects.filter(promotion=self.subject.promotion.id, semester=self.subject.semester).all())
         self.fields["number_hours"] = forms.FloatField(min_value=0.25, initial=self.nb_hours_remaining)
 
         """promotion = Promotion.objects.get(pk=self.promotion_id) year = Year.objects.get(pk=promotion.year.id) 
@@ -70,11 +81,12 @@ class AddTpSubject(forms.Form):
     teacher = forms.ModelChoiceField(queryset=Teacher.objects.all())
 
     def __init__(self, *args, **kwargs):
-        self.promotion_id = kwargs.pop("promotion_id")
+        self.subject = kwargs.pop("subject")
         self.nb_hours_remaining = kwargs.pop("nb_hours_remaining")
         super(AddTpSubject, self).__init__(*args, **kwargs)
         self.fields['tp'] = forms.ModelChoiceField(
-            queryset=Tp.objects.filter(td__in=Td.objects.filter(promotion=self.promotion_id).all()).all())
+            queryset=Tp.objects.filter(td__in=Td.objects.filter(promotion=self.subject.promotion.id,
+                                                                semester=self.subject.semester).all()).all())
         self.fields["number_hours"] = forms.FloatField(min_value=0.25, initial=self.nb_hours_remaining)
 
         """promotion = Promotion.objects.get(pk=self.promotion_id) year = Year.objects.get(pk=promotion.year.id) 
@@ -133,3 +145,14 @@ class EditSubject(forms.Form):
         self.fields['number_cm_sessions'] = forms.FloatField(min_value=0, initial=self.subject.number_cm_sessions)
         self.fields['number_td_sessions'] = forms.FloatField(min_value=0, initial=self.subject.number_td_sessions)
         self.fields['number_tp_sessions'] = forms.FloatField(min_value=0, initial=self.subject.number_tp_sessions)
+        self.fields['semester'] = forms.ModelChoiceField(queryset=self.subject.promotion.year.semester_set.all(),
+                                                         initial=self.subject.semester)
+
+
+class EditSession(forms.Form):
+    def __init__(self, *args, **kwargs):
+        self.session = kwargs.pop("session")
+        super(EditSession, self).__init__(*args, **kwargs)
+        teacher = forms.ModelChoiceField(queryset=Teacher.objects.all())
+        self.fields['teacher'] = forms.ModelChoiceField(queryset=Teacher.objects.all(), initial=self.session.teacher)
+        self.fields["number_hours"] = forms.FloatField(min_value=0.25, initial=self.session.number_hours)

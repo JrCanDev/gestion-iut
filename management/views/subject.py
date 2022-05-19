@@ -15,8 +15,10 @@ def add_subject(request, promotion_id):
     post_url = reverse('management:add-subject', args=(promotion_id,))
     back_url = reverse('management:managed-promotion', args=(promotion_id,))
 
+    promotion = Promotion.objects.get(pk=promotion_id)
+
     if request.method == 'POST':
-        form = AddSubject(request.POST)
+        form = AddSubject(request.POST, promotion=promotion)
         if form.is_valid():
             '''
             Si le formulaire a été soumi, on vérifie que les champs ont été correctement remplis.
@@ -42,7 +44,8 @@ def add_subject(request, promotion_id):
                                   description=form.cleaned_data['description'],
                                   number_cm_sessions=form.cleaned_data['number_cm_sessions'],
                                   number_td_sessions=form.cleaned_data['number_td_sessions'],
-                                  number_tp_sessions=form.cleaned_data['number_tp_sessions'], promotion=promotion)
+                                  number_tp_sessions=form.cleaned_data['number_tp_sessions'],
+                                  semester=form.cleaned_data['semester'], promotion=promotion)
             new_subject.save()
             return HttpResponseRedirect(reverse('management:managed-promotion', args=(promotion_id,)))
     else:
@@ -50,7 +53,7 @@ def add_subject(request, promotion_id):
         Sinon on affiche le formulaire vide.
         '''
 
-        form = AddSubject()
+        form = AddSubject(promotion=promotion)
         return render(request, 'management/add-form.html',
                       {'promotion_id': promotion_id, 'form': form, 'post_url': post_url, "back_url": back_url})
 
@@ -64,18 +67,20 @@ def managed_subject(request, promotion_id, subject_id):
     subject = Subject.objects.get(pk=subject_id)
     sessions = Sessions.objects.filter(subject=subject).all()
     promotion = Promotion.objects.get(pk=promotion_id)
-    tp = Tp.objects.filter(td__in=Td.objects.filter(promotion=promotion))
+    tp = Tp.objects.filter(td__in=Td.objects.filter(promotion=promotion, semester=subject.semester))
 
     '''
     Récupére le nombre de séances prévu pour la matière.
     '''
 
     nb_sessions = {
-        "cm": {"for_promotion": subject.number_cm_sessions, "foreseen": subject.number_cm_sessions,
+        "cm": {"foreseen": subject.number_cm_sessions,
                "remaining": subject.number_cm_sessions, "sessions": {}},
-        "td": {"for_td": subject.number_td_sessions, "foreseen": subject.number_cm_sessions,
-               "remaining": (subject.number_td_sessions * len(promotion.td_set.all())), "sessions": {}},
-        "tp": {"for_tp": subject.number_tp_sessions, "foreseen": subject.number_cm_sessions,
+        "td": {"foreseen": subject.number_td_sessions,
+               "remaining":
+                   subject.number_td_sessions * len(promotion.td_set.filter(semester=subject.semester).all()),
+               "sessions": {}},
+        "tp": {"foreseen": subject.number_tp_sessions,
                "remaining": (subject.number_tp_sessions * len(tp)), "sessions": {}}}
 
     '''
@@ -96,7 +101,7 @@ def managed_subject(request, promotion_id, subject_id):
 
     nb_sessions["cm"]["sessions"] = subject.sessions_set.filter(type_sessions="cm")
 
-    for one_td in promotion.td_set.all():
+    for one_td in promotion.td_set.filter(semester=subject.semester).all():
         allocate_hours = 0
         for one in sessions.filter(td=one_td).values("number_hours"):
             allocate_hours += one["number_hours"]
