@@ -23,8 +23,9 @@ def add_tp(request, promotion_id, td_id):
             '''
 
             list_tp = []
+            td = Td.objects.get(pk=td_id)
 
-            for one_td in Td.objects.filter(promotion=promotion_id).all():
+            for one_td in Td.objects.filter(promotion=promotion_id, semester=td.semester.id).all():
                 for one_tp in one_td.tp_set.all():
                     list_tp.append(one_tp.name_tp)
 

@@ -92,6 +92,13 @@ body {
     color: #ffb74f;
 }
 
+.cm table td.btn,
+.td table td.btn,
+.tp table td.btn {
+    display: flex;
+    gap: 1rem;
+}
+
 .cm a,
 .td a,
 .tp a {

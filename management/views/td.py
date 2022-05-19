@@ -15,14 +15,18 @@ def add_td(request, promotion_id):
     post_url = reverse('management:add-td', args=(promotion_id,))
     back_url = reverse('management:managed-promotion', args=(promotion_id,))
 
+    promotion = Promotion.objects.get(pk=promotion_id)
+    print(promotion.year.semester_set.all())
+
     if request.method == 'POST':
-        form = AddTD(request.POST)
+        form = AddTD(request.POST, promotion=promotion)
         if form.is_valid():
             '''
             Si le formulaire a été soumi, on vérifie que les champs ont été correctement remplis.
             '''
 
-            if len(Td.objects.filter(name_td=form.cleaned_data['name_td'], promotion=promotion_id).all()):
+            if len(Td.objects.filter(name_td=form.cleaned_data['name_td'], semester=form.cleaned_data['semester'],
+                                     promotion=promotion_id).all()):
                 '''
                 Si le TD existe déjà dans la promotion on revoie le formulaire avec une erreur.
                 '''
@@ -36,7 +40,8 @@ def add_td(request, promotion_id):
             '''
 
             promotion = Promotion.objects.get(pk=promotion_id)
-            new_td = Td(name_td=form.cleaned_data['name_td'], promotion=promotion)
+            new_td = Td(name_td=form.cleaned_data['name_td'], semester=form.cleaned_data['semester'],
+                        promotion=promotion)
             new_td.save()
         return HttpResponseRedirect(reverse('management:managed-promotion', args=(promotion_id,)))
     else:
@@ -44,7 +49,7 @@ def add_td(request, promotion_id):
         Sinon on affiche le formulaire vide.
         '''
 
-        form = AddTD()
+        form = AddTD(promotion=promotion)
         return render(request, 'management/add-form.html',
                       {'promotion_id': promotion_id, 'form': form, 'post_url': post_url, "back_url": back_url})
 

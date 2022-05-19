@@ -28,6 +28,8 @@ urlpatterns = [
          name="add-td-session"),
     path('managed/promotion/<int:promotion_id>/managed/subject/<int:subject_id>/add/session/tp', session.add_tp_session,
          name="add-tp-session"),
+    path('managed/promotion/<int:promotion_id>/managed/subject/<int:subject_id>/edit/session/<int:session_id>',
+         session.edit_session, name="edit-session"),
 
     path('managed/year/<int:year_id>', year.managed_year, name="managed-year"),
     path('managed/year/<int:year_id>/add/semester', semester.add_semester, name="add-semester"),

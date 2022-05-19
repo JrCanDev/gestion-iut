@@ -42,6 +42,7 @@ class Promotion(models.Model):
 class Td(models.Model):
     name_td = models.CharField(max_length=5)
     promotion = models.ForeignKey(Promotion, on_delete=models.CASCADE)
+    semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name_td
@@ -62,6 +63,7 @@ class Subject(models.Model):
     number_td_sessions = models.FloatField(default=0)
     number_tp_sessions = models.FloatField(default=0)
     promotion = models.ForeignKey(Promotion, on_delete=models.CASCADE)
+    semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name_subject

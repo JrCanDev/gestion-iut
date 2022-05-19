@@ -11,6 +11,37 @@
 <div class="container">
     <div class="promotion">
         <h2>Promotion</h2>
+        {% for one_semester in promotion.year.semester_set.all %}
+            <table>
+
+                <tr>
+                    <th colspan="3">{{ one_semester }}</th>
+                </tr>
+                <tr>
+                    <th>Nom TD</th>
+                    <th>Tps</th>
+                    <th>Action</th>
+                </tr>
+                {% for one_td in one_semester.td_set.all %}
+                    <tr>
+                        <td>{{ one_td }}</td>
+                        <td>
+                            {% for one_tp in one_td.tp_set.all %}
+                                {{ one_tp }}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <div class="btn">
+                                <a href="{% url 'management:managed-td' promotion.id one_td.id %}">Voir</a>
+                                <a href="{% url 'management:delete-td' promotion.id one_td.id %}">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endfor %}
+
+        <!--
         <div class="list">
             {% for one_td in td %}
                 <div class="item">
@@ -29,6 +60,7 @@
                 </div>
             {% endfor %}
         </div>
+        --->
         <a class="btn-add" href="{% url 'management:add-td' promotion.id %}">Ajouter un TD</a>
     </div>
 
