@@ -153,6 +153,10 @@ class EditSession(forms.Form):
     def __init__(self, *args, **kwargs):
         self.session = kwargs.pop("session")
         super(EditSession, self).__init__(*args, **kwargs)
-        teacher = forms.ModelChoiceField(queryset=Teacher.objects.all())
+        self.fields['teacher'] = forms.ModelChoiceField(queryset=Teacher.objects.all())
         self.fields['teacher'] = forms.ModelChoiceField(queryset=Teacher.objects.all(), initial=self.session.teacher)
         self.fields["number_hours"] = forms.FloatField(min_value=0.25, initial=self.session.number_hours)
+
+
+class AddWeekPlanning(forms.Form):
+    number_hours = forms.FloatField(min_value=0.25, initial=1)

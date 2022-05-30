@@ -1,6 +1,6 @@
 from django.urls import path
 
-from management.views import home, planning, promotion, semester, session, subject, td, teacher, tp, week, year
+from management.views import home, planning, promotion, semester, session, subject, td, teacher, tp, week, year, cost
 
 app_name = 'management'
 urlpatterns = [
@@ -36,8 +36,15 @@ urlpatterns = [
     path('managed/year/<int:year_id>/managed/semester/<int:semester_id>', semester.managed_semester,
          name="managed-semester"),
     path('managed/year/<int:year_id>/managed/semester/<int:semester_id>/add/week', week.add_week, name="add-week"),
+    path('managed/year/<int:year_id>/managed/semester/<int:semester_id>/add/nextweek', week.add_next_week,
+         name="add-next-week"),
     path('managed/year/<int:year_id>/managed/planning', planning.managed_planning, name='managed-planning'),
     path('managed/year/<int:year_id>/add/planning/<int:sessions_id>', planning.add_planning, name='add-planning'),
+    path('managed/year/<int:year_id>/managed/semester/<int:semester_id>/planning/week/<int:week_id>',
+         planning.managed_week_planning, name="managed-week-planning"),
+    path('managed/year/<int:year_id>/managed/semester/<int:semester_id>/planning/week/<int:week_id>/add/planning/<int'
+         ':sessions_id>', planning.add_week_planning, name='add-week-planning'),
+    path('managed/year/<int:year_id>/managed/cost', cost.managed_cost, name='managed-cost'),
 
     path('managed/teacher/<int:teacher_id>', teacher.managed_teacher, name='managed-teacher'),
     path('edit/teacher/<int:teacher_id>', teacher.edit_teacher, name='edit-teacher'),

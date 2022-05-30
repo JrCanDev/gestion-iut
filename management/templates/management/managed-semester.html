@@ -16,9 +16,19 @@
             {% for one_week in semester.week_set.all %}
                 <div class="item">
                     <p>{{ one_week }}</p>
-                    <a href="{% url 'management:delete-week' year.id semester.id one_week.id %}">Delete</a>
+                    <div class="btn">
+                        <a href="{% url 'management:managed-week-planning' year.id semester.id one_week.id %}">Planification</a>
+                        <a href="{% url 'management:delete-week' year.id semester.id one_week.id %}">Delete</a>
+                    </div>
                 </div>
             {% endfor %}
+            {% if semester.week_set.all %}
+                <div class="item">
+                    <div class="btn">
+                        <a href="{% url 'management:add-next-week' year.id semester.id %}">Add next</a>
+                    </div>
+                </div>
+            {% endif %}
         </div>
         <a class="btn-add" href="{% url 'management:add-week' year.id semester.id %}">Ajouter une semaine</a>
     </div>

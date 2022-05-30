@@ -1,10 +1,28 @@
+import datetime
+from datetime import date, timedelta
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
 from management.forms import AddWeek, DeleteForm
-from management.models import Semester, Week
+from management.models import Week, Semester
+
+
+def monday_of_week(year, num_week):
+    """
+    Calcul du premier et du dernier jour de la semaine ISO
+    """
+    d = date(year, 1, 1)
+    delta_days = d.isoweekday() - 1
+    delta_weeks = num_week
+    if year == d.isocalendar()[0]:
+        delta_weeks -= 1
+    # delta for the beginning of the week
+    delta = timedelta(days=-delta_days, weeks=delta_weeks)
+    monday = d + delta
+    return monday
 
 
 @login_required
@@ -20,7 +38,11 @@ def add_week(request, year_id, semester_id):
             Si le formulaire a été soumi, on vérifie que les champs ont été correctement remplis.
             '''
 
-            if len(Week.objects.filter(semester=semester_id, name_week=form.cleaned_data['name_week']).all()):
+            date_select = str(form.cleaned_data['name_week']).split("-")
+            num_week = datetime.date(int(date_select[0]), int(date_select[1]), int(date_select[2])).isocalendar()[1]
+            name_week = monday_of_week(int(date_select[0]), num_week)
+
+            if len(Week.objects.filter(semester=semester_id, name_week=name_week).all()):
                 '''
                 Si la semaine existe déjà on revoie le formulaire avec une erreur.
                 '''
@@ -34,7 +56,7 @@ def add_week(request, year_id, semester_id):
             '''
 
             semester = Semester.objects.get(pk=semester_id)
-            Week(semester=semester, name_week=form.cleaned_data['name_week']).save()
+            Week(semester=semester, name_week=name_week).save()
             return HttpResponseRedirect(reverse('management:managed-semester', args=(year_id, semester_id)))
     else:
         '''
@@ -44,6 +66,27 @@ def add_week(request, year_id, semester_id):
         form = AddWeek()
         return render(request, 'management/add-week.html',
                       {'form': form, 'year_id': year_id, 'semester_id': semester_id})
+
+
+@login_required
+def add_next_week(request, year_id, semester_id):
+    semester = Semester.objects.get(pk=semester_id)
+    weeks = Week.objects.filter(semester=semester).all()
+
+    max_num_week = 0
+    max_week_year = 0
+
+    for one_week in weeks:
+        week_date = str(one_week.name_week).split("-")
+        num_week = datetime.date(int(week_date[0]), int(week_date[1]), int(week_date[2])).isocalendar()[1]
+        if num_week > max_num_week:
+            max_num_week = num_week
+            max_week_year = int(week_date[0])
+
+    name_week = monday_of_week(max_week_year, max_num_week + 1)
+    Week(semester=semester, name_week=name_week).save()
+
+    return HttpResponseRedirect(reverse('management:managed-semester', args=(year_id, semester_id)))
 
 
 @login_required

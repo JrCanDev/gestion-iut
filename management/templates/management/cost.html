@@ -1,0 +1,76 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'management/managed-cost.css' %}"/>
+
+<div class="title">
+    <h1>Coût</h1>
+    <p>{{ year }}</p>
+    <a class="btn-back" href="{% url 'management:managed-year' year.id %}">← back</a> |
+    <a class="btn-back" href="{% url 'management:index' %}">Home</a>
+</div>
+
+<div class="container">
+    <div class="subject">
+        {% for subject, cost in cost_subject.items %}
+            <table>
+                <tr>
+                    <th colspan="4">{{ subject }}</th>
+                </tr>
+                <tr>
+                    <th>coût</th>
+                    <th>nombre cm</th>
+                    <th>nombre tp</th>
+                    <th>nombre td</th>
+                </tr>
+                <tr>
+                    <td>{{ cost.cost|floatformat }}</td>
+                    <td>{{ cost.cm }}</td>
+                    <td>{{ cost.td }}</td>
+                    <td>{{ cost.tp }}</td>
+                </tr>
+            </table>
+        {% endfor %}
+    </div>
+    <div class="semester">
+        {% for semester, cost in cost_semester.items %}
+            <table>
+                <tr>
+                    <th colspan="4">{{ semester }}</th>
+                </tr>
+                <tr>
+                    <th>coût</th>
+                    <th>nombre cm</th>
+                    <th>nombre tp</th>
+                    <th>nombre td</th>
+                </tr>
+                <tr>
+                    <td>{{ cost.cost|floatformat }}</td>
+                    <td>{{ cost.cm }}</td>
+                    <td>{{ cost.td }}</td>
+                    <td>{{ cost.tp }}</td>
+                </tr>
+            </table>
+        {% endfor %}
+    </div>
+    <div class="teacher">
+        {% for teacher, cost in cost_teacher.items %}
+            <table>
+                <tr>
+                    <th colspan="4">{{ teacher }}</th>
+                </tr>
+                <tr>
+                    <th>coût</th>
+                    <th>nombre cm</th>
+                    <th>nombre tp</th>
+                    <th>nombre td</th>
+                </tr>
+                <tr>
+                    <td>{{ cost.cost|floatformat }}</td>
+                    <td>{{ cost.cm }}</td>
+                    <td>{{ cost.td }}</td>
+                    <td>{{ cost.tp }}</td>
+                </tr>
+            </table>
+        {% endfor %}
+    </div>
+</div>
