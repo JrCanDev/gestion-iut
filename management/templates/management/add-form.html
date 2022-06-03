@@ -1,7 +1,13 @@
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'management/add-form.css' %}"/>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ADD</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'management/add-form.css' %}"/>
+</head>
+<body>
 <form action="{{ post_url }}" method="post">
     {% csrf_token %}
     {% if error %}
@@ -18,3 +24,6 @@
     <input type="submit" value="Submit"/>
     <a href="{{ back_url }}"><p>Annuler</p></a>
 </form>
+
+</body>
+</html>

@@ -1,14 +1,25 @@
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'management/managed-cost.css' %}"/>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cost</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'management/managed-cost.css' %}"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+</head>
+<body>
 <div class="title">
     <h1>Coût</h1>
     <p>{{ year }}</p>
-    <a class="btn-back" href="{% url 'management:managed-year' year.id %}">← back</a> |
-    <a class="btn-back" href="{% url 'management:index' %}">Home</a>
+    <a class="btn-back" href="{% url 'management:managed-year' year.id %}">
+        <span class="material-symbols-outlined">arrow_back</span>
+    </a>
+    <a class="btn-back" href="{% url 'management:index' %}"><span class="material-symbols-outlined">home</span></a>
 </div>
-
 <div class="container">
     <div class="subject">
         {% for subject, cost in cost_subject.items %}
@@ -74,3 +85,5 @@
         {% endfor %}
     </div>
 </div>
+</body>
+</html>

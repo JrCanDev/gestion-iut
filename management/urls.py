@@ -1,9 +1,12 @@
 from django.urls import path
 
-from management.views import home, planning, promotion, semester, session, subject, td, teacher, tp, week, year, cost
+from management.views import home, planning, promotion, semester, session, subject, td, teacher, tp, week, year, cost, \
+    csv
 
 app_name = 'management'
 urlpatterns = [
+    path('csv', csv.exporting_csv, name='csv'),
+
     path('', home.index, name='index'),
     path('accounts/login/', home.user_login, name='login'),
     path('accounts/logout/', home.user_logout, name='logout'),
@@ -38,6 +41,8 @@ urlpatterns = [
     path('managed/year/<int:year_id>/managed/semester/<int:semester_id>/add/week', week.add_week, name="add-week"),
     path('managed/year/<int:year_id>/managed/semester/<int:semester_id>/add/nextweek', week.add_next_week,
          name="add-next-week"),
+    path('managed/year/<int:year_id>/managed/semester/<int:semester_id>/add/duplicateweek/<int:week_id>',
+         week.duplicate_next_week, name="add-duplicate-week"),
     path('managed/year/<int:year_id>/managed/planning', planning.managed_planning, name='managed-planning'),
     path('managed/year/<int:year_id>/add/planning/<int:sessions_id>', planning.add_planning, name='add-planning'),
     path('managed/year/<int:year_id>/managed/semester/<int:semester_id>/planning/week/<int:week_id>',

@@ -133,7 +133,7 @@ def add_tp_session(request, promotion_id, subject_id):
     promotion = Promotion.objects.get(pk=promotion_id)
 
     if request.method == 'POST':
-        form = AddTpSubject(request.POST, subject=subject, nb_hours_remaining=subject.number_td_sessions)
+        form = AddTpSubject(request.POST, subject=subject, nb_hours_remaining=subject.number_tp_sessions)
         if form.is_valid():
             '''
             Si le formulaire a été soumi, on vérifie que les champs ont été correctement remplis.
@@ -174,7 +174,7 @@ def add_tp_session(request, promotion_id, subject_id):
         Sinon on affiche le formulaire vide.
         '''
 
-        form = AddTpSubject(subject=subject, nb_hours_remaining=subject.number_td_sessions)
+        form = AddTpSubject(subject=subject, nb_hours_remaining=subject.number_tp_sessions)
         return render(request, 'management/add-form.html',
                       {'promotion_id': promotion_id, 'subject_id': subject_id, 'form': form, 'post_url': post_url,
                        "back_url": back_url})

@@ -1,12 +1,24 @@
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'management/managed-subject.css' %}"/>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Subject</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'management/managed-subject.css' %}"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+</head>
+<body>
 <div class="title">
     <h1>{{ subject.name_subject }}</h1>
     <p>{{ promotion.name_promotion }}</p>
-    <a href="{% url 'management:managed-promotion' promotion.id %}">← back</a> | <a class="btn-back"
-                                                                                    href="{% url 'management:index' %}">Home</a>
+    <a href="{% url 'management:managed-promotion' promotion.id %}">
+        <span class="material-symbols-outlined">arrow_back</span>
+    </a>
+    <a class="btn-back" href="{% url 'management:index' %}"><span class="material-symbols-outlined">home</span></a>
 </div>
 <div class="container">
     <div class="cm">
@@ -129,3 +141,5 @@
         <a href="{% url 'management:add-tp-session' promotion.id subject.id %}"><p>Ajouter un TP</p></a>
     </div>
 </div>
+</body>
+</html>

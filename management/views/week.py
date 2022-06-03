@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from management.forms import AddWeek, DeleteForm
-from management.models import Week, Semester
+from management.models import Week, Semester, Planning
 
 
 def monday_of_week(year, num_week):
@@ -23,6 +23,24 @@ def monday_of_week(year, num_week):
     delta = timedelta(days=-delta_days, weeks=delta_weeks)
     monday = d + delta
     return monday
+
+
+def next_week(semester_id):
+    semester = Semester.objects.get(pk=semester_id)
+    weeks = Week.objects.filter(semester=semester).all()
+
+    max_num_week = 0
+    max_week_year = 0
+
+    for one_week in weeks:
+        week_date = str(one_week.name_week).split("-")
+        num_week = datetime.date(int(week_date[0]), int(week_date[1]), int(week_date[2])).isocalendar()[1]
+        if num_week > max_num_week:
+            max_num_week = num_week
+            max_week_year = int(week_date[0])
+
+    name_week = monday_of_week(max_week_year, max_num_week + 1)
+    return Week(semester=semester, name_week=name_week)
 
 
 @login_required
@@ -70,21 +88,18 @@ def add_week(request, year_id, semester_id):
 
 @login_required
 def add_next_week(request, year_id, semester_id):
-    semester = Semester.objects.get(pk=semester_id)
-    weeks = Week.objects.filter(semester=semester).all()
+    next_week(semester_id).save()
 
-    max_num_week = 0
-    max_week_year = 0
+    return HttpResponseRedirect(reverse('management:managed-semester', args=(year_id, semester_id)))
 
-    for one_week in weeks:
-        week_date = str(one_week.name_week).split("-")
-        num_week = datetime.date(int(week_date[0]), int(week_date[1]), int(week_date[2])).isocalendar()[1]
-        if num_week > max_num_week:
-            max_num_week = num_week
-            max_week_year = int(week_date[0])
 
-    name_week = monday_of_week(max_week_year, max_num_week + 1)
-    Week(semester=semester, name_week=name_week).save()
+@login_required
+def duplicate_next_week(request, year_id, semester_id, week_id):
+    week = next_week(semester_id)
+    week.save()
+
+    for one_planning in Planning.objects.filter(week=week_id).all():
+        Planning(sessions=one_planning.sessions, number_hours=one_planning.number_hours, week=week).save()
 
     return HttpResponseRedirect(reverse('management:managed-semester', args=(year_id, semester_id)))
 
@@ -108,4 +123,5 @@ def delete_week(request, year_id, semester_id, week_id):
     else:
         form = DeleteForm()
         return render(request, 'management/delete-form.html',
-                      {'form': form, 'post_url': post_url, "back_url": back_url})
+                      {'form': form, 'post_url': post_url, "back_url": back_url,
+                       "info": "Tous les éléments liés à cette semaine seront aussi supprimés !"})

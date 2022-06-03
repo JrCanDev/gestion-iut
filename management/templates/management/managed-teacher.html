@@ -1,12 +1,24 @@
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'management/managed-teacher.css' %}"/>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Subject</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'management/managed-subject.css' %}"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+</head>
+<body>
 <div class="title">
     <h1>{{ teacher.last_name }}</h1>
     <p>{{ teacher.first_name }}</p>
-    <a class="btn-back" href="{% url 'management:index' %}">← back</a> | <a class="btn-back"
-                                                                            href="{% url 'management:index' %}">Home</a>
+    <a class="btn-back" href="{% url 'management:index' %}">
+        <span class="material-symbols-outlined">arrow_back</span>
+    </a>
+    <a class="btn-back" href="{% url 'management:index' %}"><span class="material-symbols-outlined">home</span></a>
 </div>
 
 <div class="container">
@@ -42,3 +54,5 @@
         </div>
     {% endfor %}
 </div>
+</body>
+</html>

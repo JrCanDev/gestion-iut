@@ -1,11 +1,21 @@
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'management/index.css' %}"/>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'management/index.css' %}"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+</head>
+<body>
 <div class="title">
     <h1>IUT Calais</h1>
     <p>GDS | Beta : v0.1</p>
-    <a class="btn-back" href="{% url 'management:logout' %}">← Logout</a>
+    <a class="btn-back" href="{% url 'management:logout' %}">
+        <span class="material-symbols-outlined">logout</span>
+    </a>
 </div>
 <div class="container">
     <div class="year">
@@ -58,3 +68,5 @@
         <a class="btn-add" href="{% url 'management:add-promotion' %}"><p>Ajouter une promotion</p></a>
     </div>
 </div>
+</body>
+</html>

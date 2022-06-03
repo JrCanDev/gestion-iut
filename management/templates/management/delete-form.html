@@ -1,7 +1,13 @@
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'management/delete-form.css' %}"/>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DELETE</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'management/delete-form.css' %}"/>
+</head>
+<body>
 <form action="{{ post_url }}" method="post">
     {% csrf_token %}
     {% if error %}
@@ -18,3 +24,5 @@
     <input type="submit" value="Delete"/>
     <a href="{{ back_url }}">Annuler</a>
 </form>
+</body>
+</html>
