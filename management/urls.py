@@ -5,7 +5,8 @@ from management.views import home, planning, promotion, semester, session, subje
 
 app_name = 'management'
 urlpatterns = [
-    path('csv', csv.exporting_csv, name='csv'),
+    path('exporting-csv', csv.exporting_csv, name='exporting-csv'),
+    path('import-csv', csv.import_csv, name='import-csv'),
 
     path('', home.index, name='index'),
     path('accounts/login/', home.user_login, name='login'),

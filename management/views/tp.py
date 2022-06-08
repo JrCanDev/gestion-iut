@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -8,6 +8,7 @@ from management.models import Td, Tp
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def add_tp(request, promotion_id, td_id):
     """
     Affiche la vue responsable de l'ajout d'un TP dans un TD d'une promotion et gère le retour de celle-ci.
@@ -58,6 +59,7 @@ def add_tp(request, promotion_id, td_id):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def delete_tp(request, promotion_id, td_id, tp_id):
     post_url = reverse('management:delete-tp', args=(promotion_id, td_id, tp_id))
     back_url = reverse('management:managed-td', args=(promotion_id, td_id))

@@ -1,10 +1,11 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render
 
 from management.models import Sessions, Teacher, Subject, Semester, Year
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def managed_cost(request, year_id):
     teacher = Teacher.objects.all()
     year = Year.objects.get(pk=year_id)

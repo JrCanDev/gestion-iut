@@ -1,7 +1,7 @@
 import datetime
 from datetime import date, timedelta
 
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -10,6 +10,8 @@ from management.forms import AddWeek, DeleteForm
 from management.models import Week, Semester, Planning
 
 
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
 def monday_of_week(year, num_week):
     """
     Calcul du premier et du dernier jour de la semaine ISO
@@ -25,6 +27,8 @@ def monday_of_week(year, num_week):
     return monday
 
 
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
 def next_week(semester_id):
     semester = Semester.objects.get(pk=semester_id)
     weeks = Week.objects.filter(semester=semester).all()
@@ -44,6 +48,7 @@ def next_week(semester_id):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def add_week(request, year_id, semester_id):
     """
     Affiche la vue responsable de l'ajout d'une semaine et gère le retour de celle-ci.
@@ -87,6 +92,7 @@ def add_week(request, year_id, semester_id):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def add_next_week(request, year_id, semester_id):
     next_week(semester_id).save()
 
@@ -94,6 +100,7 @@ def add_next_week(request, year_id, semester_id):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def duplicate_next_week(request, year_id, semester_id, week_id):
     week = next_week(semester_id)
     week.save()
@@ -105,6 +112,7 @@ def duplicate_next_week(request, year_id, semester_id, week_id):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def delete_week(request, year_id, semester_id, week_id):
     post_url = reverse('management:delete-week', args=(year_id, semester_id, week_id))
     back_url = reverse('management:managed-semester', args=(year_id, semester_id))

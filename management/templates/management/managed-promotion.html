@@ -32,24 +32,26 @@
                 </tr>
                 <tr>
                     <th>Nom TD</th>
-                    <th>Tps</th>
+                    <th>Tp</th>
                     <th>Action</th>
                 </tr>
                 {% for one_td in one_semester.td_set.all %}
-                    <tr>
-                        <td>{{ one_td }}</td>
-                        <td>
-                            {% for one_tp in one_td.tp_set.all %}
-                                {{ one_tp }}
-                            {% endfor %}
-                        </td>
-                        <td>
-                            <div class="btn">
-                                <a href="{% url 'management:managed-td' promotion.id one_td.id %}">Voir</a>
-                                <a href="{% url 'management:delete-td' promotion.id one_td.id %}">Delete</a>
-                            </div>
-                        </td>
-                    </tr>
+                    {% if one_td.promotion == promotion %}
+                        <tr>
+                            <td>{{ one_td }}</td>
+                            <td>
+                                {% for one_tp in one_td.tp_set.all %}
+                                    {{ one_tp }}
+                                {% endfor %}
+                            </td>
+                            <td>
+                                <div class="btn">
+                                    <a href="{% url 'management:managed-td' promotion.id one_td.id %}">Voir</a>
+                                    <a href="{% url 'management:delete-td' promotion.id one_td.id %}">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endif %}
                 {% endfor %}
             </table>
         {% endfor %}

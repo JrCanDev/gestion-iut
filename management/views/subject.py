@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -8,6 +8,7 @@ from management.models import Promotion, Subject, Td, Tp, Sessions
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def add_subject(request, promotion_id):
     """
     Affiche la vue responsable de l'ajout d'une matiere dans une promotion et gère le retour de celle-ci.
@@ -59,6 +60,7 @@ def add_subject(request, promotion_id):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def managed_subject(request, promotion_id, subject_id):
     """
     Affiche la vue qui rassemble toutes les données sur une matiere.
@@ -126,6 +128,7 @@ def managed_subject(request, promotion_id, subject_id):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def edit_subject(request, promotion_id, subject_id):
     """
     Affiche la vue responsable de l'ajout d'une matiere dans une promotion et gère le retour de celle-ci.
@@ -164,6 +167,7 @@ def edit_subject(request, promotion_id, subject_id):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def delete_subject(request, promotion_id, subject_id):
     post_url = reverse('management:delete-subject', args=(promotion_id, subject_id))
     back_url = reverse('management:managed-promotion', args=(promotion_id,))

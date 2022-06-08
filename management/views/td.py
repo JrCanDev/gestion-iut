@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -8,6 +8,7 @@ from management.models import Promotion, Td
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def add_td(request, promotion_id):
     """
     Affiche la vue responsable de l'ajout d'un TD dans une promotion et gère le retour de celle-ci.
@@ -55,6 +56,7 @@ def add_td(request, promotion_id):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def managed_td(request, promotion_id, td_id):
     """
     Affiche la vue qui rassemble toutes les données sur un TD d'une promotion.
@@ -67,6 +69,7 @@ def managed_td(request, promotion_id, td_id):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def delete_td(request, promotion_id, td_id):
     post_url = reverse('management:delete-td', args=(promotion_id, td_id))
     back_url = reverse('management:managed-promotion', args=(promotion_id,))

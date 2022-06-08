@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -8,6 +8,7 @@ from management.models import Planning, Promotion, Sessions, Week, Year, Semeste
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def managed_planning(request, year_id):
     sessions = Sessions.objects.filter(promotion__in=Promotion.objects.filter(year=year_id).all()).all()
     week = Week.objects.all()
@@ -32,6 +33,7 @@ def managed_planning(request, year_id):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def add_planning(request, year_id, sessions_id):
     post_url = reverse('management:add-planning', args=(year_id, sessions_id))
     back_url = reverse('management:managed-planning', args=(year_id,))
@@ -60,6 +62,7 @@ def add_planning(request, year_id, sessions_id):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def delete_planning(request, year_id, planning_id):
     post_url = reverse('management:delete-planning', args=(year_id, planning_id))
     back_url = reverse('management:managed-planning', args=(year_id,))
@@ -82,6 +85,7 @@ def delete_planning(request, year_id, planning_id):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def managed_week_planning(request, year_id, semester_id, week_id):
     year = Year.objects.get(pk=year_id)
     week = Week.objects.get(pk=week_id)
@@ -107,6 +111,7 @@ def managed_week_planning(request, year_id, semester_id, week_id):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def add_week_planning(request, year_id, semester_id, week_id, sessions_id):
     post_url = reverse('management:add-week-planning', args=(year_id, semester_id, week_id, sessions_id))
     back_url = reverse('management:managed-week-planning', args=(year_id, semester_id, week_id))

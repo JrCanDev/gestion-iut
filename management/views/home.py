@@ -19,7 +19,8 @@ def index(request):
     teacher = Teacher.objects.all()
     promotion = Promotion.objects.all()
 
-    return render(request, 'management/index.html', {'year': year, 'teacher': teacher, 'promotion': promotion})
+    return render(request, 'management/index.html',
+                  {'year': year, 'teacher': teacher, 'promotion': promotion, 'current_session': request.user})
 
 
 def user_login(request):

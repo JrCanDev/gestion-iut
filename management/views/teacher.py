@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -8,6 +8,7 @@ from management.models import Teacher, Year
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def add_teacher(request):
     """
     Affiche la vue responsable de l'ajout d'un professeur et gère le retour de celle-ci.
@@ -44,7 +45,9 @@ def add_teacher(request):
             user.last_name = form.cleaned_data['last_name']
             user.first_name = form.cleaned_data['first_name']
             user.status = status_choices[form.cleaned_data['status']]
+            user.is_superuser = form.cleaned_data['admin']
             user.save()
+            print(user.is_superuser)
             return HttpResponseRedirect('/')
     else:
         '''
@@ -64,6 +67,7 @@ def managed_teacher(request, teacher_id):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def edit_teacher(request, teacher_id):
     post_url = reverse('management:edit-teacher', args=(teacher_id,))
     back_url = reverse('management:index')
@@ -88,6 +92,7 @@ def edit_teacher(request, teacher_id):
             teacher.last_name = form.cleaned_data['last_name']
             teacher.first_name = form.cleaned_data['first_name']
             teacher.status = status_choices[form.cleaned_data['status']]
+            teacher.is_superuser = form.cleaned_data['admin']
             teacher.save()
             return HttpResponseRedirect('/')
     else:
@@ -100,6 +105,7 @@ def edit_teacher(request, teacher_id):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def delete_teacher(request, teacher_id):
     post_url = reverse('management:delete-teacher', args=(teacher_id,))
     back_url = reverse('management:index', args=())

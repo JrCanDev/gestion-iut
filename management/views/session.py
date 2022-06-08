@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -8,6 +8,7 @@ from management.models import Promotion, Sessions, Subject, Tp
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def add_cm_session(request, promotion_id, subject_id):
     """
     Affiche la vue responsable de l'ajout d'une séances (CM) pour une matière dans une promotion et gère le retour de
@@ -64,6 +65,7 @@ def add_cm_session(request, promotion_id, subject_id):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def add_td_session(request, promotion_id, subject_id):
     """
     Affiche la vue responsable de l'ajout d'une séances (TD) pour une matière dans une promotion et gère le retour de
@@ -121,6 +123,7 @@ def add_td_session(request, promotion_id, subject_id):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def add_tp_session(request, promotion_id, subject_id):
     """
     Affiche la vue responsable de l'ajout d'une séances (TP) pour une matière dans une promotion et gère le retour de
@@ -181,6 +184,7 @@ def add_tp_session(request, promotion_id, subject_id):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def delete_session(request, promotion_id, subject_id, session_id):
     post_url = reverse('management:delete-session', args=(promotion_id, subject_id, session_id))
     back_url = reverse('management:managed-subject', args=(promotion_id, subject_id))
@@ -203,6 +207,7 @@ def delete_session(request, promotion_id, subject_id, session_id):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def edit_session(request, promotion_id, subject_id, session_id):
     post_url = reverse('management:edit-session', args=(promotion_id, subject_id, session_id))
     back_url = reverse('management:managed-subject', args=(promotion_id, subject_id))

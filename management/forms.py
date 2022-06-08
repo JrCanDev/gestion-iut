@@ -18,6 +18,7 @@ class AddTeacher(forms.Form):
     first_name = forms.CharField(max_length=50)
     password = forms.CharField(max_length=250, widget=forms.PasswordInput)
     status = forms.ChoiceField(choices=StatusChoices)
+    admin = forms.BooleanField(required=False)
 
 
 class AddPromotion(forms.Form):
@@ -134,6 +135,7 @@ class EditTeacher(forms.Form):
         self.fields['first_name'] = forms.CharField(max_length=50, initial=self.teacher.first_name)
         self.fields['status'] = forms.ChoiceField(choices=StatusChoices,
                                                   initial=(1 if self.teacher.status == "professeur" else 2))
+        self.fields['admin'] = forms.BooleanField(required=False, initial=self.teacher.is_superuser)
 
 
 class EditSubject(forms.Form):
@@ -160,3 +162,8 @@ class EditSession(forms.Form):
 
 class AddWeekPlanning(forms.Form):
     number_hours = forms.FloatField(min_value=0.25, initial=1)
+
+
+class UploadFileForm(forms.Form):
+    title = forms.CharField(max_length=50)
+    file = forms.FileField()
