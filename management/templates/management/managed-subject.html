@@ -1,25 +1,36 @@
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'management/managed-subject.css' %}"/>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Subject</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'management/managed-subject.css' %}"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+</head>
+<body>
 <div class="title">
     <h1>{{ subject.name_subject }}</h1>
     <p>{{ promotion.name_promotion }}</p>
-    <a href="{% url 'management:managed-promotion' promotion.id %}">← back</a> | <a class="btn-back"
-                                                                                    href="{% url 'management:index' %}">Home</a>
+    <a href="{% url 'management:managed-promotion' promotion.id %}">
+        <span class="material-symbols-outlined">arrow_back</span>
+    </a>
+    <a class="btn-back" href="{% url 'management:index' %}"><span class="material-symbols-outlined">home</span></a>
 </div>
 <div class="container">
     <div class="cm">
         <h2>CM</h2>
         <div class="info">
-            <p>{{ nb_sessions.cm.foreseen }} séances ont été prévues, vous devez encore en
+            <p>{{ nb_sessions.cm.foreseen }} hours ont été prévues, vous devez encore en
                 affecter {{ nb_sessions.cm.remaining }}.</p>
         </div>
         <table>
             <tr>
                 <th>Nom professeur</th>
-                <th>Nombre de séances</th>
-                <th>Semaine</th>
+                <th>Nombre d'heures</th>
                 <th>Action</th>
             </tr>
             {% for one_sessions in nb_sessions.cm.sessions %}
@@ -35,10 +46,9 @@
                                 {{ one_sessions.number_hours }}
                             {% endif %}
                         </td>
-                        <td>{{ one_sessions.week }}</td>
                         <td class="btn">
-                            <a href="{% url 'management:delete-session' promotion.id subject.id one_sessions.id %}">Delete</a>
-                            <a href="{% url 'management:edit-session' promotion.id subject.id one_sessions.id %}">Edit</a>
+                            <a href="{% url 'management:edit-session' promotion.id subject.id one_sessions.id %}">Modifier</a>
+                            <a href="{% url 'management:delete-session' promotion.id subject.id one_sessions.id %}">Supprimer</a>
                         </td>
                     {% endif %}
                 </tr>
@@ -50,7 +60,7 @@
     <div class="td">
         <h2>TD</h2>
         <div class="info">
-            <p>{{ nb_sessions.td.foreseen }} séances par TD ont été prévues, vous devez encore en
+            <p>{{ nb_sessions.td.foreseen }} hours par TD ont été prévues, vous devez encore en
                 affecter {{ nb_sessions.td.remaining }}.</p>
         </div>
         {% for td_session, list_session in nb_sessions.td.sessions.items %}
@@ -60,8 +70,7 @@
                 </tr>
                 <tr>
                     <th>Nom professeur</th>
-                    <th>Nombre de séances</th>
-                    <th>Semaine</th>
+                    <th>Nombre d'heures</th>
                     <th>Action</th>
                 </tr>
                 {% for one_sessions in list_session.data %}
@@ -76,10 +85,9 @@
                                 {{ one_sessions.number_hours }}
                             {% endif %}
                         </td>
-                        <td>{{ one_sessions.week }}</td>
                         <td class="btn">
-                            <a href="{% url 'management:delete-session' promotion.id subject.id one_sessions.id %}">Delete</a>
-                            <a href="{% url 'management:edit-session' promotion.id subject.id one_sessions.id %}">Edit</a>
+                            <a href="{% url 'management:edit-session' promotion.id subject.id one_sessions.id %}">Modifier</a>
+                            <a href="{% url 'management:delete-session' promotion.id subject.id one_sessions.id %}">Supprimer</a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -91,7 +99,7 @@
     <div class="tp">
         <h2>TP</h2>
         <div class="info">
-            <p>{{ nb_sessions.tp.foreseen }} séances par TP ont été prévues, vous devez encore en
+            <p>{{ nb_sessions.tp.foreseen }} hours par TP ont été prévues, vous devez encore en
                 affecter {{ nb_sessions.tp.remaining }}.</p>
         </div>
         {% for tp_session, list_session in nb_sessions.tp.sessions.items %}
@@ -101,8 +109,7 @@
                 </tr>
                 <tr>
                     <th>Nom professeur</th>
-                    <th>Nombre de séances</th>
-                    <th>Semaine</th>
+                    <th>Nombre d'heures</th>
                     <th>Action</th>
                 </tr>
                 {% for one_sessions in list_session.data %}
@@ -117,10 +124,9 @@
                                 {{ one_sessions.number_hours }}
                             {% endif %}
                         </td>
-                        <td>{{ one_sessions.week }}</td>
                         <td class="btn">
-                            <a href="{% url 'management:delete-session' promotion.id subject.id one_sessions.id %}">Delete</a>
-                            <a href="{% url 'management:edit-session' promotion.id subject.id one_sessions.id %}">Edit</a>
+                            <a href="{% url 'management:edit-session' promotion.id subject.id one_sessions.id %}">Modifier</a>
+                            <a href="{% url 'management:delete-session' promotion.id subject.id one_sessions.id %}">Supprimer</a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -129,3 +135,5 @@
         <a href="{% url 'management:add-tp-session' promotion.id subject.id %}"><p>Ajouter un TP</p></a>
     </div>
 </div>
+</body>
+</html>

@@ -4,8 +4,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Planning</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'management/managed-planning.css' %}"/>
+    <title>Subject</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'management/managed-week-planning.css' %}"/>
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
     <link rel="stylesheet"
@@ -14,53 +14,48 @@
 <body>
 <div class="title">
     <h1>Planification</h1>
-    <p>{{ year }}</p>
-    <a class="btn-back" href="{% url 'management:managed-year' year.id %}">
+    <p>{{ week.name_week }}</p>
+    <a class="btn-back" href="{% url 'management:managed-semester' year.id semester.id %}">
         <span class="material-symbols-outlined">arrow_back</span>
     </a>
     <a class="btn-back" href="{% url 'management:index' %}"><span class="material-symbols-outlined">home</span></a>
 </div>
 
-<div class="container">
-    <div class="year">
-        <div class="info">
-            <p>Séance affectée aux semaines</p>
-        </div>
-        {% for one_semester in year.semester_set.all %}
-            <table>
-                <tr>
-                    <th colspan="7">{{ one_semester }}</th>
-                </tr>
-                <tr>
-                    <th>Semaine</th>
-                    <th>Ressource</th>
-                    <th>Promotion</th>
-                    <th>Type de séance</th>
-                    <th>Nombre d'heures</th>
-                    <th>Professeur</th>
-                    <th>Action</th>
-                </tr>
-                {% for one_week in one_semester.week_set.all %} {% for one_planning in one_week.planning_set.all %}
-                    <tr>
-                        <td>{{ one_week }}</td>
-                        <td>{{ one_planning.sessions.subject }}</td>
-                        <td>{{ one_planning.sessions.promotion }}</td>
-                        <td>{{ one_planning.sessions.type_sessions }}</td>
-                        <td>{{ one_planning.number_hours }}</td>
-                        <td>{{ one_planning.sessions.teacher }}</td>
-                        <td><a href="{% url 'management:delete-planning' year.id one_planning.id %}">Supprimer</a></td>
-                    </tr>
-                {% endfor %} {% endfor %}
-            </table>
 
-        {% endfor %}
+<div class="container">
+    <div class="week">
+        <div class="info">
+            <p>Séance affecter</p>
+        </div>
+        <table>
+            <tr>
+                <th>Semaine</th>
+                <th>Ressource</th>
+                <th>Promotion</th>
+                <th>Type de séance</th>
+                <th>Nombre d'heures</th>
+                <th>Professeur</th>
+                <th>Action</th>
+            </tr>
+            {% for one_planning in week.planning_set.all %}
+                <tr>
+                    <td>{{ one_planning.week.name_week }}</td>
+                    <td>{{ one_planning.sessions.subject }}</td>
+                    <td>{{ one_planning.sessions.promotion }}</td>
+                    <td>{{ one_planning.sessions.type_sessions }}</td>
+                    <td>{{ one_planning.number_hours }}</td>
+                    <td>{{ one_planning.sessions.teacher }}</td>
+                    <td><a href="{% url 'management:delete-planning' year.id one_planning.id %}">Supprimer</a></td>
+                </tr>
+            {% endfor %}
+        </table>
     </div>
 
     <br/>
 
     <div class="padding">
         <div class="info">
-            <p>Séance a assigné à une semaine</p>
+            <p>Séance à affecter</p>
         </div>
         <table>
             <tr>
@@ -79,7 +74,8 @@
                         <td>{{ remaining_session_data.type_sessions }}</td>
                         <td>{{ remaining_session_data.number_hours }}</td>
                         <td>{{ remaining_session_data.teacher }}</td>
-                        <td><a class="btn-back" href="{% url 'management:add-planning' year.id remaining_session_id %}">+</a>
+                        <td><a class="btn-back"
+                               href="{% url 'management:add-week-planning' year.id semester.id week.id remaining_session_id %}">+</a>
                         </td>
                     </tr>
                 {% endif %} {% endfor %}

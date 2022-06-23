@@ -1,0 +1,70 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Settings</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'management/managed-settings.css' %}"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+</head>
+<body>
+<div class="title">
+    <h1>Paramètre</h1>
+    <a class="btn-back" href="{% url 'management:index' %}">
+        <span class="material-symbols-outlined">arrow_back</span>
+    </a>
+    <a class="btn-back" href="{% url 'management:index' %}"><span class="material-symbols-outlined">home</span></a>
+</div>
+<div class="container">
+    <div class="cost">
+        <h2>Paramètre des coûts</h2>
+        <table>
+            <tr>
+                <th colspan="4">Professeur</th>
+            </tr>
+            <tr>
+                <th>Coût d'une heure</th>
+                <th>Coefficient pour une heure de CM</th>
+                <th>Coefficient pour une heure de TD</th>
+                <th>Coefficient pour une heure de TP</th>
+            </tr>
+            <tr>
+                <td>{{ settings.professeur.hour_price }}</td>
+                <td>{{ settings.professeur.eq_td.cm }}</td>
+                <td>{{ settings.professeur.eq_td.td }}</td>
+                <td>{{ settings.professeur.eq_td.tp }}</td>
+            </tr>
+        </table>
+
+        <table>
+            <tr>
+                <th colspan="4">Vacataire</th>
+            </tr>
+            <tr>
+                <th>Coût d'une heure</th>
+                <th>Coefficient pour une heure de CM</th>
+                <th>Coefficient pour une heure de TD</th>
+                <th>Coefficient pour une heure de TP</th>
+            </tr>
+            <tr>
+                <td>{{ settings.vacataire.hour_price }}</td>
+                <td>{{ settings.vacataire.eq_td.cm }}</td>
+                <td>{{ settings.vacataire.eq_td.td }}</td>
+                <td>{{ settings.vacataire.eq_td.tp }}</td>
+            </tr>
+        </table>
+        <a class="btn-add" href="{% url 'management:edit-cost-settings' %}">Modifier</a>
+
+    </div>
+    <div class="bdd">
+        <h2>Base de données</h2>
+        <a class="btn-add" href="{% url 'management:exporting-csv' %}">Exportation des données (csv)</a>
+        <a class="btn-add" href="{% url 'management:import-csv' %}">Importation des données (csv)</a>
+    </div>
+</div>
+</body>
+</html>

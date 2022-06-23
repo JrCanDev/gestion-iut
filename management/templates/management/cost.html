@@ -1,0 +1,92 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cost</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'management/managed-cost.css' %}"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+</head>
+<body>
+<div class="title">
+    <h1>Coût</h1>
+    <p>{{ year }}</p>
+    <a class="btn-back" href="{% url 'management:managed-year' year.id %}">
+        <span class="material-symbols-outlined">arrow_back</span>
+    </a>
+    <a class="btn-back" href="{% url 'management:index' %}"><span class="material-symbols-outlined">home</span></a>
+</div>
+<div class="container">
+    <div class="subject">
+        <h2>Coûts par ressource</h2>
+        {% for subject, cost in cost_subject.items %}
+            <table>
+                <tr>
+                    <th colspan="4">{{ subject }}</th>
+                </tr>
+                <tr>
+                    <th>Nombre d'heures de CM</th>
+                    <th>Nombre d'heures de TD</th>
+                    <th>Nombre d'heures de TP</th>
+                    <th>coût</th>
+                </tr>
+                <tr>
+                    <td>{{ cost.cm }}</td>
+                    <td>{{ cost.td }}</td>
+                    <td>{{ cost.tp }}</td>
+                    <td>{{ cost.cost }}</td>
+                </tr>
+            </table>
+        {% endfor %}
+    </div>
+    <div class="semester">
+        <h2>Coûts par semestre</h2>
+        {% for semester, cost in cost_semester.items %}
+            <table>
+                <tr>
+                    <th colspan="4">{{ semester }}</th>
+                </tr>
+                <tr>
+                    <th>Nombre d'heures de CM</th>
+                    <th>Nombre d'heures de TD</th>
+                    <th>Nombre d'heures de TP</th>
+                    <th>coût</th>
+                </tr>
+                <tr>
+                    <td>{{ cost.cm }}</td>
+                    <td>{{ cost.td }}</td>
+                    <td>{{ cost.tp }}</td>
+                    <td>{{ cost.cost }}</td>
+                </tr>
+            </table>
+        {% endfor %}
+    </div>
+    <div class="teacher">
+        <h2>Coûts par professeur</h2>
+        {% for teacher, cost in cost_teacher.items %}
+            <table>
+                <tr>
+                    <th colspan="4">{{ teacher }}</th>
+                </tr>
+                <tr>
+                    <th>Nombre d'heures de CM</th>
+                    <th>Nombre d'heures de TD</th>
+                    <th>Nombre d'heures de TP</th>
+                    <th>coût</th>
+                </tr>
+                <tr>
+                    <td>{{ cost.cm }}</td>
+                    <td>{{ cost.td }}</td>
+                    <td>{{ cost.tp }}</td>
+                    <td>{{ cost.cost }}</td>
+                </tr>
+            </table>
+        {% endfor %}
+    </div>
+</div>
+</body>
+</html>

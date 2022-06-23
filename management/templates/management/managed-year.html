@@ -1,11 +1,24 @@
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'management/managed-year.css' %}"/>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Year</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'management/managed-year.css' %}"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+</head>
+<body>
 <div class="title">
     <h1>{{ year.name_year }}</h1>
-    <a class="btn-back" href="{% url 'management:index' %}">← back</a> | <a class="btn-back"
-                                                                            href="{% url 'management:index' %}">Home</a>
+    <a class="btn-back" href="{% url 'management:index' %}">
+        <span class="material-symbols-outlined">arrow_back</span>
+    </a>
+    <a class="btn-back" href="{% url 'management:index' %}"><span class="material-symbols-outlined">home</span></a>
 </div>
 
 <div class="container">
@@ -23,13 +36,14 @@
                         {% endfor %}
                     </div>
                     <div class="btn">
-                        <a href="{% url 'management:managed-semester' year.id one_semester.id %}">Voir</a>
-                        <a href="{% url 'management:delete-semester' year.id one_semester.id %}">Delete</a>
+                        <a href="{% url 'management:managed-semester' year.id one_semester.id %}">Géré</a>
+                        <a href="{% url 'management:delete-semester' year.id one_semester.id %}">Supprimer</a>
                     </div>
                 </div>
             {% endfor %}
         </div>
         <a class="btn-add" href="{% url 'management:add-semester' year.id %}">Ajouter un semestre</a>
         <a class="btn-add" href="{% url 'management:managed-planning' year.id %}">Modifier la planification</a>
+        <a class="btn-add" href="{% url 'management:managed-cost' year.id %}">Voir les coûts</a>
     </div>
 </div>

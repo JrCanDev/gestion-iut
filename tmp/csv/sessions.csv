@@ -1,0 +1,11 @@
+name_subject,name_promotion,name_teacher,name_semester,name_year,type_sessions,number_hours,name_td,name_tp
+M3204,DUT 2020/2021,Medart,s2,2020-2021,cm,10.0,,
+M3204,DUT 2020/2021,Medart,s2,2020-2021,td,4.0,TD1,
+M3205,DUT 2020/2021,Martin,s1,2020-2021,td,12.0,TD1,
+M3205,DUT 2020/2021,Martin,s1,2020-2021,td,12.0,TD2,
+M3204,DUT 2020/2021,Medart,s2,2020-2021,tp,6.0,,TPA
+M3204,DUT 2020/2021,Medart,s2,2020-2021,tp,6.0,,TPB
+M3205,DUT 2020/2021,Martin,s1,2020-2021,tp,18.0,,TPA
+M3205,DUT 2020/2021,Martin,s1,2020-2021,tp,18.0,,TPB
+M3205,DUT 2020/2021,Martin,s1,2020-2021,tp,18.0,,TPC
+M3205,DUT 2020/2021,Martin,s1,2020-2021,cm,10.0,,

@@ -1,32 +1,46 @@
 {% load static %}
 
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ADD</title>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
 
-<!-- Fengyuan Chen's Datepicker -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css" integrity="sha256-b88RdwbRJEzRx95nCuuva+hO5ExvXXnpX+78h8DjyOE=" crossorigin="anonymous" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js" integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>
+    <!-- Fengyuan Chen's Datepicker -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css"
+          integrity="sha256-b88RdwbRJEzRx95nCuuva+hO5ExvXXnpX+78h8DjyOE=" crossorigin="anonymous"/>
 
-<link rel="stylesheet" type="text/css" href="{% static 'management/add-form.css' %}" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js"
+            integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>
 
-<form action="{% url 'management:add-week' year_id semester_id%}" method="post">
-  {% csrf_token %}
+    <link rel="stylesheet" type="text/css" href="{% static 'management/add-form.css' %}"/>
+</head>
+<body>
+<form action="{% url 'management:add-week' year_id semester_id %}" method="post">
+    {% csrf_token %}
 
-  <script>
-    $(function () {
-      $("#id_name_week").datepicker({
-        language: "fr-FR",
-      });
-    });
-  </script>
-  <!---->
-  {% if error %}
-  <div class="error">
-    <p>{{ error }}</p>
-  </div>
-  {% endif %}
-  <!---->
-  <div class="inputs">{{ form }}</div>
-  <input type="submit" value="Submit" />
-  <a href="{% url 'management:managed-semester' year_id semester_id%}"><p>Annuler</p></a>
+    <script>
+        $(function () {
+            $("#id_name_week").datepicker({
+                language: "fr-FR",
+                weekStart: 1
+            });
+        });
+    </script>
+    <!---->
+    {% if error %}
+        <div class="error">
+            <p>{{ error }}</p>
+        </div>
+    {% endif %}
+    <!---->
+    <div class="inputs">{{ form }}</div>
+    <input type="submit" value="Ajouter"/>
+    <a href="{% url 'management:managed-semester' year_id semester_id %}"><p>Annuler</p></a>
 </form>
+</body>
+</html>

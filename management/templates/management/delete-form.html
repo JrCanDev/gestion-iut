@@ -1,7 +1,13 @@
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'management/delete-form.css' %}"/>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DELETE</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'management/delete-form.css' %}"/>
+</head>
+<body>
 <form action="{{ post_url }}" method="post">
     {% csrf_token %}
     {% if error %}
@@ -15,6 +21,8 @@
         </div>
     {% endif %}
     <div class="inputs">{{ form }}</div>
-    <input type="submit" value="Delete"/>
+    <input type="submit" value="Je confirme la suppression"/>
     <a href="{{ back_url }}">Annuler</a>
 </form>
+</body>
+</html>

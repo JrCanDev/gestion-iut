@@ -1,7 +1,13 @@
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'management/edit-form.css' %}"/>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EDIT</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'management/edit-form.css' %}"/>
+</head>
+<body>
 <form action="{{ post_url }}" method="post">
     {% csrf_token %}
     {% if error %}
@@ -15,6 +21,8 @@
         </div>
     {% endif %}
     <div class="inputs">{{ form }}</div>
-    <input type="submit" value="Save"/>
+    <input type="submit" value="Enregistrer"/>
     <a href="{{ back_url }}"><p>Annuler</p></a>
 </form>
+</body>
+</html>

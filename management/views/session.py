@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -8,6 +8,7 @@ from management.models import Promotion, Sessions, Subject, Tp
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def add_cm_session(request, promotion_id, subject_id):
     """
     Affiche la vue responsable de l'ajout d'une séances (CM) pour une matière dans une promotion et gère le retour de
@@ -64,6 +65,7 @@ def add_cm_session(request, promotion_id, subject_id):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def add_td_session(request, promotion_id, subject_id):
     """
     Affiche la vue responsable de l'ajout d'une séances (TD) pour une matière dans une promotion et gère le retour de
@@ -121,6 +123,7 @@ def add_td_session(request, promotion_id, subject_id):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def add_tp_session(request, promotion_id, subject_id):
     """
     Affiche la vue responsable de l'ajout d'une séances (TP) pour une matière dans une promotion et gère le retour de
@@ -133,7 +136,7 @@ def add_tp_session(request, promotion_id, subject_id):
     promotion = Promotion.objects.get(pk=promotion_id)
 
     if request.method == 'POST':
-        form = AddTpSubject(request.POST, subject=subject, nb_hours_remaining=subject.number_td_sessions)
+        form = AddTpSubject(request.POST, subject=subject, nb_hours_remaining=subject.number_tp_sessions)
         if form.is_valid():
             '''
             Si le formulaire a été soumi, on vérifie que les champs ont été correctement remplis.
@@ -150,37 +153,28 @@ def add_tp_session(request, promotion_id, subject_id):
                     nb_hours_remaining -= one_sessions.number_hours
 
             '''
-            if form.cleaned_data['number_hours'] > nb_hours_remaining:
-                return render(request, 'management/add-form.html',
-                              {'promotion_id': promotion_id, 'subject_id': subject_id, 'form': form,
-                               'error': 'Vous ne pouvez pas affecter plus de ' + str(
-                                   nb_hours_remaining) + ' séances', 'post_url': post_url, "back_url": back_url})
-            '''
-
-            '''
             Ajoute les données à la BDD et redirige le client.
             '''
 
-            new_session = Sessions(subject=subject, type_sessions='tp', promotion=promotion,
-                                   teacher=form.cleaned_data['teacher'],
-                                   number_hours=form.cleaned_data['number_hours'])
             tp = Tp.objects.get(pk=form.cleaned_data['tp'].id)
-            new_session.save()
-            new_session.tp.add(tp)
-            new_session.save()
+            new_session = Sessions(subject=subject, type_sessions='tp', promotion=promotion,
+                                   teacher=form.cleaned_data['teacher'], number_hours=form.cleaned_data['number_hours'],
+                                   tp=tp).save()
+
             return HttpResponseRedirect(reverse('management:managed-subject', args=(promotion_id, subject_id)))
     else:
         '''
         Sinon on affiche le formulaire vide.
         '''
 
-        form = AddTpSubject(subject=subject, nb_hours_remaining=subject.number_td_sessions)
+        form = AddTpSubject(subject=subject, nb_hours_remaining=subject.number_tp_sessions)
         return render(request, 'management/add-form.html',
                       {'promotion_id': promotion_id, 'subject_id': subject_id, 'form': form, 'post_url': post_url,
                        "back_url": back_url})
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def delete_session(request, promotion_id, subject_id, session_id):
     post_url = reverse('management:delete-session', args=(promotion_id, subject_id, session_id))
     back_url = reverse('management:managed-subject', args=(promotion_id, subject_id))
@@ -203,6 +197,7 @@ def delete_session(request, promotion_id, subject_id, session_id):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def edit_session(request, promotion_id, subject_id, session_id):
     post_url = reverse('management:edit-session', args=(promotion_id, subject_id, session_id))
     back_url = reverse('management:managed-subject', args=(promotion_id, subject_id))

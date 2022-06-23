@@ -29,7 +29,8 @@ body {
     padding: 0px 5rem;
 }
 
-.week {
+.week,
+.padding {
     padding: 2rem;
     border-radius: 1.5rem;
     border: 2px solid #0002;
@@ -37,50 +38,33 @@ body {
     margin-bottom: 5rem;
 }
 
-.week h2 {
+.week .info,
+.padding .info {
     text-align: center;
-    margin-bottom: 2rem;
-}
-
-.week .list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-.week .list .item {
-    min-width: 20rem;
-    padding: 1.5rem;
-    border-radius: 0.8rem;
-    background-color: #f5f5f5;
-    margin-bottom: 2rem;
-}
-
-.week .list .item p {
-    text-align: center;
-    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
     margin-bottom: 1rem;
 }
 
-.week .list .item .btn {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.week .list .item .btn a {
-    display: block;
-    text-align: center;
-    text-decoration: none;
-    color: #f5f5f5;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-    font-weight: 500;
+.week table,
+.padding table {
     width: 100%;
-    background-color: #1e88e5;
+    border: 1px solid #0002;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
 }
 
-.week a {
+.week table th,
+.week table td,
+.padding table th,
+.padding table td {
+    padding: 0.5rem;
+    text-align: center;
+    border: 1px solid #0002;
+}
+
+.week table td a,
+.padding table td a {
     display: block;
     text-decoration: none;
     text-align: center;

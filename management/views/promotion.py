@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -8,6 +8,7 @@ from management.models import Promotion
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def add_promotion(request):
     """
     Fiche la vue responsable de l'ajout d'une promotions et gère le retour de celle-ci.
@@ -49,6 +50,7 @@ def add_promotion(request):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def managed_promotion(request, promotion_id):
     """
     Affiche la vue qui rassemble toutes les données sur une promotion.
@@ -56,11 +58,12 @@ def managed_promotion(request, promotion_id):
 
     promotion = Promotion.objects.get(pk=promotion_id)
     td = promotion.td_set.all()
-    subject = promotion.subject_set.all()
+    subject = promotion.subject_set.all().order_by("name_subject")
     return render(request, 'management/managed-promotion.html', {'promotion': promotion, 'td': td, 'subject': subject})
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def delete_promotion(request, promotion_id):
     post_url = reverse('management:delete-promotion', args=(promotion_id,))
     back_url = reverse('management:index', args=())

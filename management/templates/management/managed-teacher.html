@@ -1,44 +1,69 @@
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'management/managed-teacher.css' %}"/>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Teacher</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'management/managed-teacher.css' %}"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+</head>
+<body>
 <div class="title">
     <h1>{{ teacher.last_name }}</h1>
     <p>{{ teacher.first_name }}</p>
-    <a class="btn-back" href="{% url 'management:index' %}">← back</a> | <a class="btn-back"
-                                                                            href="{% url 'management:index' %}">Home</a>
+    <a class="btn-back" href="{% url 'management:index' %}">
+        <span class="material-symbols-outlined">arrow_back</span>
+    </a>
+    <a class="btn-back" href="{% url 'management:index' %}"><span class="material-symbols-outlined">home</span></a>
 </div>
 
 <div class="container">
-    {% for one_year in year %}
+    {% for year, data in services.items %}
         <div class="year">
-            <h2>{{ one_year }}</h2>
-            {% for one_semester in one_year.semester_set.all %}
-                <table>
-                    <tr>
-                        <th colspan="4">{{ one_semester }}</th>
-                    </tr>
+            <h2>{{ year }}</h2>
+            <table>
+                <tr>
+                    <th colspan="4">Récapitulatif de toutes les heures</th>
+                </tr>
+                <tr>
+                    <th>Nombre d'heures de CM</th>
+                    <th>Nombre d'heures de TD</th>
+                    <th>Nombre d'heures de TP</th>
+                    <th>Gratification</th>
+                </tr>
+                <tr>
+                    <td>{{ data.total.cm }}</td>
+                    <td>{{ data.total.td }}</td>
+                    <td>{{ data.total.tp }}</td>
+                    <td>{{ data.cost }} €</td>
+                </tr>
+            </table>
 
-                    {% for one_week in one_semester.week_set.all %}
-                        <tr>
-                            <th>Module</th>
-                            <th>Type de séance</th>
-                            <th>Nombre d'heures</th>
-                            <th>Semaine</th>
-                        </tr>
-                        {% for one_planning in one_week.planning_set.all %}
-                            {% if teacher == one_planning.sessions.teacher %}
-                                <tr>
-                                    <td>{{ one_planning.sessions.subject }}</td>
-                                    <td>{{ one_planning.sessions.type_sessions }}</td>
-                                    <td>{{ one_planning.number_hours }}</td>
-                                    <td>{{ one_week }}</td>
-                                </tr>
-                            {% endif %}
-                        {% endfor %}
-                    {% endfor %}
-                </table>
-            {% endfor %}
+            <table>
+                <tr>
+                    <th colspan="4">Récapitulatif des heures par module</th>
+                </tr>
+                <tr>
+                    <th>Module</th>
+                    <th>Nombre d'heures de CM</th>
+                    <th>Nombre d'heures de TD</th>
+                    <th>Nombre d'heures de TP</th>
+                </tr>
+                {% for one_sessions, hours in data.sessions.items %}
+                    <tr>
+                        <td>{{ one_sessions }}</td>
+                        <td>{{ hours.cm }}</td>
+                        <td>{{ hours.td }}</td>
+                        <td>{{ hours.tp }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
         </div>
     {% endfor %}
 </div>
+</body>
+</html>

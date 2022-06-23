@@ -1,0 +1,18 @@
+{
+    "professeur": {
+        "eq_td": {
+            "cm": 1.5,
+            "td": 1.0,
+            "tp": 0.66
+        },
+        "hour_price": 10.0
+    },
+    "vacataire": {
+        "eq_td": {
+            "cm": 1.5,
+            "td": 1.0,
+            "tp": 0.66
+        },
+        "hour_price": 5.0
+    }
+}

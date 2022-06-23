@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -8,6 +8,7 @@ from management.models import Year
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def add_year(request):
     """
     Affiche la vue responsable de l'ajout d'une année et gère le retour de celle-ci.
@@ -46,6 +47,7 @@ def add_year(request):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def managed_year(request, year_id):
     """
     Affiche la vue qui rassemble toutes les données sur une année.
@@ -57,6 +59,7 @@ def managed_year(request, year_id):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def delete_year(request, year_id):
     post_url = reverse('management:delete-year', args=(year_id,))
     back_url = reverse('management:index', args=())

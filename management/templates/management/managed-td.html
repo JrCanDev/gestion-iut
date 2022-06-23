@@ -1,25 +1,39 @@
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'management/managed-td.css' %}"/>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TD</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'management/managed-td.css' %}"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+</head>
+<body>
 <div class="title">
     <h1>{{ td.name_td }}</h1>
     <p>{{ promotion.name_promotion }}</p>
-    <a class="btn-back" href="{% url 'management:managed-promotion' promotion.id %}">← back</a> | <a class="btn-back"
-                                                                                                     href="{% url 'management:index' %}">Home</a>
+    <a class="btn-back" href="{% url 'management:managed-promotion' promotion.id %}">
+        <span class="material-symbols-outlined">arrow_back</span>
+    </a>
+    <a class="btn-back" href="{% url 'management:index' %}"><span class="material-symbols-outlined">home</span></a>
 </div>
 
 <div class="container">
     <div class="td">
-        <h2>TD</h2>
+        <h2>TP</h2>
         <div class="list">
             {% for one_tp in td.tp_set.all %}
                 <div class="item">
                     <p>{{ one_tp }}</p>
-                    <a href="{% url 'management:delete-tp' promotion.id td.id one_tp.id %}">Delete</a>
+                    <a href="{% url 'management:delete-tp' promotion.id td.id one_tp.id %}">Supprimer</a>
                 </div>
             {% endfor %}
         </div>
         <a class="btn-add" href="{% url 'management:add-tp' promotion.id td.id %}">Ajouter un TP</a>
     </div>
 </div>
+</body>
+</html>
