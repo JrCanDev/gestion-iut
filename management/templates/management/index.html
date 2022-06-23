@@ -16,6 +16,13 @@
     <a class="btn-back" href="{% url 'management:logout' %}">
         <span class="material-symbols-outlined">logout</span>
     </a>
+    {% if current_session.is_superuser %}
+        <a class="btn-back" href="{% url 'management:managed-settings' %}">
+        <span class="material-symbols-outlined">
+            settings
+        </span>
+        </a>
+    {% endif %}
 </div>
 <div class="container">
     {% if current_session.is_superuser %}
@@ -26,8 +33,8 @@
                     <div class="item">
                         <p>{{ one_year }}</p>
                         <div class="btn">
-                            <a href="{% url 'management:managed-year' one_year.id %}">Voir</a>
-                            <a href="{% url 'management:delete-year' one_year.id %}">Delete</a>
+                            <a href="{% url 'management:managed-year' one_year.id %}">Géré</a>
+                            <a href="{% url 'management:delete-year' one_year.id %}">Supprimer</a>
                         </div>
                     </div>
                 {% endfor %}
@@ -44,12 +51,12 @@
                     <div class="item">
                         <p>{{ one_teacher }}</p>
                         <div class="btn">
-                            <a href="{% url 'management:managed-teacher' one_teacher.id %}">Service</a>
+                            <a href="{% url 'management:managed-teacher' one_teacher.id %}">Voir service</a>
                             {% if current_session.is_superuser %}
-                                <a href="{% url 'management:edit-teacher' one_teacher.id %}">Edit</a>
-                                <a href="{% url 'management:delete-teacher' one_teacher.id %}">Delete</a>
+                                <a href="{% url 'management:edit-teacher' one_teacher.id %}">Géré</a>
+                                <a href="{% url 'management:delete-teacher' one_teacher.id %}">Supprimer</a>
                             {% endif %}
-                            <a href="{% url 'management:change-password' one_teacher.id %}">Password</a>
+                            <a href="{% url 'management:change-password' one_teacher.id %}">Changer le mot de passe</a>
                         </div>
                     </div>
                 {% endif %}
@@ -68,8 +75,8 @@
                     <div class="item">
                         <p>{{ one_promotion }}</p>
                         <div class="btn">
-                            <a href="{% url 'management:managed-promotion' one_promotion.id %}">Voir</a>
-                            <a href="{% url 'management:delete-promotion' one_promotion.id %}">Delete</a>
+                            <a href="{% url 'management:managed-promotion' one_promotion.id %}">Géré</a>
+                            <a href="{% url 'management:delete-promotion' one_promotion.id %}">Supprimer</a>
                         </div>
                     </div>
                 {% endfor %}

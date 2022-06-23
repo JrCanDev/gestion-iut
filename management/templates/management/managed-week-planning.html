@@ -30,10 +30,10 @@
         <table>
             <tr>
                 <th>Semaine</th>
-                <th>Matiere</th>
+                <th>Ressource</th>
                 <th>Promotion</th>
                 <th>Type de séance</th>
-                <th>Nombre de séances</th>
+                <th>Nombre d'heures</th>
                 <th>Professeur</th>
                 <th>Action</th>
             </tr>
@@ -45,7 +45,7 @@
                     <td>{{ one_planning.sessions.type_sessions }}</td>
                     <td>{{ one_planning.number_hours }}</td>
                     <td>{{ one_planning.sessions.teacher }}</td>
-                    <td><a href="{% url 'management:delete-planning' year.id one_planning.id %}">Delete</a></td>
+                    <td><a href="{% url 'management:delete-planning' year.id one_planning.id %}">Supprimer</a></td>
                 </tr>
             {% endfor %}
         </table>
@@ -59,10 +59,10 @@
         </div>
         <table>
             <tr>
-                <th>Matiere</th>
+                <th>Ressource</th>
                 <th>Promotion</th>
                 <th>Type de séance</th>
-                <th>Nombre de séance</th>
+                <th>Nombre d'heures</th>
                 <th>Professeur</th>
                 <th>Affecter</th>
             </tr>

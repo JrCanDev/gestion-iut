@@ -15,9 +15,9 @@ def index(request):
     """
     Récupère les années, les professeurs et les promotions pour les envoyer à la vue.
     """
-    year = Year.objects.all()
-    teacher = Teacher.objects.all()
-    promotion = Promotion.objects.all()
+    year = Year.objects.all().order_by("-name_year")
+    teacher = Teacher.objects.all().order_by("last_name")
+    promotion = Promotion.objects.all().order_by("-year__name_year")
 
     return render(request, 'management/index.html',
                   {'year': year, 'teacher': teacher, 'promotion': promotion, 'current_session': request.user})
@@ -60,6 +60,6 @@ def user_change_password(request, teacher_id):
             return HttpResponseRedirect(reverse('management:index'))
     else:
         form = ChangePassword()
-        return render(request, 'management/add-form.html', {'form': form, "post_url": post_url, "back_url": back_url,
-                                                            'info': "Le changement de mots de passe déconnectera "
-                                                                    "l'utilisateur de toutes ses sessions !"})
+        return render(request, 'management/edit-form.html', {'form': form, "post_url": post_url, "back_url": back_url,
+                                                             'info': "Le changement de mots de passe déconnectera "
+                                                                     "l'utilisateur de toutes ses sessions !"})

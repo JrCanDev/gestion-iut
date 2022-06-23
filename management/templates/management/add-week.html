@@ -27,6 +27,7 @@
         $(function () {
             $("#id_name_week").datepicker({
                 language: "fr-FR",
+                weekStart: 1
             });
         });
     </script>
@@ -38,7 +39,7 @@
     {% endif %}
     <!---->
     <div class="inputs">{{ form }}</div>
-    <input type="submit" value="Submit"/>
+    <input type="submit" value="Ajouter"/>
     <a href="{% url 'management:managed-semester' year_id semester_id %}"><p>Annuler</p></a>
 </form>
 </body>

@@ -1,12 +1,14 @@
 from django.urls import path
 
 from management.views import home, planning, promotion, semester, session, subject, td, teacher, tp, week, year, cost, \
-    csv
+    csv, settings
 
 app_name = 'management'
 urlpatterns = [
-    path('exporting-csv', csv.exporting_csv, name='exporting-csv'),
-    path('import-csv', csv.import_csv, name='import-csv'),
+    path('settings/exporting-csv', csv.exporting_csv, name='exporting-csv'),
+    path('settings/import-csv', csv.import_csv, name='import-csv'),
+    path('settings', settings.managed_settings, name='managed-settings'),
+    path('settings/edit/cost', settings.edit_cost_settings, name='edit-cost-settings'),
 
     path('', home.index, name='index'),
     path('accounts/login/', home.user_login, name='login'),

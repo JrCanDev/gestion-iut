@@ -30,8 +30,7 @@
         <table>
             <tr>
                 <th>Nom professeur</th>
-                <th>Nombre de séances</th>
-                <th>Semaine</th>
+                <th>Nombre d'heures</th>
                 <th>Action</th>
             </tr>
             {% for one_sessions in nb_sessions.cm.sessions %}
@@ -47,10 +46,9 @@
                                 {{ one_sessions.number_hours }}
                             {% endif %}
                         </td>
-                        <td>{{ one_sessions.week }}</td>
                         <td class="btn">
-                            <a href="{% url 'management:delete-session' promotion.id subject.id one_sessions.id %}">Delete</a>
-                            <a href="{% url 'management:edit-session' promotion.id subject.id one_sessions.id %}">Edit</a>
+                            <a href="{% url 'management:edit-session' promotion.id subject.id one_sessions.id %}">Modifier</a>
+                            <a href="{% url 'management:delete-session' promotion.id subject.id one_sessions.id %}">Supprimer</a>
                         </td>
                     {% endif %}
                 </tr>
@@ -72,8 +70,7 @@
                 </tr>
                 <tr>
                     <th>Nom professeur</th>
-                    <th>Nombre de séances</th>
-                    <th>Semaine</th>
+                    <th>Nombre d'heures</th>
                     <th>Action</th>
                 </tr>
                 {% for one_sessions in list_session.data %}
@@ -88,10 +85,9 @@
                                 {{ one_sessions.number_hours }}
                             {% endif %}
                         </td>
-                        <td>{{ one_sessions.week }}</td>
                         <td class="btn">
-                            <a href="{% url 'management:delete-session' promotion.id subject.id one_sessions.id %}">Delete</a>
-                            <a href="{% url 'management:edit-session' promotion.id subject.id one_sessions.id %}">Edit</a>
+                            <a href="{% url 'management:edit-session' promotion.id subject.id one_sessions.id %}">Modifier</a>
+                            <a href="{% url 'management:delete-session' promotion.id subject.id one_sessions.id %}">Supprimer</a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -113,8 +109,7 @@
                 </tr>
                 <tr>
                     <th>Nom professeur</th>
-                    <th>Nombre de séances</th>
-                    <th>Semaine</th>
+                    <th>Nombre d'heures</th>
                     <th>Action</th>
                 </tr>
                 {% for one_sessions in list_session.data %}
@@ -129,10 +124,9 @@
                                 {{ one_sessions.number_hours }}
                             {% endif %}
                         </td>
-                        <td>{{ one_sessions.week }}</td>
                         <td class="btn">
-                            <a href="{% url 'management:delete-session' promotion.id subject.id one_sessions.id %}">Delete</a>
-                            <a href="{% url 'management:edit-session' promotion.id subject.id one_sessions.id %}">Edit</a>
+                            <a href="{% url 'management:edit-session' promotion.id subject.id one_sessions.id %}">Modifier</a>
+                            <a href="{% url 'management:delete-session' promotion.id subject.id one_sessions.id %}">Supprimer</a>
                         </td>
                     </tr>
                 {% endfor %}

@@ -46,8 +46,10 @@
                             </td>
                             <td>
                                 <div class="btn">
-                                    <a href="{% url 'management:managed-td' promotion.id one_td.id %}">Voir</a>
-                                    <a href="{% url 'management:delete-td' promotion.id one_td.id %}">Delete</a>
+                                    <a href="{% url 'management:managed-td' promotion.id one_td.id %}">Géré</a>
+                                    <a class="btn-add" href="{% url 'management:add-tp' promotion.id one_td.id %}">Ajouter
+                                        un TP</a>
+                                    <a href="{% url 'management:delete-td' promotion.id one_td.id %}">Supprimer</a>
                                 </div>
                             </td>
                         </tr>
@@ -80,7 +82,7 @@
     </div>
 
     <div class="subject">
-        <h2>Matiere</h2>
+        <h2>Ressource</h2>
         <div class="list">
             {% for one_subject in subject %}
                 <div class="item">
@@ -88,14 +90,14 @@
                     <p>{{ one_subject.description }}</p>
 
                     <div class="btn">
-                        <a href="{% url 'management:managed-subject' promotion.id one_subject.id %}">Voir</a>
-                        <a href="{% url 'management:edit-subject' promotion.id one_subject.id %}">Edit</a>
-                        <a href="{% url 'management:delete-subject' promotion.id one_subject.id %}">Delete</a>
+                        <a href="{% url 'management:managed-subject' promotion.id one_subject.id %}">Géré</a>
+                        <a href="{% url 'management:edit-subject' promotion.id one_subject.id %}">Modifier</a>
+                        <a href="{% url 'management:delete-subject' promotion.id one_subject.id %}">Supprimer</a>
                     </div>
                 </div>
             {% endfor %}
         </div>
-        <a class="btn-add" href="{% url 'management:add-subject' promotion.id %}">Ajouter une matiere</a>
+        <a class="btn-add" href="{% url 'management:add-subject' promotion.id %}">Ajouter une ressource</a>
     </div>
 </div>
 </body>

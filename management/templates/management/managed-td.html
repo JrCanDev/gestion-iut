@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>TD</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'management/managed-subject.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'management/managed-td.css' %}"/>
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
     <link rel="stylesheet"
@@ -23,12 +23,12 @@
 
 <div class="container">
     <div class="td">
-        <h2>TD</h2>
+        <h2>TP</h2>
         <div class="list">
             {% for one_tp in td.tp_set.all %}
                 <div class="item">
                     <p>{{ one_tp }}</p>
-                    <a href="{% url 'management:delete-tp' promotion.id td.id one_tp.id %}">Delete</a>
+                    <a href="{% url 'management:delete-tp' promotion.id td.id one_tp.id %}">Supprimer</a>
                 </div>
             {% endfor %}
         </div>

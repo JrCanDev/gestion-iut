@@ -58,7 +58,7 @@ def managed_promotion(request, promotion_id):
 
     promotion = Promotion.objects.get(pk=promotion_id)
     td = promotion.td_set.all()
-    subject = promotion.subject_set.all()
+    subject = promotion.subject_set.all().order_by("name_subject")
     return render(request, 'management/managed-promotion.html', {'promotion': promotion, 'td': td, 'subject': subject})
 
 

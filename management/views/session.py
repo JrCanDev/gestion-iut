@@ -153,24 +153,14 @@ def add_tp_session(request, promotion_id, subject_id):
                     nb_hours_remaining -= one_sessions.number_hours
 
             '''
-            if form.cleaned_data['number_hours'] > nb_hours_remaining:
-                return render(request, 'management/add-form.html',
-                              {'promotion_id': promotion_id, 'subject_id': subject_id, 'form': form,
-                               'error': 'Vous ne pouvez pas affecter plus de ' + str(
-                                   nb_hours_remaining) + ' séances', 'post_url': post_url, "back_url": back_url})
-            '''
-
-            '''
             Ajoute les données à la BDD et redirige le client.
             '''
 
-            new_session = Sessions(subject=subject, type_sessions='tp', promotion=promotion,
-                                   teacher=form.cleaned_data['teacher'],
-                                   number_hours=form.cleaned_data['number_hours'])
             tp = Tp.objects.get(pk=form.cleaned_data['tp'].id)
-            new_session.save()
-            new_session.tp.add(tp)
-            new_session.save()
+            new_session = Sessions(subject=subject, type_sessions='tp', promotion=promotion,
+                                   teacher=form.cleaned_data['teacher'], number_hours=form.cleaned_data['number_hours'],
+                                   tp=tp).save()
+
             return HttpResponseRedirect(reverse('management:managed-subject', args=(promotion_id, subject_id)))
     else:
         '''

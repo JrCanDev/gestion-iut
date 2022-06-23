@@ -20,10 +20,23 @@ class AddTeacher(forms.Form):
     status = forms.ChoiceField(choices=StatusChoices)
     admin = forms.BooleanField(required=False)
 
+    def __init__(self, *args, **kwargs):
+        super(AddTeacher, self).__init__(*args, **kwargs)
+        self.fields['last_name'].label = "Nom"
+        self.fields['first_name'].label = "Prénom"
+        self.fields['password'].label = "Mot de passe"
+        self.fields['status'].label = "Statut"
+        self.fields['admin'].label = "Super-utilisateur"
+
 
 class AddPromotion(forms.Form):
     name_promotion = forms.CharField(max_length=20)
     year = forms.ModelChoiceField(queryset=Year.objects.all())
+
+    def __init__(self, *args, **kwargs):
+        super(AddPromotion, self).__init__(*args, **kwargs)
+        self.fields['name_promotion'].label = "Nom de la promotion"
+        self.fields['year'].label = "Année de la promotion"
 
 
 class AddTD(forms.Form):
@@ -33,10 +46,16 @@ class AddTD(forms.Form):
         self.promotion = kwargs.pop("promotion")
         super(AddTD, self).__init__(*args, **kwargs)
         self.fields['semester'] = forms.ModelChoiceField(queryset=self.promotion.year.semester_set.all())
+        self.fields['name_td'].label = "Nom du TD"
+        self.fields['semester'].label = "Semestre"
 
 
 class AddTP(forms.Form):
     name_tp = forms.CharField(max_length=5)
+
+    def __init__(self, *args, **kwargs):
+        super(AddTP, self).__init__(*args, **kwargs)
+        self.fields['name_tp'].label = "Nom du TP"
 
 
 class AddSubject(forms.Form):
@@ -50,6 +69,12 @@ class AddSubject(forms.Form):
         self.promotion = kwargs.pop("promotion")
         super(AddSubject, self).__init__(*args, **kwargs)
         self.fields['semester'] = forms.ModelChoiceField(queryset=self.promotion.year.semester_set.all())
+        self.fields['name_subject'].label = "Nom de la ressource"
+        self.fields['description'].label = "Description"
+        self.fields['number_cm_sessions'].label = "Nombre d'heures en cm"
+        self.fields['number_td_sessions'].label = "Nombre d'heures par groupe TD"
+        self.fields['number_tp_sessions'].label = "Nombre d'heures par groupe TP"
+        self.fields['semester'].label = "Semestre"
 
 
 class AddCmSubject(forms.Form):
@@ -60,6 +85,9 @@ class AddCmSubject(forms.Form):
         self.nb_hours_remaining = kwargs.pop("nb_hours_remaining")
         super(AddCmSubject, self).__init__(*args, **kwargs)
         self.fields["number_hours"] = forms.FloatField(min_value=0.25, initial=self.nb_hours_remaining)
+
+        self.fields['teacher'].label = "Professeur"
+        self.fields['number_hours'].label = "Nombre d'heures"
 
 
 class AddTdSubject(forms.Form):
@@ -73,6 +101,9 @@ class AddTdSubject(forms.Form):
             queryset=Td.objects.filter(promotion=self.subject.promotion.id, semester=self.subject.semester).all())
         self.fields["number_hours"] = forms.FloatField(min_value=0.25, initial=self.nb_hours_remaining)
 
+        self.fields['teacher'].label = "Professeur"
+        self.fields['td'].label = "Groupe TD"
+        self.fields['number_hours'].label = "Nombre d'heures"
         """promotion = Promotion.objects.get(pk=self.promotion_id) year = Year.objects.get(pk=promotion.year.id) 
         self.fields['week'] = forms.ModelChoiceField(queryset=Week.objects.filter(semester__in=year.semester_set.all(
         )).all()) """
@@ -90,6 +121,9 @@ class AddTpSubject(forms.Form):
                                                                 semester=self.subject.semester).all()).all())
         self.fields["number_hours"] = forms.FloatField(min_value=0.25, initial=self.nb_hours_remaining)
 
+        self.fields['teacher'].label = "Professeur"
+        self.fields['tp'].label = "Groupe TP"
+        self.fields['number_hours'].label = "Nombre d'heures"
         """promotion = Promotion.objects.get(pk=self.promotion_id) year = Year.objects.get(pk=promotion.year.id) 
         self.fields['week'] = forms.ModelChoiceField(queryset=Week.objects.filter(semester__in=year.semester_set.all(
         )).all()) """
@@ -98,10 +132,18 @@ class AddTpSubject(forms.Form):
 class AddSemester(forms.Form):
     name_semester = forms.CharField(max_length=20)
 
+    def __init__(self, *args, **kwargs):
+        super(AddSemester, self).__init__(*args, **kwargs)
+        self.fields['name_semester'].label = "Nom du semestre"
+
 
 class AddWeek(forms.Form):
     # name_week = forms.DateField(widget=forms.SelectDateWidget)
     name_week = forms.DateField(input_formats=['%m/%d/%Y'])
+
+    def __init__(self, *args, **kwargs):
+        super(AddWeek, self).__init__(*args, **kwargs)
+        self.fields['name_week'].label = "Nom de la semaine"
 
 
 class Login(forms.Form):
@@ -118,9 +160,16 @@ class AddPlanning(forms.Form):
         self.fields['week'] = forms.ModelChoiceField(
             queryset=Week.objects.filter(semester__in=Semester.objects.filter(year=self.year_id).all()).all())
 
+        self.fields['number_hours'].label = "Nombre d'heures"
+        self.fields['week'].label = "Nom de la semaine"
+
 
 class DeleteForm(forms.Form):
     confirm = forms.BooleanField()
+
+    def __init__(self, *args, **kwargs):
+        super(DeleteForm, self).__init__(*args, **kwargs)
+        self.fields['confirm'].label = "Je valide"
 
 
 class ChangePassword(forms.Form):
@@ -137,6 +186,11 @@ class EditTeacher(forms.Form):
                                                   initial=(1 if self.teacher.status == "professeur" else 2))
         self.fields['admin'] = forms.BooleanField(required=False, initial=self.teacher.is_superuser)
 
+        self.fields['last_name'].label = "Nom"
+        self.fields['first_name'].label = "Prénom"
+        self.fields['status'].label = "Statut"
+        self.fields['admin'].label = "Super-utilisateur"
+
 
 class EditSubject(forms.Form):
     def __init__(self, *args, **kwargs):
@@ -150,14 +204,23 @@ class EditSubject(forms.Form):
         self.fields['semester'] = forms.ModelChoiceField(queryset=self.subject.promotion.year.semester_set.all(),
                                                          initial=self.subject.semester)
 
+        self.fields['name_subject'].label = "Nom de la ressource"
+        self.fields['description'].label = "Description"
+        self.fields['number_cm_sessions'].label = "Nombre d'heures en cm"
+        self.fields['number_td_sessions'].label = "Nombre d'heures par groupe TD"
+        self.fields['number_tp_sessions'].label = "Nombre d'heures par groupe TP"
+        self.fields['semester'].label = "Semestre"
+
 
 class EditSession(forms.Form):
     def __init__(self, *args, **kwargs):
         self.session = kwargs.pop("session")
         super(EditSession, self).__init__(*args, **kwargs)
-        self.fields['teacher'] = forms.ModelChoiceField(queryset=Teacher.objects.all())
         self.fields['teacher'] = forms.ModelChoiceField(queryset=Teacher.objects.all(), initial=self.session.teacher)
         self.fields["number_hours"] = forms.FloatField(min_value=0.25, initial=self.session.number_hours)
+
+        self.fields['teacher'].label = "Professeur"
+        self.fields['number_hours'].label = "Nombre d'heures"
 
 
 class AddWeekPlanning(forms.Form):
@@ -165,5 +228,32 @@ class AddWeekPlanning(forms.Form):
 
 
 class UploadFileForm(forms.Form):
-    title = forms.CharField(max_length=50)
-    file = forms.FileField()
+    weeks = forms.FileField()
+    teacher = forms.FileField()
+    promotion = forms.FileField()
+    subject = forms.FileField()
+    sessions = forms.FileField()
+    planning = forms.FileField()
+
+
+class EditSettings(forms.Form):
+    def __init__(self, *args, **kwargs):
+        self.settings = kwargs.pop("settings")
+        super(EditSettings, self).__init__(*args, **kwargs)
+        self.fields['teacher_hour_price'] = forms.FloatField(initial=self.settings["professeur"]["hour_price"])
+        self.fields['teacher_price_cm'] = forms.FloatField(initial=self.settings["professeur"]["eq_td"]["cm"])
+        self.fields['teacher_price_td'] = forms.FloatField(initial=self.settings["professeur"]["eq_td"]["td"])
+        self.fields['teacher_price_tp'] = forms.FloatField(initial=self.settings["professeur"]["eq_td"]["tp"])
+        self.fields['contractor_hour_price'] = forms.FloatField(initial=self.settings["vacataire"]["hour_price"])
+        self.fields['contractor_price_cm'] = forms.FloatField(initial=self.settings["vacataire"]["eq_td"]["cm"])
+        self.fields['contractor_price_td'] = forms.FloatField(initial=self.settings["vacataire"]["eq_td"]["td"])
+        self.fields['contractor_price_tp'] = forms.FloatField(initial=self.settings["vacataire"]["eq_td"]["tp"])
+
+        self.fields['teacher_hour_price'].label = "Prix horaire professeur"
+        self.fields['teacher_price_cm'].label = "Coefficient pour une heure de CM"
+        self.fields['teacher_price_td'].label = "Coefficient pour une heure de TD"
+        self.fields['teacher_price_tp'].label = "Coefficient pour une heure de TP"
+        self.fields['contractor_hour_price'].label = "Prix horaire vacataire"
+        self.fields['contractor_price_cm'].label = "Coefficient pour une heure de CM"
+        self.fields['contractor_price_td'].label = "Coefficient pour une heure de TD"
+        self.fields['contractor_price_tp'].label = "Coefficient pour une heure de TP"

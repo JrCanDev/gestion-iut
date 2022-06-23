@@ -10,8 +10,6 @@ from management.forms import AddWeek, DeleteForm
 from management.models import Week, Semester, Planning
 
 
-@login_required
-@user_passes_test(lambda u: u.is_superuser)
 def monday_of_week(year, num_week):
     """
     Calcul du premier et du dernier jour de la semaine ISO
@@ -27,8 +25,6 @@ def monday_of_week(year, num_week):
     return monday
 
 
-@login_required
-@user_passes_test(lambda u: u.is_superuser)
 def next_week(semester_id):
     semester = Semester.objects.get(pk=semester_id)
     weeks = Week.objects.filter(semester=semester).all()

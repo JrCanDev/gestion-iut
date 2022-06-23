@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'management/add-form.css' %}"/>
 </head>
 <body>
-<form action="{{ post_url }}" method="post" enctype=”multipart/form-data”>
+<form action="{{ post_url }}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {% if error %}
         <div class="error">
@@ -21,7 +21,7 @@
         </div>
     {% endif %}
     <div class="inputs">{{ form }}</div>
-    <input type="submit" value="Submit"/>
+    <input type="submit" value="Ajouter"/>
     <a href="{{ back_url }}"><p>Annuler</p></a>
 </form>
 

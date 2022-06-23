@@ -76,7 +76,7 @@ class Sessions(models.Model):
     number_hours = models.FloatField(default=0)
     promotion = models.ForeignKey(Promotion, blank=True, null=True, on_delete=models.CASCADE, related_name='promotion')
     td = models.ForeignKey(Td, blank=True, null=True, on_delete=models.CASCADE, related_name='td')
-    tp = models.ManyToManyField(Tp, blank=True, related_name='tp')
+    tp = models.ForeignKey(Tp, blank=True, null=True, on_delete=models.CASCADE, related_name='tp')
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
 
 

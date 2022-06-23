@@ -22,64 +22,67 @@
 </div>
 <div class="container">
     <div class="subject">
+        <h2>Coûts par ressource</h2>
         {% for subject, cost in cost_subject.items %}
             <table>
                 <tr>
                     <th colspan="4">{{ subject }}</th>
                 </tr>
                 <tr>
+                    <th>Nombre d'heures de CM</th>
+                    <th>Nombre d'heures de TD</th>
+                    <th>Nombre d'heures de TP</th>
                     <th>coût</th>
-                    <th>nombre cm</th>
-                    <th>nombre tp</th>
-                    <th>nombre td</th>
                 </tr>
                 <tr>
-                    <td>{{ cost.cost|floatformat }}</td>
                     <td>{{ cost.cm }}</td>
                     <td>{{ cost.td }}</td>
                     <td>{{ cost.tp }}</td>
+                    <td>{{ cost.cost }}</td>
                 </tr>
             </table>
         {% endfor %}
     </div>
     <div class="semester">
+        <h2>Coûts par semestre</h2>
         {% for semester, cost in cost_semester.items %}
             <table>
                 <tr>
                     <th colspan="4">{{ semester }}</th>
                 </tr>
                 <tr>
+                    <th>Nombre d'heures de CM</th>
+                    <th>Nombre d'heures de TD</th>
+                    <th>Nombre d'heures de TP</th>
                     <th>coût</th>
-                    <th>nombre cm</th>
-                    <th>nombre tp</th>
-                    <th>nombre td</th>
                 </tr>
                 <tr>
-                    <td>{{ cost.cost|floatformat }}</td>
                     <td>{{ cost.cm }}</td>
                     <td>{{ cost.td }}</td>
                     <td>{{ cost.tp }}</td>
+                    <td>{{ cost.cost }}</td>
                 </tr>
             </table>
         {% endfor %}
     </div>
     <div class="teacher">
+        <h2>Coûts par professeur</h2>
         {% for teacher, cost in cost_teacher.items %}
             <table>
                 <tr>
                     <th colspan="4">{{ teacher }}</th>
                 </tr>
                 <tr>
+                    <th>Nombre d'heures de CM</th>
+                    <th>Nombre d'heures de TD</th>
+                    <th>Nombre d'heures de TP</th>
                     <th>coût</th>
-                    <th>nombre cm</th>
-                    <th>nombre tp</th>
-                    <th>nombre td</th>
                 </tr>
                 <tr>
-                    <td>{{ cost.cost|floatformat }}</td>
                     <td>{{ cost.cm }}</td>
                     <td>{{ cost.td }}</td>
                     <td>{{ cost.tp }}</td>
+                    <td>{{ cost.cost }}</td>
                 </tr>
             </table>
         {% endfor %}

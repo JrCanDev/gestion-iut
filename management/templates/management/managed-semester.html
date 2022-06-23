@@ -29,16 +29,18 @@
                 <div class="item">
                     <p>{{ one_week }}</p>
                     <div class="btn">
-                        <a href="{% url 'management:managed-week-planning' year.id semester.id one_week.id %}">Planification</a>
+                        <a href="{% url 'management:managed-week-planning' year.id semester.id one_week.id %}">Modifier
+                            la planification</a>
                         <a href="{% url 'management:add-duplicate-week' year.id semester.id one_week.id %}">Dupliquer</a>
-                        <a href="{% url 'management:delete-week' year.id semester.id one_week.id %}">Delete</a>
+                        <a href="{% url 'management:delete-week' year.id semester.id one_week.id %}">Supprimer</a>
                     </div>
                 </div>
             {% endfor %}
             {% if semester.week_set.all %}
                 <div class="item">
+                    <p>Semaine suivante</p>
                     <div class="btn">
-                        <a href="{% url 'management:add-next-week' year.id semester.id %}">Add next</a>
+                        <a href="{% url 'management:add-next-week' year.id semester.id %}">Ajouter la semaine</a>
                     </div>
                 </div>
             {% endif %}
