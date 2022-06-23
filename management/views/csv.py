@@ -372,7 +372,7 @@ def import_csv(request):
                         if not Planning.objects.filter(sessions=sessions, number_hours=one_lines[0],
                                                        week=week).filter():
                             Planning(sessions=sessions, number_hours=one_lines[0], week=week).save()
-                    elif one_lines[4] == "td":
+                    elif one_lines[4] == "tp":
                         tp = Tp.objects.filter(name_tp=one_lines[10], tp__promotion__name_promotion=promotion,
                                                td__semester__name_semester=semester).first()
 
@@ -383,7 +383,7 @@ def import_csv(request):
 
                         sessions = Sessions.objects.filter(type_sessions=one_lines[4], teacher=teacher,
                                                            number_hours=one_lines[6], promotion=promotion,
-                                                           subject=subject, td=td).first()
+                                                           subject=subject, tp=tp).first()
 
                         if not Sessions:
                             return render(request, 'management/add-form.html',
@@ -393,18 +393,6 @@ def import_csv(request):
                         if not Planning.objects.filter(sessions=sessions, number_hours=one_lines[0],
                                                        week=week).filter():
                             Planning(sessions=sessions, number_hours=one_lines[0], week=week).save()
-
-                # 0 number_hours_planning
-                # 1 name_week
-                # 2 name_semester
-                # 3 name_year
-                # 4 type_sessions
-                # 5 name_teacher
-                # 6 number_hours_sessions
-                # 7 name_promotion
-                # 8 name_subject
-                # 9 name_td
-                # 10 name_tp
 
             return HttpResponseRedirect(reverse('management:managed-settings', args=()))
         else:

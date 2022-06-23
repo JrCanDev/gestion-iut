@@ -5,7 +5,7 @@
             "td": 1.0,
             "tp": 0.66
         },
-        "hour_price": 12.0
+        "hour_price": 10.0
     },
     "vacataire": {
         "eq_td": {
@@ -13,6 +13,6 @@
             "td": 1.0,
             "tp": 0.66
         },
-        "hour_price": 6.0
+        "hour_price": 5.0
     }
 }
